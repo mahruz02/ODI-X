@@ -1,0 +1,173 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * DiagnosaBMT design system.
+ * Palet: netral tenang (kertas hangat + navy-teal) — objektif, tepercaya,
+ * tidak menghakimi. Level urgensi memakai gradasi lembut (terakota/emas/sage),
+ * bukan merah-hijau traffic-light.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-pengurus);
+  --color-chart-2: var(--chart-manajemen);
+  --color-chart-3: var(--chart-karyawan);
+  --color-gap-high: var(--gap-high);
+  --color-gap-mid: var(--gap-mid);
+  --color-gap-low: var(--gap-low);
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.978 0.005 100);
+  --foreground: oklch(0.28 0.045 235);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.28 0.045 235);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.28 0.045 235);
+  --primary: oklch(0.42 0.08 208);
+  --primary-foreground: oklch(0.97 0.01 200);
+  --secondary: oklch(0.945 0.01 220);
+  --secondary-foreground: oklch(0.34 0.05 230);
+  --muted: oklch(0.955 0.008 225);
+  --muted-foreground: oklch(0.52 0.03 235);
+  --accent: oklch(0.93 0.03 200);
+  --accent-foreground: oklch(0.36 0.07 210);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --border: oklch(0.905 0.01 230);
+  --input: oklch(0.905 0.01 230);
+  --ring: oklch(0.55 0.07 210);
+  /* Warna peran pada radar chart tiga-garis (elemen signature) */
+  --chart-pengurus: oklch(0.42 0.1 258);
+  --chart-manajemen: oklch(0.62 0.11 195);
+  --chart-karyawan: oklch(0.68 0.13 70);
+  /* Gradasi urgensi halus — bukan merah/hijau */
+  --gap-high: oklch(0.55 0.14 42);
+  --gap-mid: oklch(0.62 0.12 85);
+  --gap-low: oklch(0.58 0.08 168);
+}
+
+.dark {
+  --background: oklch(0.2 0.03 240);
+  --foreground: oklch(0.95 0.01 220);
+  --card: oklch(0.26 0.035 240);
+  --card-foreground: oklch(0.95 0.01 220);
+  --popover: oklch(0.26 0.035 240);
+  --popover-foreground: oklch(0.95 0.01 220);
+  --primary: oklch(0.72 0.1 200);
+  --primary-foreground: oklch(0.22 0.04 230);
+  --secondary: oklch(0.32 0.035 240);
+  --secondary-foreground: oklch(0.95 0.01 220);
+  --muted: oklch(0.32 0.035 240);
+  --muted-foreground: oklch(0.72 0.02 230);
+  --accent: oklch(0.34 0.05 210);
+  --accent-foreground: oklch(0.95 0.01 210);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.66 0.09 205);
+  --chart-pengurus: oklch(0.68 0.11 260);
+  --chart-manajemen: oklch(0.74 0.11 195);
+  --chart-karyawan: oklch(0.78 0.13 75);
+  --gap-high: oklch(0.7 0.14 42);
+  --gap-mid: oklch(0.76 0.12 85);
+  --gap-low: oklch(0.72 0.09 168);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+/* Badge urgensi gap persepsi — gradasi lembut, tidak menghakimi */
+@utility badge-gap-high {
+  background-color: color-mix(in oklch, var(--gap-high) 12%, transparent);
+  color: var(--gap-high);
+  border-color: color-mix(in oklch, var(--gap-high) 35%, transparent);
+}
+
+@utility badge-gap-mid {
+  background-color: color-mix(in oklch, var(--gap-mid) 14%, transparent);
+  color: color-mix(in oklch, var(--gap-mid) 80%, black);
+  border-color: color-mix(in oklch, var(--gap-mid) 38%, transparent);
+}
+
+@utility badge-gap-low {
+  background-color: color-mix(in oklch, var(--gap-low) 12%, transparent);
+  color: color-mix(in oklch, var(--gap-low) 75%, black);
+  border-color: color-mix(in oklch, var(--gap-low) 35%, transparent);
+}
+
+/* Sel peta triangulasi */
+@utility cell-filled {
+  background-color: color-mix(in oklch, var(--primary) 10%, transparent);
+  color: var(--primary);
+}
+
+@utility cell-thin {
+  background-color: color-mix(in oklch, var(--gap-mid) 12%, transparent);
+  color: color-mix(in oklch, var(--gap-mid) 80%, black);
+}
+
+@utility cell-empty {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+@media print {
+  .no-print,
+  header[data-site-header],
+  nav[data-site-nav] {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  section {
+    break-inside: avoid;
+  }
+}

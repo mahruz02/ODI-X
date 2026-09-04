@@ -1,0 +1,1 @@
+drop policy "responses_read_authenticated" on public.responses;
