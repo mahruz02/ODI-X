@@ -47,7 +47,7 @@ export const CONFIDENCE_SCORE: Record<ConfidenceLevel, number> = {
 export const THIN_EVIDENCE_NOTE =
   "Skor ini berbasis data terbatas — perlu digali lebih lanjut sebelum dipakai sebagai dasar keputusan.";
 
-const ALL_ROLES: Role[] = ["pengurus", "manajemen", "karyawan"];
+const ALL_ROLES: Role[] = ["pengurus", "manajemen", "karyawan", "stakeholder"];
 
 export function computeConfidence(ev: DimensionEvidence): ConfidenceResult {
   const counts = ALL_ROLES.map((r) => ev.respondentsByRole[r] ?? 0);
@@ -60,9 +60,9 @@ export function computeConfidence(ev: DimensionEvidence): ConfidenceResult {
   const methods = (totalRespondents > 0 ? 1 : 0) + qualMethods;
 
   let level: ConfidenceLevel;
-  if (methods >= 3 && qualMethods >= 2 && minRespondents >= 3) {
+  if (methods >= 3 && qualMethods >= 2 && minRespondents >= 2) {
     level = "kuat";
-  } else if (methods >= 2 && rolesCovered === ALL_ROLES.length && minRespondents >= 1) {
+  } else if (methods >= 2 && rolesCovered >= 3) {
     level = "cukup";
   } else {
     level = "tipis";
@@ -74,7 +74,7 @@ export function computeConfidence(ev: DimensionEvidence): ConfidenceResult {
   const parts = [`${methods} metode data`];
   if (missing.length) parts.push(`belum ada responden ${missing.join(", ")}`);
   else parts.push(`responden minimum per peran ${minRespondents}`);
-  if (qualMethods === 0) parts.push("belum ada data kualitatif");
+  if (qualMethods === 0) parts.push("belum ada data kualitatif/objektif");
 
   return {
     level,

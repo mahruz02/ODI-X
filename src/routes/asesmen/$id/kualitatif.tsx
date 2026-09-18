@@ -5,13 +5,16 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2, Upload, FileText, BarChart3, MessageSquare, Users } from "lucide-react";
 import { useState } from "react";
 
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AssessmentNavTabs } from "@/components/AssessmentNavTabs";
 import {
   addDocumentReview,
   addFgdNote,
   addInterviewNote,
+  addQuantitativeMetric,
   getQualitativeData,
   removeQualitativeEntry,
 } from "@/lib/admin.functions";
@@ -28,17 +31,17 @@ export const Route = createFileRoute("/asesmen/$id/kualitatif")({
     context.queryClient.ensureQueryData(qualitativeQuery(params.id)),
   head: () => ({
     meta: [
-      { title: "Data Kualitatif — DiagnosaBMT" },
+      { title: "Data Kualitatif & Kuantitatif — ODI-X" },
       {
         name: "description",
         content:
-          "Catat hasil FGD, wawancara mendalam, dan telaah dokumen per dimensi agar tiap kesimpulan diagnosis punya sumber pendukung.",
+          "Input data objektif/kuantitatif, catatan FGD, wawancara, dan telaah dokumen pendukung dengan tingkat keyakinan (confidence level).",
       },
-      { property: "og:title", content: "Data Kualitatif — DiagnosaBMT" },
+      { property: "og:title", content: "Data Kualitatif & Dokumen — ODI-X" },
       {
         property: "og:description",
         content:
-          "FGD, wawancara, dan telaah dokumen sebagai penguat data kuesioner dalam diagnosis BMT.",
+          "FGD, wawancara, data kuantitatif, dan telaah dokumen pendukung diagnosis.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -47,28 +50,37 @@ export const Route = createFileRoute("/asesmen/$id/kualitatif")({
   component: QualitativePage,
 });
 
-type Tab = "fgd" | "wawancara" | "dokumen";
+type Tab = "kuantitatif" | "dokumen" | "fgd" | "wawancara";
 
-const TABS: { key: Tab; label: string }[] = [
-  { key: "fgd", label: "FGD" },
-  { key: "wawancara", label: "Wawancara" },
-  { key: "dokumen", label: "Telaah Dokumen" },
+const TABS: { key: Tab; label: string; icon: any }[] = [
+  { key: "kuantitatif", label: "Data Kuantitatif / Objektif", icon: BarChart3 },
+  { key: "dokumen", label: "Telaah Dokumen Bukti", icon: FileText },
+  { key: "fgd", label: "FGD Notes", icon: Users },
+  { key: "wawancara", label: "Wawancara Mendalam", icon: MessageSquare },
 ];
 
 const inputClass =
-  "mt-1.5 w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring";
+  "mt-1.5 w-full rounded-xl border bg-background px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-ring font-sans";
 
 function QualitativePage() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(qualitativeQuery(id));
   const qc = useQueryClient();
-  const [tab, setTab] = useState<Tab>("fgd");
+  const [tab, setTab] = useState<Tab>("kuantitatif");
 
   const invalidate = () => {
     void qc.invalidateQueries({ queryKey: ["kualitatif", id] });
     void qc.invalidateQueries({ queryKey: ["triangulasi", id] });
   };
 
+  const metricMutation = useMutation({
+    mutationFn: addQuantitativeMetric,
+    onSuccess: invalidate,
+  });
+  const docMutation = useMutation({
+    mutationFn: addDocumentReview,
+    onSuccess: invalidate,
+  });
   const fgdMutation = useMutation({
     mutationFn: addFgdNote,
     onSuccess: invalidate,
@@ -77,58 +89,109 @@ function QualitativePage() {
     mutationFn: addInterviewNote,
     onSuccess: invalidate,
   });
-  const docMutation = useMutation({
-    mutationFn: addDocumentReview,
-    onSuccess: invalidate,
-  });
   const removeMutation = useMutation({
     mutationFn: removeQualitativeEntry,
     onSuccess: invalidate,
   });
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
+    <ProtectedRoute allowedRoles={["super_admin", "org_admin", "analyst"]}>
+      <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 animate-fade-in">
       <header className="mb-6">
         <Link
           to="/asesmen/$id"
           params={{ id }}
-          className="text-xs font-semibold text-muted-foreground hover:underline"
+          className="text-xs font-semibold text-primary hover:underline"
         >
-          ← {data.organization?.name ?? "Dashboard Organisasi"}
+          ← Kembali ke Dashboard Organisasi
         </Link>
         <h1 className="mt-2 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-          Data Kualitatif
+          Bukti Kualitatif, Dokumen & Data Kuantitatif
         </h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Catatan FGD, wawancara mendalam, dan telaah dokumen. Setiap catatan
-          yang disimpan langsung mengisi sel yang bersangkutan pada{" "}
-          <Link
-            to="/asesmen/$id/triangulasi"
-            params={{ id }}
-            className="font-semibold underline"
-          >
-            peta triangulasi
-          </Link>
-          .
+        <p className="mt-2 max-w-3xl text-xs text-muted-foreground leading-relaxed">
+          Input bukti pendukung diagnosis dari hasil FGD, wawancara mendalam, telaah dokumen internal, dan metriks kuantitatif objektif untuk memperkuat triangulasi data.
         </p>
       </header>
 
+      <AssessmentNavTabs id={id} />
+
       <div className="mb-6 flex flex-wrap gap-2">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            onClick={() => setTab(t.key)}
-            className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-colors ${
-              tab === t.key
-                ? "border-primary bg-accent text-accent-foreground"
-                : "bg-card hover:bg-muted"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+        {TABS.map((t) => {
+          const Icon = t.icon;
+          return (
+            <button
+              key={t.key}
+              type="button"
+              onClick={() => setTab(t.key)}
+              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-bold transition-all ${
+                tab === t.key
+                  ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                  : "bg-card hover:bg-muted"
+              }`}
+            >
+              <Icon className="size-3.5" />
+              {t.label}
+            </button>
+          );
+        })}
       </div>
+
+      {tab === "kuantitatif" && (
+        <Section
+          title="Data Objektif / Kuantitatif"
+          form={
+            <MetricForm
+              busy={metricMutation.isPending}
+              onSubmit={(values) =>
+                metricMutation.mutate({ data: { organizationId: id, ...values } })
+              }
+            />
+          }
+          rows={(data.metrics || []).map((m) => ({
+            id: m.id,
+            dimension: m.dimension,
+            title: m.metric_name,
+            body: `Target: ${m.target_val || "—"} | Actual: ${m.actual_val || "—"} (${m.unit || ""}) · Periode: ${m.period || "—"}`,
+            meta: [
+              `Sumber: ${m.data_source || "Internal"}`,
+              `Confidence: ${m.confidence_level}`,
+            ],
+            quote: null,
+          }))}
+          onDelete={(rowId) =>
+            removeMutation.mutate({ data: { table: "quantitative_metrics", id: rowId } })
+          }
+        />
+      )}
+
+      {tab === "dokumen" && (
+        <Section
+          title="Telaah Dokumen Pendukung"
+          form={
+            <DocumentForm
+              busy={docMutation.isPending}
+              onSubmit={(values) =>
+                docMutation.mutate({ data: { organizationId: id, ...values } })
+              }
+            />
+          }
+          rows={data.documents.map((d) => ({
+            id: d.id,
+            dimension: d.dimension,
+            title: d.doc_type,
+            body: d.notes ?? "—",
+            meta: [
+              `Status: ${d.doc_status}`,
+              d.score ? `Mutu: ${d.score}/5` : null,
+              `Confidence: ${d.confidence_level || "cukup"}`,
+            ],
+            quote: null,
+          }))}
+          onDelete={(rowId) =>
+            removeMutation.mutate({ data: { table: "document_reviews", id: rowId } })
+          }
+        />
+      )}
 
       {tab === "fgd" && (
         <Section
@@ -160,7 +223,7 @@ function QualitativePage() {
 
       {tab === "wawancara" && (
         <Section
-          title="Catatan Wawancara"
+          title="Catatan Wawancara Mendalam"
           form={
             <InterviewForm
               busy={interviewMutation.isPending}
@@ -186,37 +249,8 @@ function QualitativePage() {
           }
         />
       )}
-
-      {tab === "dokumen" && (
-        <Section
-          title="Telaah Dokumen"
-          form={
-            <DocumentForm
-              busy={docMutation.isPending}
-              onSubmit={(values) =>
-                docMutation.mutate({ data: { organizationId: id, ...values } })
-              }
-            />
-          }
-          rows={data.documents.map((d) => ({
-            id: d.id,
-            dimension: d.dimension,
-            title: d.doc_type,
-            body: d.notes ?? "—",
-            meta: [
-              `Ketersediaan: ${d.doc_status}`,
-              d.score ? `Mutu ${d.score}/5` : null,
-            ],
-            quote: null,
-          }))}
-          onDelete={(rowId) =>
-            removeMutation.mutate({
-              data: { table: "document_reviews", id: rowId },
-            })
-          }
-        />
-      )}
     </main>
+    </ProtectedRoute>
   );
 }
 
@@ -241,20 +275,20 @@ function Section({
   onDelete: (id: string) => void;
 }) {
   return (
-    <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+    <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
       <div className="rounded-2xl border bg-card p-5 shadow-sm">
-        <h2 className="font-display text-lg font-bold tracking-tight">
-          Tambah {title}
+        <h2 className="font-display text-base font-bold tracking-tight">
+          Input {title}
         </h2>
-        <div className="mt-4">{form}</div>
+        <div className="mt-3">{form}</div>
       </div>
       <div>
-        <h2 className="mb-3 font-display text-lg font-bold tracking-tight">
-          {title} tersimpan ({rows.length})
+        <h2 className="mb-3 font-display text-base font-bold tracking-tight">
+          Daftar {title} Tersimpan ({rows.length})
         </h2>
         {rows.length === 0 ? (
-          <p className="rounded-2xl border border-dashed p-6 text-sm text-muted-foreground">
-            Belum ada catatan. Isi formulir di samping untuk menambahkan.
+          <p className="rounded-2xl border border-dashed p-6 text-xs text-muted-foreground text-center">
+            Belum ada data tersimpan. Gunakan formulir di samping.
           </p>
         ) : (
           <ul className="space-y-3">
@@ -263,12 +297,12 @@ function Section({
               return (
                 <li
                   key={r.id}
-                  className="rounded-2xl border bg-card p-4 shadow-sm"
+                  className="rounded-2xl border bg-card p-4 shadow-sm text-xs"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                        Dimensi {r.dimension} · {dim?.name}
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                        Domain {r.dimension} · {dim?.name}
                       </p>
                       <p className="mt-0.5 text-sm font-bold">{r.title}</p>
                     </div>
@@ -276,24 +310,24 @@ function Section({
                       type="button"
                       onClick={() => onDelete(r.id)}
                       aria-label="Hapus catatan"
-                      className="rounded-lg border p-2 text-muted-foreground transition-colors hover:bg-muted"
+                      className="rounded-lg border p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                     >
-                      <Trash2 className="size-4" />
+                      <Trash2 className="size-3.5" />
                     </button>
                   </div>
-                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed">
+                  <p className="mt-2 whitespace-pre-line leading-relaxed text-foreground">
                     {r.body}
                   </p>
                   {r.quote && (
-                    <p className="mt-2 border-l-2 border-primary pl-3 text-sm italic text-muted-foreground">
-                      {r.quote}
+                    <p className="mt-2 border-l-2 border-primary pl-3 italic text-muted-foreground">
+                      “{r.quote}”
                     </p>
                   )}
-                  <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  <div className="mt-3 flex flex-wrap gap-1.5 text-[10px]">
                     {r.meta.filter(Boolean).map((m) => (
                       <span
                         key={m as string}
-                        className="rounded-full border px-2.5 py-0.5 font-semibold"
+                        className="rounded-full border bg-accent/30 px-2 py-0.5 font-semibold text-accent-foreground capitalize"
                       >
                         {m}
                       </span>
@@ -317,8 +351,8 @@ function DimensionSelect({
   onChange: (v: number) => void;
 }) {
   return (
-    <label className="block text-sm font-semibold">
-      Dimensi
+    <label className="block text-xs font-semibold">
+      Domain Terkait
       <select
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
@@ -334,23 +368,24 @@ function DimensionSelect({
   );
 }
 
-function StatusSelect({
+function ConfidenceSelect({
   value,
   onChange,
 }: {
-  value: "draft" | "final";
-  onChange: (v: "draft" | "final") => void;
+  value: "tipis" | "cukup" | "kuat";
+  onChange: (v: "tipis" | "cukup" | "kuat") => void;
 }) {
   return (
-    <label className="block text-sm font-semibold">
-      Status catatan
+    <label className="block text-xs font-semibold">
+      Tingkat Keyakinan Validitas (Confidence)
       <select
         value={value}
-        onChange={(e) => onChange(e.target.value as "draft" | "final")}
+        onChange={(e) => onChange(e.target.value as "tipis" | "cukup" | "kuat")}
         className={inputClass}
       >
-        <option value="draft">Draft</option>
-        <option value="final">Final</option>
+        <option value="kuat font-bold">Kuat (Dokumen Resmi / Data Terverifikasi)</option>
+        <option value="cukup">Cukup (Laporan Internal / Sampel Cukup)</option>
+        <option value="tipis">Tipis (Klaim Lisan / Sampel Terbatas)</option>
       </select>
     </label>
   );
@@ -361,10 +396,211 @@ function SubmitButton({ busy, label }: { busy: boolean; label: string }) {
     <button
       type="submit"
       disabled={busy}
-      className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+      className="w-full rounded-xl bg-primary px-4 py-2.5 text-xs font-bold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
     >
       {busy ? "Menyimpan…" : label}
     </button>
+  );
+}
+
+function MetricForm({
+  busy,
+  onSubmit,
+}: {
+  busy: boolean;
+  onSubmit: (v: {
+    dimension: number;
+    metricName: string;
+    targetVal?: string;
+    actualVal?: string;
+    unit?: string;
+    period?: string;
+    dataSource?: string;
+    confidenceLevel?: "tipis" | "cukup" | "kuat";
+  }) => void;
+}) {
+  const [dimension, setDimension] = useState(1);
+  const [metricName, setMetricName] = useState("");
+  const [targetVal, setTargetVal] = useState("");
+  const [actualVal, setActualVal] = useState("");
+  const [unit, setUnit] = useState("%");
+  const [period, setPeriod] = useState("2025/2026");
+  const [dataSource, setDataSource] = useState("");
+  const [confidenceLevel, setConfidenceLevel] = useState<"tipis" | "cukup" | "kuat">("kuat");
+
+  return (
+    <form
+      className="space-y-3"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (metricName.trim().length < 2) return;
+        onSubmit({
+          dimension,
+          metricName,
+          ...(targetVal.trim() ? { targetVal } : {}),
+          ...(actualVal.trim() ? { actualVal } : {}),
+          ...(unit.trim() ? { unit } : {}),
+          ...(period.trim() ? { period } : {}),
+          ...(dataSource.trim() ? { dataSource } : {}),
+          confidenceLevel,
+        });
+        setMetricName("");
+        setTargetVal("");
+        setActualVal("");
+      }}
+    >
+      <DimensionSelect value={dimension} onChange={setDimension} />
+      <label className="block text-xs font-semibold">
+        Nama Indikator / Metric
+        <input
+          value={metricName}
+          onChange={(e) => setMetricName(e.target.value)}
+          className={inputClass}
+          placeholder="mis. NPF Gross, Turnover SDM, Complaints"
+          required
+        />
+      </label>
+      <div className="grid grid-cols-2 gap-2">
+        <label className="block text-xs font-semibold">
+          Target
+          <input
+            value={targetVal}
+            onChange={(e) => setTargetVal(e.target.value)}
+            className={inputClass}
+            placeholder="mis. < 3.0"
+          />
+        </label>
+        <label className="block text-xs font-semibold">
+          Capaian Actual
+          <input
+            value={actualVal}
+            onChange={(e) => setActualVal(e.target.value)}
+            className={inputClass}
+            placeholder="mis. 4.2"
+          />
+        </label>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <label className="block text-xs font-semibold">
+          Satuan
+          <input
+            value={unit}
+            onChange={(e) => setUnit(e.target.value)}
+            className={inputClass}
+            placeholder="%, orang, kasus"
+          />
+        </label>
+        <label className="block text-xs font-semibold">
+          Periode
+          <input
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+            className={inputClass}
+            placeholder="TW-IV 2025"
+          />
+        </label>
+      </div>
+      <label className="block text-xs font-semibold">
+        Sumber Data
+        <input
+          value={dataSource}
+          onChange={(e) => setDataSource(e.target.value)}
+          className={inputClass}
+          placeholder="Laporan Keuangan Audit, CBS Log"
+        />
+      </label>
+      <ConfidenceSelect value={confidenceLevel} onChange={setConfidenceLevel} />
+      <SubmitButton busy={busy} label="Simpan Data Kuantitatif" />
+    </form>
+  );
+}
+
+function DocumentForm({
+  busy,
+  onSubmit,
+}: {
+  busy: boolean;
+  onSubmit: (v: {
+    dimension: number;
+    docType: string;
+    docStatus: "mutakhir" | "usang" | "tidak_ada" | "ada" | "sebagian" | "tidak ada";
+    score?: number;
+    confidenceLevel?: "tipis" | "cukup" | "kuat";
+    notes?: string;
+  }) => void;
+}) {
+  const [dimension, setDimension] = useState(1);
+  const [docType, setDocType] = useState("");
+  const [docStatus, setDocStatus] = useState<"mutakhir" | "usang" | "tidak_ada">("mutakhir");
+  const [score, setScore] = useState("4");
+  const [confidenceLevel, setConfidenceLevel] = useState<"tipis" | "cukup" | "kuat">("kuat");
+  const [notes, setNotes] = useState("");
+
+  return (
+    <form
+      className="space-y-3"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (docType.trim().length < 2) return;
+        onSubmit({
+          dimension,
+          docType,
+          docStatus,
+          confidenceLevel,
+          ...(score ? { score: Number(score) } : {}),
+          ...(notes.trim() ? { notes } : {}),
+        });
+        setDocType("");
+        setNotes("");
+      }}
+    >
+      <DimensionSelect value={dimension} onChange={setDimension} />
+      <label className="block text-xs font-semibold">
+        Jenis Dokumen Bukti
+        <input
+          value={docType}
+          onChange={(e) => setDocType(e.target.value)}
+          className={inputClass}
+          placeholder="mis. Renstra, SOP Penagihan, Laporan Audit"
+          required
+        />
+      </label>
+      <label className="block text-xs font-semibold">
+        Status Dokumen
+        <select
+          value={docStatus}
+          onChange={(e) => setDocStatus(e.target.value as any)}
+          className={inputClass}
+        >
+          <option value="mutakhir">Mutakhir & Berlaku</option>
+          <option value="usang">Usang / Perlu Revisi</option>
+          <option value="tidak_ada">Tidak Ditemukan</option>
+        </select>
+      </label>
+      <label className="block text-xs font-semibold">
+        Penilaian Mutu Dokumen (1–5)
+        <input
+          type="number"
+          min={1}
+          max={5}
+          value={score}
+          onChange={(e) => setScore(e.target.value)}
+          className={inputClass}
+        />
+      </label>
+      <ConfidenceSelect value={confidenceLevel} onChange={setConfidenceLevel} />
+      <label className="block text-xs font-semibold">
+        Catatan & Hasil Telaah
+        <textarea
+          rows={3}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          className={inputClass}
+          placeholder="Kesesuaian isi dokumen dengan praktek riil di lapangan"
+        />
+      </label>
+      <SubmitButton busy={busy} label="Simpan Telaah Dokumen" />
+    </form>
   );
 }
 
@@ -386,12 +622,12 @@ function FgdForm({
   const [facilitator, setFacilitator] = useState("");
   const [themes, setThemes] = useState("");
   const [quotes, setQuotes] = useState("");
-  const [consensus, setConsensus] = useState("");
-  const [status, setStatus] = useState<"draft" | "final">("draft");
+  const [consensus, setConsensus] = useState("4");
+  const [status, setStatus] = useState<"draft" | "final">("final");
 
   return (
     <form
-      className="space-y-4"
+      className="space-y-3"
       onSubmit={(e) => {
         e.preventDefault();
         onSubmit({
@@ -405,51 +641,38 @@ function FgdForm({
         setFacilitator("");
         setThemes("");
         setQuotes("");
-        setConsensus("");
       }}
     >
       <DimensionSelect value={dimension} onChange={setDimension} />
-      <label className="block text-sm font-semibold">
-        Fasilitator
+      <label className="block text-xs font-semibold">
+        Fasilitator FGD
         <input
           value={facilitator}
           onChange={(e) => setFacilitator(e.target.value)}
           className={inputClass}
-          placeholder="Nama fasilitator FGD"
+          placeholder="Tim Asesor / Moderator"
         />
       </label>
-      <label className="block text-sm font-semibold">
-        Tema yang muncul
+      <label className="block text-xs font-semibold">
+        Tema Utama Diskusi
         <textarea
-          rows={4}
+          rows={3}
           value={themes}
           onChange={(e) => setThemes(e.target.value)}
           className={inputClass}
-          placeholder="Ringkasan tema utama diskusi"
+          placeholder="Poin kesepakatan dan perbedaan pendapat"
         />
       </label>
-      <label className="block text-sm font-semibold">
-        Kutipan penting
+      <label className="block text-xs font-semibold">
+        Kutipan Verbatim
         <textarea
-          rows={3}
+          rows={2}
           value={quotes}
           onChange={(e) => setQuotes(e.target.value)}
           className={inputClass}
-          placeholder="Kutipan verbatim tanpa identitas"
+          placeholder="Kutipan langsung dari peserta FGD"
         />
       </label>
-      <label className="block text-sm font-semibold">
-        Tingkat konsensus (1–5)
-        <input
-          type="number"
-          min={1}
-          max={5}
-          value={consensus}
-          onChange={(e) => setConsensus(e.target.value)}
-          className={inputClass}
-        />
-      </label>
-      <StatusSelect value={status} onChange={setStatus} />
       <SubmitButton busy={busy} label="Simpan Catatan FGD" />
     </form>
   );
@@ -470,11 +693,11 @@ function InterviewForm({
   const [dimension, setDimension] = useState(1);
   const [informantRole, setInformantRole] = useState("");
   const [findings, setFindings] = useState("");
-  const [status, setStatus] = useState<"draft" | "final">("draft");
+  const [status, setStatus] = useState<"draft" | "final">("final");
 
   return (
     <form
-      className="space-y-4"
+      className="space-y-3"
       onSubmit={(e) => {
         e.preventDefault();
         onSubmit({
@@ -488,117 +711,26 @@ function InterviewForm({
       }}
     >
       <DimensionSelect value={dimension} onChange={setDimension} />
-      <label className="block text-sm font-semibold">
-        Peran informan
+      <label className="block text-xs font-semibold">
+        Peran / Posisi Informan
         <input
           value={informantRole}
           onChange={(e) => setInformantRole(e.target.value)}
           className={inputClass}
-          placeholder="mis. Ketua Pengurus, Manajer Operasional"
+          placeholder="Ketua Pengurus, GM, Kepala Cabang"
         />
       </label>
-      <label className="block text-sm font-semibold">
-        Temuan
+      <label className="block text-xs font-semibold">
+        Temuan Wawancara Mendalam
         <textarea
-          rows={6}
+          rows={4}
           value={findings}
           onChange={(e) => setFindings(e.target.value)}
           className={inputClass}
-          placeholder="Poin-poin temuan dari wawancara"
+          placeholder="Hasil pendalaman isu kunci"
         />
       </label>
-      <StatusSelect value={status} onChange={setStatus} />
       <SubmitButton busy={busy} label="Simpan Catatan Wawancara" />
-    </form>
-  );
-}
-
-function DocumentForm({
-  busy,
-  onSubmit,
-}: {
-  busy: boolean;
-  onSubmit: (v: {
-    dimension: number;
-    docType: string;
-    docStatus: "ada" | "sebagian" | "tidak ada";
-    score?: number;
-    notes?: string;
-  }) => void;
-}) {
-  const [dimension, setDimension] = useState(1);
-  const [docType, setDocType] = useState("");
-  const [docStatus, setDocStatus] = useState<"ada" | "sebagian" | "tidak ada">(
-    "ada",
-  );
-  const [score, setScore] = useState("");
-  const [notes, setNotes] = useState("");
-
-  return (
-    <form
-      className="space-y-4"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (docType.trim().length < 2) return;
-        onSubmit({
-          dimension,
-          docType,
-          docStatus,
-          ...(score ? { score: Number(score) } : {}),
-          ...(notes.trim() ? { notes } : {}),
-        });
-        setDocType("");
-        setScore("");
-        setNotes("");
-      }}
-    >
-      <DimensionSelect value={dimension} onChange={setDimension} />
-      <label className="block text-sm font-semibold">
-        Jenis dokumen
-        <input
-          value={docType}
-          onChange={(e) => setDocType(e.target.value)}
-          className={inputClass}
-          placeholder="mis. RAT, SOP Pembiayaan, Struktur Organisasi"
-          required
-        />
-      </label>
-      <label className="block text-sm font-semibold">
-        Ketersediaan
-        <select
-          value={docStatus}
-          onChange={(e) =>
-            setDocStatus(e.target.value as "ada" | "sebagian" | "tidak ada")
-          }
-          className={inputClass}
-        >
-          <option value="ada">Ada dan lengkap</option>
-          <option value="sebagian">Ada sebagian</option>
-          <option value="tidak ada">Tidak ada</option>
-        </select>
-      </label>
-      <label className="block text-sm font-semibold">
-        Mutu dokumen (1–5)
-        <input
-          type="number"
-          min={1}
-          max={5}
-          value={score}
-          onChange={(e) => setScore(e.target.value)}
-          className={inputClass}
-        />
-      </label>
-      <label className="block text-sm font-semibold">
-        Catatan telaah
-        <textarea
-          rows={4}
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          className={inputClass}
-          placeholder="Kesenjangan antara dokumen dan praktik"
-        />
-      </label>
-      <SubmitButton busy={busy} label="Simpan Telaah Dokumen" />
     </form>
   );
 }

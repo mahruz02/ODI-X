@@ -1,7 +1,5 @@
-// Priority engine komposit — menggantikan pemeringkatan yang hanya melihat besar Δ gap.
+// Priority engine komposit — perumusan prioritas ODI-X
 // Priority Score = (Urgency × 0.35) + (Impact × 0.30) + (Risk × 0.20) − (Confidence_penalty × 0.15)
-// Confidence_penalty = 1 − skor confidence: evidence tipis menurunkan prioritas
-// (artinya "perlu digali", bukan otomatis "mendesak").
 
 import type { ConfidenceResult } from "./confidence";
 import { CONFIDENCE_LABELS } from "./confidence";
@@ -10,30 +8,34 @@ import type { DimensionSummary } from "./report";
 
 /** Bobot dampak dimensi terhadap kesehatan organisasi (0–1). */
 export const IMPACT_WEIGHT: Record<number, number> = {
-  1: 0.8,
-  2: 0.7,
-  3: 0.8,
-  4: 0.7,
-  5: 0.7,
-  6: 0.7,
-  7: 1,
-  8: 1,
-  9: 0.65,
-  10: 0.7,
+  1: 0.85, // Konteks Eksternal
+  2: 0.90, // Strategi & Arah
+  3: 0.95, // Kepemimpinan & Tata Kelola
+  4: 0.75, // Struktur Organisasi
+  5: 0.85, // Budaya & Etika
+  6: 0.80, // SDM & Kompetensi
+  7: 0.70, // Desain Pekerjaan
+  8: 0.80, // Tim & Kolaborasi
+  9: 0.85, // Proses & Teknologi
+  10: 0.90, // Manajemen Kinerja
+  11: 1.00, // Risiko & Kontrol
+  12: 0.85, // Pengalaman Stakeholder
 };
 
 /** Kategori risiko per dimensi: kepatuhan/keuangan/legal = 1, SDM/budaya = 0.5, administratif = 0.25. */
 export const RISK_WEIGHT: Record<number, number> = {
-  1: 0.5,
-  2: 0.25,
-  3: 0.5,
+  1: 0.6,
+  2: 0.7,
+  3: 0.9,
   4: 0.5,
-  5: 0.5,
-  6: 0.25,
-  7: 1,
-  8: 1,
-  9: 0.5,
-  10: 0.5,
+  5: 0.8,
+  6: 0.7,
+  7: 0.5,
+  8: 0.6,
+  9: 0.75,
+  10: 0.8,
+  11: 1.0,
+  12: 0.7,
 };
 
 export interface PriorityItem {
@@ -71,8 +73,8 @@ export function buildPriorities(
     const reasons: string[] = [];
     if (urgency >= 0.5) reasons.push(`gap persepsi ${s.gap.toFixed(2)} (${GAP_LABELS[s.level].toLowerCase()})`);
     if (shortfall >= 0.45) reasons.push(`skor rata-rata rendah (${s.average.toFixed(2)})`);
-    if (risk >= 1) reasons.push("menyentuh kepatuhan syariah/keuangan");
-    else if (risk >= 0.5) reasons.push("berdampak pada SDM dan budaya kerja");
+    if (risk >= 0.9) reasons.push("menyentuh kepatuhan, risiko, dan tata kelola");
+    else if (risk >= 0.6) reasons.push("berdampak pada SDM, efisiensi, dan kinerja");
     reasons.push(CONFIDENCE_LABELS[conf.level].toLowerCase());
     items.push({
       dimension: s.id,
@@ -90,7 +92,6 @@ export function buildPriorities(
   return items.sort((a, b) => b.score - a.score || a.dimension - b.dimension);
 }
 
-/** Top prioritas utama: maksimal 5, minimal 3 selama datanya ada. */
 export function topPriorities(items: PriorityItem[], max = 5): PriorityItem[] {
   return items.slice(0, Math.min(max, items.length));
 }

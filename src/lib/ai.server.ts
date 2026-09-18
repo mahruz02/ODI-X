@@ -220,3 +220,29 @@ export async function deleteInsight(client: AnyClient, id: string) {
   if (error) throw new Error(error.message);
   return { ok: true as const };
 }
+
+export interface ExecutiveSummaryAiInput {
+  organizationName: string;
+  healthIndex: number;
+  alignmentIndex: number;
+  maturityLabel: string;
+  riskExposure: string;
+  topPriorities: { dimension: number; name: string; gap: number }[];
+  fgdSummary: string[];
+}
+
+export async function generateExecutiveSummarySynthesis(input: ExecutiveSummaryAiInput) {
+  const user = `Susun sintesis naratif Ringkasan Eksekutif untuk laporan diagnosis organisasi ${input.organizationName}.
+Health Index: ${input.healthIndex}/100, Alignment Index: ${input.alignmentIndex}/100.
+Tingkat Kematangan: ${input.maturityLabel}, Profil Risk Exposure: ${input.riskExposure}.
+Domain Prioritas Utama dengan Gap Persepsi Lebar:
+${input.topPriorities.map((p) => `- Dimensi ${p.dimension} (${p.name}): Δ gap ${p.gap.toFixed(2)}`).join("\n")}
+Poin Kualitatif Kunci:
+${input.fgdSummary.map((s) => `- ${s}`).join("\n")}
+
+Format output JSON yang diminta:
+{"status":"ok","executiveNarrative":"3-5 paragraf komprehensif benang merah kondisi organisasi, temuan kunci, serta rekomendasi strategis utama. Bahasa profesional, lugas, dan berfokus pada perbaikan."}`;
+
+  const out = await callAi(GUARDRAILS, user);
+  return out as { status: "ok"; executiveNarrative: string };
+}

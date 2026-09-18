@@ -5,10 +5,12 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * DiagnosaBMT design system.
- * Palet: netral tenang (kertas hangat + navy-teal) — objektif, tepercaya,
- * tidak menghakimi. Level urgensi memakai gradasi lembut (terakota/emas/sage),
- * bukan merah-hijau traffic-light.
+ * ODI-X Design System (§9 instructions.md)
+ * Primer: Teal Gelap #1B5A5A (header, nav, tombol utama)
+ * Aksen: Biru Cerah #2E9BC7 (link, CTA sekunder, highlight chart)
+ * Highlight: Kuning/Emas #D9A441 (badge "Critical", ikon prestasi)
+ * Netral: Latar #F7F8F9, card putih dengan shadow lembut, teks #1F2937
+ * Status warna: Critical #DC2626 · High #EA580C · Medium #D9A441 · Low #16A34A
  */
 
 @theme inline {
@@ -41,70 +43,91 @@
   --color-chart-1: var(--chart-pengurus);
   --color-chart-2: var(--chart-manajemen);
   --color-chart-3: var(--chart-karyawan);
+  --color-chart-4: var(--chart-stakeholder);
   --color-gap-high: var(--gap-high);
   --color-gap-mid: var(--gap-mid);
   --color-gap-low: var(--gap-low);
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Archivo", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.978 0.005 100);
-  --foreground: oklch(0.28 0.045 235);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.28 0.045 235);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.28 0.045 235);
-  --primary: oklch(0.42 0.08 208);
-  --primary-foreground: oklch(0.97 0.01 200);
-  --secondary: oklch(0.945 0.01 220);
-  --secondary-foreground: oklch(0.34 0.05 230);
-  --muted: oklch(0.955 0.008 225);
-  --muted-foreground: oklch(0.52 0.03 235);
-  --accent: oklch(0.93 0.03 200);
-  --accent-foreground: oklch(0.36 0.07 210);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.905 0.01 230);
-  --input: oklch(0.905 0.01 230);
-  --ring: oklch(0.55 0.07 210);
-  /* Warna peran pada radar chart tiga-garis (elemen signature) */
-  --chart-pengurus: oklch(0.42 0.1 258);
-  --chart-manajemen: oklch(0.62 0.11 195);
-  --chart-karyawan: oklch(0.68 0.13 70);
-  /* Gradasi urgensi halus — bukan merah/hijau */
-  --gap-high: oklch(0.55 0.14 42);
-  --gap-mid: oklch(0.62 0.12 85);
-  --gap-low: oklch(0.58 0.08 168);
+  --background: #F7F8F9;
+  --foreground: #1F2937;
+  --card: #FFFFFF;
+  --card-foreground: #1F2937;
+  --popover: #FFFFFF;
+  --popover-foreground: #1F2937;
+
+  /* #1B5A5A Teal Gelap */
+  --primary: #1B5A5A;
+  --primary-foreground: #FFFFFF;
+
+  /* #2E9BC7 Biru Cerah */
+  --secondary: #EBF7FC;
+  --secondary-foreground: #1B5A5A;
+
+  --muted: #EFF1F3;
+  --muted-foreground: #6B7280;
+
+  --accent: #E2F3F9;
+  --accent-foreground: #2E9BC7;
+
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #2E9BC7;
+
+  /* Warna Prespektif */
+  --chart-pengurus: #1B5A5A;
+  --chart-manajemen: #2E9BC7;
+  --chart-karyawan: #D9A441;
+  --chart-stakeholder: #9333EA;
+
+  /* Status warna */
+  --gap-high: #DC2626;
+  --gap-mid: #EA580C;
+  --gap-low: #16A34A;
 }
 
 .dark {
-  --background: oklch(0.2 0.03 240);
-  --foreground: oklch(0.95 0.01 220);
-  --card: oklch(0.26 0.035 240);
-  --card-foreground: oklch(0.95 0.01 220);
-  --popover: oklch(0.26 0.035 240);
-  --popover-foreground: oklch(0.95 0.01 220);
-  --primary: oklch(0.72 0.1 200);
-  --primary-foreground: oklch(0.22 0.04 230);
-  --secondary: oklch(0.32 0.035 240);
-  --secondary-foreground: oklch(0.95 0.01 220);
-  --muted: oklch(0.32 0.035 240);
-  --muted-foreground: oklch(0.72 0.02 230);
-  --accent: oklch(0.34 0.05 210);
-  --accent-foreground: oklch(0.95 0.01 210);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.66 0.09 205);
-  --chart-pengurus: oklch(0.68 0.11 260);
-  --chart-manajemen: oklch(0.74 0.11 195);
-  --chart-karyawan: oklch(0.78 0.13 75);
-  --gap-high: oklch(0.7 0.14 42);
-  --gap-mid: oklch(0.76 0.12 85);
-  --gap-low: oklch(0.72 0.09 168);
+  --background: #111827;
+  --foreground: #F9FAFB;
+  --card: #1F2937;
+  --card-foreground: #F9FAFB;
+  --popover: #1F2937;
+  --popover-foreground: #F9FAFB;
+
+  --primary: #2E9BC7;
+  --primary-foreground: #111827;
+
+  --secondary: #1E293B;
+  --secondary-foreground: #F9FAFB;
+
+  --muted: #374151;
+  --muted-foreground: #9CA3AF;
+
+  --accent: #1E3A8A;
+  --accent-foreground: #93C5FD;
+
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+
+  --border: #374151;
+  --input: #374151;
+  --ring: #2E9BC7;
+
+  --chart-pengurus: #2E9BC7;
+  --chart-manajemen: #38BDF8;
+  --chart-karyawan: #FBBF24;
+  --chart-stakeholder: #C084FC;
+
+  --gap-high: #F87171;
+  --gap-mid: #FB923C;
+  --gap-low: #4ADE80;
 }
 
 @layer base {
@@ -112,45 +135,71 @@
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
   }
+
+  button, a {
+    touch-action: manipulation;
+  }
 }
 
-/* Badge urgensi gap persepsi — gradasi lembut, tidak menghakimi */
+/* Micro-animations & UX Polish */
+.animate-fade-in {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @utility badge-gap-high {
-  background-color: color-mix(in oklch, var(--gap-high) 12%, transparent);
-  color: var(--gap-high);
-  border-color: color-mix(in oklch, var(--gap-high) 35%, transparent);
+  background-color: #FEE2E2;
+  color: #DC2626;
+  border-color: #FCA5A5;
 }
 
 @utility badge-gap-mid {
-  background-color: color-mix(in oklch, var(--gap-mid) 14%, transparent);
-  color: color-mix(in oklch, var(--gap-mid) 80%, black);
-  border-color: color-mix(in oklch, var(--gap-mid) 38%, transparent);
+  background-color: #FFEDD5;
+  color: #EA580C;
+  border-color: #FDBA74;
 }
 
 @utility badge-gap-low {
-  background-color: color-mix(in oklch, var(--gap-low) 12%, transparent);
-  color: color-mix(in oklch, var(--gap-low) 75%, black);
-  border-color: color-mix(in oklch, var(--gap-low) 35%, transparent);
+  background-color: #DCFCE7;
+  color: #16A34A;
+  border-color: #86EFAC;
 }
 
-/* Sel peta triangulasi */
 @utility cell-filled {
-  background-color: color-mix(in oklch, var(--primary) 10%, transparent);
-  color: var(--primary);
+  background-color: #E6F4F4;
+  color: #1B5A5A;
 }
 
 @utility cell-thin {
-  background-color: color-mix(in oklch, var(--gap-mid) 12%, transparent);
-  color: color-mix(in oklch, var(--gap-mid) 80%, black);
+  background-color: #FFEDD5;
+  color: #EA580C;
 }
 
 @utility cell-empty {

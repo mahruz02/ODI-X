@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as AsesmenIndexRouteImport } from './routes/asesmen/index'
 import { Route as IsiKodeRouteImport } from './routes/isi/$kode'
 import { Route as AsesmenIdIndexRouteImport } from './routes/asesmen/$id/index'
@@ -20,6 +21,11 @@ import { Route as AsesmenIdTriangulasiRouteImport } from './routes/asesmen/$id/t
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AsesmenIndexRoute = AsesmenIndexRouteImport.update({
@@ -55,6 +61,7 @@ const AsesmenIdTriangulasiRoute = AsesmenIdTriangulasiRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/isi/$kode': typeof IsiKodeRoute
   '/asesmen/': typeof AsesmenIndexRoute
   '/asesmen/$id/kualitatif': typeof AsesmenIdKualitatifRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/isi/$kode': typeof IsiKodeRoute
   '/asesmen': typeof AsesmenIndexRoute
   '/asesmen/$id/kualitatif': typeof AsesmenIdKualitatifRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/isi/$kode': typeof IsiKodeRoute
   '/asesmen/': typeof AsesmenIndexRoute
   '/asesmen/$id/kualitatif': typeof AsesmenIdKualitatifRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
     | '/isi/$kode'
     | '/asesmen/'
     | '/asesmen/$id/kualitatif'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
     | '/isi/$kode'
     | '/asesmen'
     | '/asesmen/$id/kualitatif'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login'
     | '/isi/$kode'
     | '/asesmen/'
     | '/asesmen/$id/kualitatif'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
   IsiKodeRoute: typeof IsiKodeRoute
   AsesmenIndexRoute: typeof AsesmenIndexRoute
   AsesmenIdKualitatifRoute: typeof AsesmenIdKualitatifRoute
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/asesmen/': {
@@ -177,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
   IsiKodeRoute: IsiKodeRoute,
   AsesmenIndexRoute: AsesmenIndexRoute,
   AsesmenIdKualitatifRoute: AsesmenIdKualitatifRoute,
