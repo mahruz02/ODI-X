@@ -273,8 +273,7 @@ function LoginPage() {
                 onChange={(e) => setRole(e.target.value as SystemRole)}
                 className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
               >
-                <option value="hr">HR</option>
-                <option value="admin">Admin</option>
+                 <option value="hr">HR</option>
               </select>
             </div>
 

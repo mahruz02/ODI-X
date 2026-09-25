@@ -107,3 +107,19 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
     });
   },
 );
+
+export const requireAdminOrHr = requireSupabaseAuth.middleware([]).server(
+  async ({ next, context }) => {
+    const { data, error } = await context.supabase
+      .from("user_profiles")
+      .select("role")
+      .eq("id", context.userId)
+      .maybeSingle();
+
+    if (error || !data || (data.role !== "admin" && data.role !== "hr")) {
+      throw new Error("Forbidden: Admin or HR role required");
+    }
+
+    return next({ context: { role: data.role } });
+  },
+);

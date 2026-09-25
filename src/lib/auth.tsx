@@ -38,21 +38,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Check local session fallback first
-    try {
-      const savedLocal = localStorage.getItem("odix_local_session");
-      if (savedLocal) {
-        const parsed = JSON.parse(savedLocal);
-        if (parsed.user && parsed.profile) {
-          setUser(parsed.user);
-          setProfile(parsed.profile);
-          setIsLoading(false);
-        }
-      }
-    } catch {
-      /* ignore storage errors */
-    }
-
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setSession(session);
@@ -71,11 +56,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session.user);
         await fetchProfile(session.user);
       } else {
-        // Only clear if no local fallback session exists
-        if (!localStorage.getItem("odix_local_session")) {
-          setProfile(null);
-          setUser(null);
-        }
+        setSession(null);
+        setProfile(null);
+        setUser(null);
         setIsLoading(false);
       }
     });
@@ -183,7 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore */
     }
-    localStorage.removeItem("odix_local_session");
+    setSession(null);
     setProfile(null);
     setUser(null);
   }

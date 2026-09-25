@@ -80,7 +80,7 @@ function IsiPage() {
   const [name, setName] = useState("");
   const [tenure, setTenure] = useState<string | null>(null);
   const [scores, setScores] = useState<Record<string, number>>({});
-  const [comments, setComments] = useState<Record<number, string>>({});
+  const [comments, setComments] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [locked, setLocked] = useState(false);
@@ -181,7 +181,7 @@ function IsiPage() {
       (_, qi) => scores[questionKey(dim.id, qi)] != null,
     );
     if (!allScored) return false;
-    if (dim.critical && !comments[dim.id]?.trim()) return false;
+     if (dim.critical && !comments[String(dim.id)]?.trim()) return false;
     return true;
   }
 
@@ -192,13 +192,17 @@ function IsiPage() {
     try {
       const answers = dims.flatMap((dim) =>
         (dim.questions[role] || []).map((_, qi) => {
-          const comment = comments[dim.id]?.trim();
-          return {
-            dimension: dim.id,
-            questionId: questionKey(dim.id, qi),
-            score: scores[questionKey(dim.id, qi)]!,
-            comment: comment ? comment : undefined,
-          };
+           const comment = comments[String(dim.id)]?.trim();
+           const question = (dim.questions[role] || [])[qi];
+           return {
+             dimension: dim.id,
+             questionId: questionKey(dim.id, qi),
+             score: scores[questionKey(dim.id, qi)]!,
+             comment: comment ? comment : undefined,
+             evidenceText: comments[`${dim.id}-ev-${qi}`]?.trim() || undefined,
+             conflictText: comments[`${dim.id}-cf-${qi}`]?.trim() || undefined,
+             isNa: question?.na ? scores[questionKey(dim.id, qi)] === 0 : undefined,
+           };
         }),
       );
 
@@ -544,12 +548,12 @@ function DimensionStep(props: {
   dim: ReturnType<typeof dimensionsForRole>[number];
   role: Role;
   scores: Record<string, number>;
-  comments: Record<number, string>;
+  comments: Record<string, string>;
   questionKey: (dimId: number, qIdx: number) => string;
   answeredCount: number;
   totalQuestions: number;
   onScore: (key: string, value: number) => void;
-  onComment: (dimId: number, value: string) => void;
+  onComment: (dimId: string, value: string) => void;
   onBack: () => void;
   onNext: () => void;
   canNext: boolean;
@@ -719,8 +723,8 @@ function DimensionStep(props: {
           <textarea
             id={`komentar-${dim.id}`}
             rows={3}
-            value={props.comments[dim.id] ?? ""}
-            onChange={(e) => props.onComment(dim.id, e.target.value)}
+             value={props.comments[String(dim.id)] ?? ""}
+             onChange={(e) => props.onComment(String(dim.id), e.target.value)}
             placeholder="Sampaikan fakta/pengalaman nyata terkait domain ini secara objektif..."
             className="mt-2 w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring"
           />

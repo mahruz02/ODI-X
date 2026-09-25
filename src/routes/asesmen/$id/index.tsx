@@ -32,6 +32,7 @@ import {
   type Role,
 } from "@/lib/questionnaire";
 import { buildDimensionSummaries, computeCompositeIndices } from "@/lib/report";
+import type { CommentRow, DocumentReview, FgdNote, InterviewNote, QuantitativeMetric, RespondentLink, RespondentRow } from "@/lib/diagnosis.server";
 
 const dashboardQuery = (id: string) =>
   queryOptions({
@@ -95,6 +96,12 @@ function DashboardPage() {
   const [selectedSummary, setSelectedSummary] = useState<DimensionSummary | null>(null);
 
   const scores = data.scores;
+  const comments = data.comments as CommentRow[];
+  const fgd = qualData.fgd as FgdNote[];
+  const interviews = qualData.interviews as InterviewNote[];
+  const documents = qualData.documents as DocumentReview[];
+  const metrics = qualData.metrics as QuantitativeMetric[];
+  const respondentLinks = (qualData.respondentLinks ?? []) as RespondentLink[];
 
   const summaries = useMemo(
     () => buildDimensionSummaries(scores),
@@ -107,8 +114,8 @@ function DashboardPage() {
   );
 
   const evidenceMap = useMemo(
-    () => buildEvidenceMap({ scores, fgd: qualData.fgd, interviews: qualData.interviews, documents: qualData.documents }),
-    [scores, qualData],
+    () => buildEvidenceMap({ scores, fgd: fgd, interviews: interviews, documents: documents }),
+    [scores, fgd, interviews, documents],
   );
 
   const priorities = useMemo(
@@ -157,17 +164,17 @@ function DashboardPage() {
 
   const flaggedComments = useMemo(() => {
     const flaggedIds = new Set(summaries.filter((s) => s.level !== "low").map((f) => f.id));
-    return data.comments.filter((c) => flaggedIds.has(c.dimension)).slice(0, 6);
-  }, [data.comments, summaries]);
+    return comments.filter((c) => flaggedIds.has(c.dimension)).slice(0, 6);
+  }, [comments, summaries]);
 
   const publicLink =
     typeof window !== "undefined" && data.organization
       ? `${window.location.origin}/isi/${data.organization.code}`
       : "";
 
-  const totalFgd = qualData.fgd.length;
-  const totalInterviews = qualData.interviews.length;
-  const totalDocs = qualData.documents.length;
+  const totalFgd = fgd.length;
+  const totalInterviews = interviews.length;
+  const totalDocs = documents.length;
   const reportReady = totalRespondents >= 5 && (totalFgd > 0 || totalInterviews > 0 || totalDocs > 0);
 
   return (
@@ -518,16 +525,16 @@ function DashboardPage() {
           summary={selectedSummary}
           onClose={() => setSelectedSummary(null)}
           evidenceData={{
-            fgdCount: qualData.fgd.filter((f) => f.dimension === selectedSummary.id).length,
-            interviewCount: qualData.interviews.filter((i) => i.dimension === selectedSummary.id).length,
-            docCount: qualData.documents.filter((d) => d.dimension === selectedSummary.id).length,
-            fgdQuotes: qualData.fgd
+            fgdCount: fgd.filter((f) => f.dimension === selectedSummary.id).length,
+            interviewCount: interviews.filter((i) => i.dimension === selectedSummary.id).length,
+            docCount: documents.filter((d) => d.dimension === selectedSummary.id).length,
+            fgdQuotes: fgd
               .filter((f) => f.dimension === selectedSummary.id && f.quotes?.trim())
               .map((f) => f.quotes!),
-            interviewFindings: qualData.interviews
+            interviewFindings: interviews
               .filter((i) => i.dimension === selectedSummary.id && i.findings?.trim())
               .map((i) => i.findings!),
-            metrics: qualData.metrics
+            metrics: metrics
               .filter((m) => m.dimension === selectedSummary.id)
               .map((m) => ({ name: m.metric_name, target: m.target_val, actual: m.actual_val })),
           }}
@@ -570,10 +577,11 @@ function RespondentLinkManager({ id }: { id: string }) {
   const [role, setRole] = useState<Role>("karyawan");
   const [name, setName] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
-  const { data: links = [] } = useQuery({
+  const { data: rawLinks = [] } = useQuery({
     queryKey: ["respondent-links", id],
     queryFn: () => listRespondentLinks({ data: { id } }),
   });
+  const links = rawLinks as RespondentLink[];
   const create = useMutation({
     mutationFn: () =>
       addRespondentLink({
@@ -630,10 +638,11 @@ function RespondentLinkManager({ id }: { id: string }) {
 
 function ResponseManager({ id }: { id: string }) {
   const qc = useQueryClient();
-  const { data: respondents = [], isLoading } = useQuery({
+  const { data: rawRespondents = [], isLoading } = useQuery({
     queryKey: ["respondents", id],
     queryFn: () => getRespondents({ data: { id } }),
   });
+  const respondents = rawRespondents as RespondentRow[];
 
   const invalidate = () => {
     void qc.invalidateQueries({ queryKey: ["respondents", id] });
