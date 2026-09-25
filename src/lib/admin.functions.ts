@@ -26,11 +26,11 @@ export const listProjects = createServerFn({ method: "GET" }).middleware([requir
   .handler(() => fetchProjects(createPublicClient()));
 
 export const listRespondentLinks = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(({ data }) => fetchRespondentLinks(createPublicClient(), data.id));
 
 export const addRespondentLink = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -43,7 +43,7 @@ export const addRespondentLink = createServerFn({ method: "POST" }).middleware([
   .handler(({ data }) => createRespondentLink(createPublicClient(), data));
 
 export const addProject = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         name: z.string().min(2).max(160),
@@ -62,7 +62,7 @@ export const addProject = createServerFn({ method: "POST" }).middleware([require
   .handler(({ data }) => createProject(createPublicClient(), data));
 
 export const setProjectStatus = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         id: z.string().uuid(),
@@ -73,21 +73,21 @@ export const setProjectStatus = createServerFn({ method: "POST" }).middleware([r
   .handler(({ data }) => updateProjectStatus(createPublicClient(), data));
 
 export const getDashboardData = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(({ data }) => fetchDashboardData(createPublicClient(), data.id));
 
 export const getTriangulationData = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(({ data }) =>
     fetchTriangulationData(createPublicClient(), data.id),
   );
 
 export const getQualitativeData = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(({ data }) => fetchQualitative(createPublicClient(), data.id));
 
 export const addFgdNote = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -103,7 +103,7 @@ export const addFgdNote = createServerFn({ method: "POST" }).middleware([require
   .handler(({ data }) => saveFgdNote(createPublicClient(), data));
 
 export const addInterviewNote = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -117,7 +117,7 @@ export const addInterviewNote = createServerFn({ method: "POST" }).middleware([r
   .handler(({ data }) => saveInterviewNote(createPublicClient(), data));
 
 export const addDocumentReview = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -133,7 +133,7 @@ export const addDocumentReview = createServerFn({ method: "POST" }).middleware([
   .handler(({ data }) => saveDocumentReview(createPublicClient(), data));
 
 export const addQuantitativeMetric = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -151,7 +151,7 @@ export const addQuantitativeMetric = createServerFn({ method: "POST" }).middlewa
   .handler(({ data }) => saveQuantitativeMetric(createPublicClient(), data));
 
 export const removeQualitativeEntry = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         table: z.enum(["fgd_notes", "interview_notes", "document_reviews", "quantitative_metrics"]),
@@ -164,15 +164,15 @@ export const removeQualitativeEntry = createServerFn({ method: "POST" }).middlew
   );
 
 export const removeProject = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(({ data }) => deleteProject(createPublicClient(), data.id));
 
 export const getRespondents = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(({ data }) => fetchRespondents(createPublicClient(), data.id));
 
 export const removeRespondent = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -183,7 +183,7 @@ export const removeRespondent = createServerFn({ method: "POST" }).middleware([r
   .handler(({ data }) => deleteRespondent(createPublicClient(), data));
 
 export const removeResponsesByRole = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),

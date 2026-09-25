@@ -3,11 +3,11 @@ import { z } from "zod";
 import { fetchLinkByToken, fetchOrganizationByCode, insertResponses, submitResponsesWithToken } from "./diagnosis.server";
 
 export const getOrganizationByCode = createServerFn({ method: "GET" })
-  .inputValidator((data) => z.object({ code: z.string().max(80) }).parse(data))
+  .validator((data) => z.object({ code: z.string().max(80) }).parse(data))
   .handler(({ data }) => fetchOrganizationByCode(data.code));
 
 export const getLinkByToken = createServerFn({ method: "GET" })
-  .inputValidator((data) => z.object({ token: z.string().max(100) }).parse(data))
+  .validator((data) => z.object({ token: z.string().max(100) }).parse(data))
   .handler(({ data }) => fetchLinkByToken(data.token));
 
 const submitSchema = z.object({
@@ -31,7 +31,7 @@ const submitSchema = z.object({
 });
 
 export const submitResponses = createServerFn({ method: "POST" })
-  .inputValidator((data) => submitSchema.parse(data))
+  .validator((data) => submitSchema.parse(data))
   .handler(({ data }) => insertResponses(data));
 
 const submitTokenSchema = z.object({
@@ -54,5 +54,5 @@ const submitTokenSchema = z.object({
 });
 
 export const submitTokenResponses = createServerFn({ method: "POST" })
-  .inputValidator((data) => submitTokenSchema.parse(data))
+  .validator((data) => submitTokenSchema.parse(data))
   .handler(({ data }) => submitResponsesWithToken(data));

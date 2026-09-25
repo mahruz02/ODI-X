@@ -137,6 +137,8 @@ export interface AnswerInput {
 
 /* ---------- Publik (tanpa login) ---------- */
 
+const demoEnabled = process.env["ODIX_ENABLE_DEMO"] === "true";
+
 export async function fetchOrganizationByCode(code: string) {
   try {
     const { data, error } = await createPublicClient()
@@ -149,9 +151,8 @@ export async function fetchOrganizationByCode(code: string) {
     /* fallback below */
   }
 
-  // Fallback demo lookup by code or default
-  const matched = DEMO_ORGANIZATIONS.find((o) => o.code === code) || DEMO_ORGANIZATIONS[0]!;
-  return matched;
+  if (!demoEnabled) throw new Error("Organization lookup unavailable");
+  return DEMO_ORGANIZATIONS.find((o) => o.code === code) ?? null;
 }
 
 export async function fetchLinkByToken(token: string) {
@@ -201,10 +202,11 @@ export async function insertResponses(input: {
     /* fallback demo response submit below */
   }
 
+  if (!demoEnabled) throw new Error("Response submission unavailable");
   return { ok: true as const };
 }
 
-/* ---------- Mock Demo Fallback Data ---------- */
+/* ---------- Mock Demo Fallback Data ----------
 
 const DEMO_ORG_ID = "00000000-0000-0000-0000-000000000001";
 

@@ -49,11 +49,11 @@ async function loadContext(orgId: string, dimension: number) {
 }
 
 export const listInsights = createServerFn({ method: "GET" })
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(({ data }) => fetchInsights(createPublicClient(), data.id));
 
 export const buildDimensionInsight = createServerFn({ method: "POST" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -126,7 +126,7 @@ export const buildDimensionInsight = createServerFn({ method: "POST" })
   });
 
 export const buildProbingQuestions = createServerFn({ method: "POST" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -161,7 +161,7 @@ export const buildProbingQuestions = createServerFn({ method: "POST" })
   });
 
 export const saveInsightEdit = createServerFn({ method: "POST" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         organizationId: z.string().uuid(),
@@ -182,11 +182,11 @@ export const saveInsightEdit = createServerFn({ method: "POST" })
   );
 
 export const toggleInsightInReport = createServerFn({ method: "POST" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z.object({ id: z.string().uuid(), include: z.boolean() }).parse(data),
   )
   .handler(({ data }) => setInsightInclusion(createPublicClient(), data));
 
 export const removeInsight = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(({ data }) => deleteInsight(createPublicClient(), data.id));
