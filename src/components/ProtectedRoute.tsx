@@ -35,14 +35,14 @@ export function ProtectedRoute({
           Akses Terbatas — Memerlukan Login
         </h1>
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-          Ruang kerja diagnosis dan dashboard organisasi hanya dapat diakses oleh pengguna terautentikasi (Admin / Asesor).
+          Ruang kerja diagnosis dan dashboard organisasi hanya dapat diakses oleh Admin / HR.
         </p>
         <div className="mt-6 flex w-full flex-col gap-2">
           <Link
             to="/login"
             className="w-full rounded-xl bg-primary px-4 py-3 text-xs font-bold text-primary-foreground shadow-sm hover:opacity-90"
           >
-            Masuk ke Akun Asesor / Admin
+            Masuk ke Akun Admin / HR
           </Link>
           <Link
             to="/"

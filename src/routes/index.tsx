@@ -41,7 +41,7 @@ function LandingPage() {
             to="/asesmen"
             className="rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary/90"
           >
-            Ruang Kerja Asesor & Proyek
+            Ruang Kerja Admin/HR & Proyek
           </Link>
           <Link
             to="/asesmen"
@@ -64,7 +64,7 @@ function LandingPage() {
           <StepBox
             step="1"
             title="Setup Organisasi"
-            desc="Role auth (Super Admin, Org Admin, Leadership, Respondent, Analyst), Profile Organisasi, dan pembuatan proyek."
+            desc="Role auth (Admin, HR), profil organisasi, link khusus responden, dan pembuatan proyek."
           />
           <StepBox
             step="2"

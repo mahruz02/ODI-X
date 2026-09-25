@@ -142,7 +142,7 @@ function ReportPage() {
   }
 
   return (
-    <ProtectedRoute allowedRoles={["super_admin", "org_admin", "analyst"]}>
+    <ProtectedRoute allowedRoles={["admin", "hr"]}>
       <main className="mx-auto w-full max-w-5xl px-4 py-8 print:max-w-none print:px-0 print:py-0 sm:px-6 animate-fade-in">
       <div className="no-print mb-4">
         <Link

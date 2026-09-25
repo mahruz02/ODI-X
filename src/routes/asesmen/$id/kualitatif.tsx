@@ -95,7 +95,7 @@ function QualitativePage() {
   });
 
   return (
-    <ProtectedRoute allowedRoles={["super_admin", "org_admin", "analyst"]}>
+    <ProtectedRoute allowedRoles={["admin", "hr"]}>
       <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 animate-fade-in">
       <header className="mb-6">
         <Link

@@ -330,6 +330,23 @@ function IsiPage() {
             subtitle="Isian di bawah bersifat opsional untuk memudahkan analisis demografi."
           />
           <div className="space-y-5 rounded-2xl border bg-card p-5 shadow-sm">
+            {draftSavedTime && (
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/40 p-3 text-xs">
+                <span className="font-medium text-muted-foreground">Draft tersimpan pukul {draftSavedTime}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.localStorage.removeItem(draftKey);
+                    setScores({});
+                    setComments({});
+                    setDraftSavedTime(null);
+                  }}
+                  className="rounded-lg border bg-background px-3 py-1.5 font-bold text-destructive hover:bg-destructive/10"
+                >
+                  Reset Draft
+                </button>
+              </div>
+            )}
             <div>
               <label htmlFor="nama" className="text-sm font-semibold">
                 Nama / Inisial{" "}

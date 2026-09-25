@@ -2,7 +2,7 @@
 // Prespektif: Leadership / Pengurus, Manager / Manajemen, Employee / Karyawan, Stakeholder.
 
 export type Role = "pengurus" | "manajemen" | "karyawan" | "stakeholder";
-export type SystemRole = "super_admin" | "org_admin" | "analyst";
+export type SystemRole = "admin" | "hr";
 
 export const ROLE_LABELS: Record<Role, string> = {
   pengurus: "Leadership / Pengurus",
@@ -12,9 +12,8 @@ export const ROLE_LABELS: Record<Role, string> = {
 };
 
 export const SYSTEM_ROLE_LABELS: Record<SystemRole, string> = {
-  super_admin: "Super Admin",
-  org_admin: "Org Admin",
-  analyst: "Analyst (Asesor)",
+  admin: "Admin",
+  hr: "HR",
 };
 
 export interface Dimension {

@@ -12,9 +12,11 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 
 import { RadarTriChart, type RadarDatum } from "@/components/RadarTriChart";
 import {
+  addRespondentLink,
   getDashboardData,
   getQualitativeData,
   getRespondents,
+  listRespondentLinks,
   removeRespondent,
   removeResponsesByRole,
   setProjectStatus,
@@ -169,7 +171,7 @@ function DashboardPage() {
   const reportReady = totalRespondents >= 5 && (totalFgd > 0 || totalInterviews > 0 || totalDocs > 0);
 
   return (
-    <ProtectedRoute allowedRoles={["super_admin", "org_admin", "analyst"]}>
+    <ProtectedRoute allowedRoles={["admin", "hr"]}>
       <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 animate-fade-in">
       {/* Top Banner Header */}
       <div className="mb-6 rounded-2xl border bg-card p-6 shadow-sm">
@@ -206,6 +208,8 @@ function DashboardPage() {
           </div>
         </div>
       </div>
+
+      <RespondentLinkManager id={id} />
 
       {/* Persisten Navigation Tabs */}
       <AssessmentNavTabs id={id} />
@@ -561,6 +565,69 @@ function IndexCard({
   );
 }
 
+function RespondentLinkManager({ id }: { id: string }) {
+  const qc = useQueryClient();
+  const [role, setRole] = useState<Role>("karyawan");
+  const [name, setName] = useState("");
+  const [copied, setCopied] = useState<string | null>(null);
+  const { data: links = [] } = useQuery({
+    queryKey: ["respondent-links", id],
+    queryFn: () => listRespondentLinks({ data: { id } }),
+  });
+  const create = useMutation({
+    mutationFn: () =>
+      addRespondentLink({
+        data: {
+          organizationId: id,
+          perspective: role,
+          respondentName: name.trim() || undefined,
+        },
+      }),
+    onSuccess: () => {
+      setName("");
+      void qc.invalidateQueries({ queryKey: ["respondent-links", id] });
+    },
+  });
+
+  const urlOf = (token: string) =>
+    typeof window !== "undefined" ? `${window.location.origin}/isi/${token}` : `/isi/${token}`;
+
+  return (
+    <section className="mb-6 rounded-2xl border bg-card p-5 shadow-sm">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="font-display text-lg font-bold tracking-tight">Link Khusus Responden</h2>
+          <p className="text-xs text-muted-foreground">Asesor/responden isi nama dan kuesioner tanpa login lewat link unik.</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <select value={role} onChange={(e) => setRole(e.target.value as Role)} className="rounded-xl border bg-background px-3 py-2 text-xs font-semibold">
+            {ROLES.map((r) => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
+          </select>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nama/inisial opsional" className="rounded-xl border bg-background px-3 py-2 text-xs" />
+          <button type="button" disabled={create.isPending} onClick={() => create.mutate()} className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50">
+            Buat Link Khusus
+          </button>
+        </div>
+      </div>
+      {links.length > 0 && (
+        <div className="mt-4 space-y-2">
+          {links.slice(0, 6).map((link) => {
+            const url = urlOf(link.token);
+            return (
+              <div key={link.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border bg-background p-3 text-xs">
+                <span className="font-semibold">{ROLE_LABELS[link.perspective]} · {link.respondent_name || "Tanpa nama"} · {link.status}</span>
+                <button type="button" onClick={() => { void navigator.clipboard.writeText(url); setCopied(link.id); setTimeout(() => setCopied(null), 2000); }} className="rounded-lg border px-3 py-1.5 font-bold hover:bg-muted">
+                  {copied === link.id ? "Tersalin" : "Salin Link"}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function ResponseManager({ id }: { id: string }) {
   const qc = useQueryClient();
   const { data: respondents = [], isLoading } = useQuery({
@@ -603,13 +670,10 @@ function ResponseManager({ id }: { id: string }) {
             type="button"
             disabled={delRole.isPending}
             onClick={() => {
-              if (
-                window.confirm(
-                  `Hapus SEMUA isian ${ROLE_LABELS[role]} pada asesmen ini?`,
-                )
-              ) {
-                delRole.mutate(role);
-              }
+              const typed = window.prompt(
+                `Ketik RESET untuk menghapus semua isian ${ROLE_LABELS[role]} pada asesmen ini.`,
+              );
+              if (typed === "RESET") delRole.mutate(role);
             }}
             className="inline-flex items-center gap-2 rounded-xl border border-destructive/30 bg-background px-3 py-2 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/10 disabled:opacity-50"
           >
@@ -649,9 +713,8 @@ function ResponseManager({ id }: { id: string }) {
                 type="button"
                 disabled={delOne.isPending}
                 onClick={() => {
-                  if (window.confirm("Hapus seluruh isian responden ini?")) {
-                    delOne.mutate(r.respondent_id);
-                  }
+                  const typed = window.prompt("Ketik HAPUS untuk menghapus seluruh isian responden ini.");
+                  if (typed === "HAPUS") delOne.mutate(r.respondent_id);
                 }}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-destructive/30 px-2.5 py-1 text-xs font-semibold text-destructive hover:bg-destructive/10"
               >

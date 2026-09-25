@@ -90,7 +90,7 @@ function ProjectsPage() {
       .reduce((a, b) => a + Number(b.respondents ?? 0), 0);
 
   return (
-    <ProtectedRoute allowedRoles={["super_admin", "org_admin", "analyst"]}>
+    <ProtectedRoute allowedRoles={["admin", "hr"]}>
       <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">
         <header className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b pb-6">
           <div>
@@ -328,13 +328,10 @@ function ProjectsPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      if (
-                        window.confirm(
-                          `Hapus proyek diagnosis \"${org.name}\" beserta SELURUH data kuesioner, FGD, wawancara, dan telaah dokumen? Tindakan ini permanen.`,
-                        )
-                      ) {
-                        destroy.mutate({ id: org.id });
-                      }
+                      const typed = window.prompt(
+                        `Ketik HAPUS untuk menghapus proyek "${org.name}" beserta seluruh data. Tindakan ini permanen.`,
+                      );
+                      if (typed === "HAPUS") destroy.mutate({ id: org.id });
                     }}
                     disabled={destroy.isPending}
                     className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/30 px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50"

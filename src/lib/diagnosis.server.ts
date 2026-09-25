@@ -6,20 +6,14 @@ export async function seedAdminAccounts() {
     {
       email: "admin@odix.id",
       password: "Admin123!",
-      name: "Super Admin ODI-X",
-      role: "super_admin",
+      name: "Admin ODI-X",
+      role: "admin",
     },
     {
-      email: "asesor@odix.id",
-      password: "Asesor123!",
-      name: "Asesor Organisasi",
-      role: "org_admin",
-    },
-    {
-      email: "analyst@odix.id",
-      password: "Analyst123!",
-      name: "Analis Data Diagnosis",
-      role: "analyst",
+      email: "hr@odix.id",
+      password: "Hr123456!",
+      name: "HR Organisasi",
+      role: "hr",
     },
   ];
 

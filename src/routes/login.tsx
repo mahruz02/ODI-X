@@ -1,18 +1,17 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Activity, KeyRound, Mail, ShieldCheck, Sparkles, UserPlus } from "lucide-react";
+import { Activity, KeyRound, Mail, ShieldCheck, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { seedDefaultAdmin } from "@/lib/admin.functions";
 import type { SystemRole } from "@/lib/questionnaire";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Login Ruang Asesor — ODI-X" },
+      { title: "Login Admin & HR — ODI-X" },
       {
         name: "description",
         content:
-          "Halaman masuk sistem diagnosis ODI-X untuk Super Admin, Org Admin, dan Analyst.",
+          "Halaman masuk sistem diagnosis ODI-X untuk Admin dan HR.",
       },
     ],
   }),
@@ -27,7 +26,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [role, setRole] = useState<SystemRole>("org_admin");
+  const [role, setRole] = useState<SystemRole>("hr");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -107,10 +106,10 @@ function LoginPage() {
             <Activity className="size-6" />
           </span>
           <h1 className="mt-3 font-display text-2xl font-extrabold tracking-tight">
-            Ruang Kerja Asesor ODI-X
+            Ruang Kerja Admin & HR ODI-X
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">
-            Akses khusus Super Admin, Org Admin, dan Analyst
+            Akses khusus Admin dan HR
           </p>
         </div>
 
@@ -274,9 +273,8 @@ function LoginPage() {
                 onChange={(e) => setRole(e.target.value as SystemRole)}
                 className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
               >
-                <option value="org_admin">Org Admin (Pengelola Organisasi BMT)</option>
-                <option value="analyst">Analyst / Asesor Organisasi</option>
-                <option value="super_admin">Super Admin (Global Platform)</option>
+                <option value="hr">HR</option>
+                <option value="admin">Admin</option>
               </select>
             </div>
 
@@ -290,67 +288,6 @@ function LoginPage() {
           </form>
         )}
 
-        {/* Quick Seed & Demo Login Helper */}
-        <div className="mt-6 border-t pt-4">
-          <p className="text-[11px] text-muted-foreground text-center font-medium">
-            Kredensial Pengujian / Seeder Akun Demo:
-          </p>
-          <div className="mt-2.5 space-y-1.5">
-            <button
-              type="button"
-              onClick={() => {
-                setEmail("admin@odix.id");
-                setPassword("Admin123!");
-                setMode("password");
-              }}
-              className="w-full rounded-xl border bg-muted/40 p-2.5 text-left text-xs transition-colors hover:bg-muted flex items-center justify-between"
-            >
-              <div>
-                <span className="font-bold block text-foreground">admin@odix.id</span>
-                <span className="text-[10px] text-muted-foreground">Pass: Admin123! · Role: Super Admin</span>
-              </div>
-              <span className="text-[10px] font-bold text-primary">Isi Form →</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setEmail("asesor@odix.id");
-                setPassword("Asesor123!");
-                setMode("password");
-              }}
-              className="w-full rounded-xl border bg-muted/40 p-2.5 text-left text-xs transition-colors hover:bg-muted flex items-center justify-between"
-            >
-              <div>
-                <span className="font-bold block text-foreground">asesor@odix.id</span>
-                <span className="text-[10px] text-muted-foreground">Pass: Asesor123! · Role: Org Admin</span>
-              </div>
-              <span className="text-[10px] font-bold text-primary">Isi Form →</span>
-            </button>
-          </div>
-
-          <button
-            type="button"
-            disabled={loading}
-            onClick={async () => {
-              setLoading(true);
-              setError(null);
-              setMessage(null);
-              try {
-                const res = await seedDefaultAdmin();
-                setMessage(`Seeder berhasil dijalankan: ${res.map((r) => `${r.email} (${r.status})`).join(", ")}`);
-              } catch (e: any) {
-                setError(e?.message || "Gagal menjalankan seeder.");
-              } finally {
-                setLoading(false);
-              }
-            }}
-            className="mt-3 w-full inline-flex items-center justify-center gap-1.5 rounded-xl border border-primary/30 bg-primary/5 py-2 text-xs font-bold text-primary hover:bg-primary/10 transition-colors disabled:opacity-50"
-          >
-            <Sparkles className="size-3.5" />
-            Jalankan Seeder Akun Bawaan Di Database
-          </button>
-        </div>
       </div>
     </main>
   );

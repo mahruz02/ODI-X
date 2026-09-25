@@ -125,7 +125,7 @@ function SiteHeader() {
                 </span>
                 <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-primary">
                   <ShieldCheck className="size-3" />
-                  {SYSTEM_ROLE_LABELS[profile?.role || "org_admin"]}
+                  {SYSTEM_ROLE_LABELS[profile?.role || "hr"]}
                 </span>
               </div>
               <button
@@ -146,7 +146,7 @@ function SiteHeader() {
                 to="/login"
                 className="rounded-xl bg-primary px-4 py-2 text-primary-foreground transition-opacity hover:opacity-90 shadow-sm"
               >
-                Masuk Ruang Asesor
+                Masuk Admin / HR
               </Link>
             </div>
           )}
