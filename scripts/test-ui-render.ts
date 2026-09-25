@@ -30,8 +30,8 @@ try {
 
   const htmlRadar = renderToString(React.createElement(RadarTriChart, { data: mockRadarData }));
   assert(htmlRadar.length > 0, "RadarTriChart berhasil di-render ke HTML");
-} catch (e: any) {
-  console.error("RadarTriChart error:", e.message);
+} catch (e: unknown) {
+  console.error("RadarTriChart error:", e instanceof Error ? e.message : String(e));
   assert(false, "RadarTriChart render test");
 }
 
@@ -54,10 +54,17 @@ try {
     },
   ];
 
-  const htmlKanban = renderToString(React.createElement(KanbanRoadmap, { recommendations: mockRecs as any }));
-  assert(htmlKanban.includes("Sosialisasi Visi Organisasi") && htmlKanban.includes("Direksi Utama"), "KanbanRoadmap berhasil di-render dengan data rekomendasi");
-} catch (e: any) {
-  console.error("KanbanRoadmap error:", e.message);
+  const htmlKanban = renderToString(
+    React.createElement(KanbanRoadmap, {
+      recommendations: mockRecs as Parameters<typeof KanbanRoadmap>[0]["recommendations"],
+    }),
+  );
+  assert(
+    htmlKanban.includes("Sosialisasi Visi Organisasi") && htmlKanban.includes("Direksi Utama"),
+    "KanbanRoadmap berhasil di-render dengan data rekomendasi",
+  );
+} catch (e: unknown) {
+  console.error("KanbanRoadmap error:", e instanceof Error ? e.message : String(e));
   assert(false, "KanbanRoadmap render test");
 }
 
@@ -77,7 +84,7 @@ try {
 
   const htmlModal = renderToString(
     React.createElement(DomainDetailModal, {
-      summary: mockSummary as any,
+      summary: mockSummary as Parameters<typeof DomainDetailModal>[0]["summary"],
       onClose: () => {},
       evidenceData: {
         fgdCount: 2,
@@ -87,12 +94,16 @@ try {
         interviewFindings: ["Perlu refresh pelatihan"],
         metrics: [{ name: "Target NPF", target: "< 3%", actual: "4.5%" }],
       },
-    })
+    }),
   );
 
-  assert(htmlModal.includes("Kepemimpinan &amp; Visi Strategis") && htmlModal.includes("SOP kurang jelas"), "DomainDetailModal berhasil di-render dengan bukti kualitatif");
-} catch (e: any) {
-  console.error("DomainDetailModal error:", e.message);
+  assert(
+    htmlModal.includes("Kepemimpinan &amp; Visi Strategis") &&
+      htmlModal.includes("SOP kurang jelas"),
+    "DomainDetailModal berhasil di-render dengan bukti kualitatif",
+  );
+} catch (e: unknown) {
+  console.error("DomainDetailModal error:", e instanceof Error ? e.message : String(e));
   assert(false, "DomainDetailModal render test");
 }
 

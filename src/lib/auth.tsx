@@ -18,7 +18,12 @@ interface AuthContextType {
   isLoading: boolean;
   signInWithPassword: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithOtp: (email: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, name: string, role?: SystemRole) => Promise<{ error: Error | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    name: string,
+    role?: SystemRole,
+  ) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   hasRole: (roles: SystemRole[]) => boolean;
   canManageOrg: (orgId: string) => boolean;
@@ -38,17 +43,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setSession(session);
-        setUser(session.user);
-        fetchProfile(session.user);
-      } else {
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        if (session?.user) {
+          setSession(session);
+          setUser(session.user);
+          fetchProfile(session.user);
+        } else {
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
         setIsLoading(false);
-      }
-    }).catch(() => {
-      setIsLoading(false);
-    });
+      });
 
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
@@ -100,7 +108,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-
   async function signInWithPassword(email: string, password: string) {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -131,7 +138,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       /* offline */
     }
 
-    return { error: new Error("Gagal mengirim magic link. Periksa koneksi atau konfigurasi Supabase.") };
+    return {
+      error: new Error("Gagal mengirim magic link. Periksa koneksi atau konfigurasi Supabase."),
+    };
   }
 
   async function signUp(email: string, password: string, name: string, role: SystemRole = "hr") {

@@ -9,16 +9,16 @@ import type { DimensionSummary } from "./report";
 /** Bobot dampak dimensi terhadap kesehatan organisasi (0–1). */
 export const IMPACT_WEIGHT: Record<number, number> = {
   1: 0.85, // Konteks Eksternal
-  2: 0.90, // Strategi & Arah
+  2: 0.9, // Strategi & Arah
   3: 0.95, // Kepemimpinan & Tata Kelola
   4: 0.75, // Struktur Organisasi
   5: 0.85, // Budaya & Etika
-  6: 0.80, // SDM & Kompetensi
-  7: 0.70, // Desain Pekerjaan
-  8: 0.80, // Tim & Kolaborasi
+  6: 0.8, // SDM & Kompetensi
+  7: 0.7, // Desain Pekerjaan
+  8: 0.8, // Tim & Kolaborasi
   9: 0.85, // Proses & Teknologi
-  10: 0.90, // Manajemen Kinerja
-  11: 1.00, // Risiko & Kontrol
+  10: 0.9, // Manajemen Kinerja
+  11: 1.0, // Risiko & Kontrol
   12: 0.85, // Pengalaman Stakeholder
 };
 
@@ -65,13 +65,11 @@ export function buildPriorities(
     const impact = 0.5 * weight + 0.5 * shortfall;
     const risk = RISK_WEIGHT[s.id] ?? 0.5;
     const penalty = 1 - conf.score;
-    const score = Math.max(
-      0,
-      urgency * 0.35 + impact * 0.3 + risk * 0.2 - penalty * 0.15,
-    );
+    const score = Math.max(0, urgency * 0.35 + impact * 0.3 + risk * 0.2 - penalty * 0.15);
 
     const reasons: string[] = [];
-    if (urgency >= 0.5) reasons.push(`gap persepsi ${s.gap.toFixed(2)} (${GAP_LABELS[s.level].toLowerCase()})`);
+    if (urgency >= 0.5)
+      reasons.push(`gap persepsi ${s.gap.toFixed(2)} (${GAP_LABELS[s.level].toLowerCase()})`);
     if (shortfall >= 0.45) reasons.push(`skor rata-rata rendah (${s.average.toFixed(2)})`);
     if (risk >= 0.9) reasons.push("menyentuh kepatuhan, risiko, dan tata kelola");
     else if (risk >= 0.6) reasons.push("berdampak pada SDM, efisiensi, dan kinerja");

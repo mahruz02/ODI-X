@@ -48,24 +48,40 @@ export function DomainDetailModal({ summary, onClose, evidenceData }: DomainDeta
           {/* Scorecards */}
           <div className="grid grid-cols-3 gap-3">
             <div className="rounded-xl border bg-background p-3">
-              <span className="text-muted-foreground font-semibold block text-[10px]">Skor Agregat</span>
+              <span className="text-muted-foreground font-semibold block text-[10px]">
+                Skor Agregat
+              </span>
               <p className="text-xl font-extrabold text-primary mt-0.5">
                 {summary.scoreNormalized != null ? `${summary.scoreNormalized}/100` : "—"}
               </p>
-              <p className="text-[10px] text-muted-foreground">Rata-rata Likert: {summary.average?.toFixed(2) ?? "—"}</p>
+              <p className="text-[10px] text-muted-foreground">
+                Rata-rata Likert: {summary.average?.toFixed(2) ?? "—"}
+              </p>
             </div>
             <div className="rounded-xl border bg-background p-3">
-              <span className="text-muted-foreground font-semibold block text-[10px]">Gap Persepsi Δ</span>
-              <p className="text-xl font-extrabold text-foreground mt-0.5">{summary.gap.toFixed(2)}</p>
-              <p className="text-[10px] text-muted-foreground">Status: {GAP_LABELS[summary.level]}</p>
-            </div>
-            <div className="rounded-xl border bg-background p-3">
-              <span className="text-muted-foreground font-semibold block text-[10px]">Bukti Kualitatif</span>
+              <span className="text-muted-foreground font-semibold block text-[10px]">
+                Gap Persepsi Δ
+              </span>
               <p className="text-xl font-extrabold text-foreground mt-0.5">
-                {(evidenceData?.fgdCount ?? 0) + (evidenceData?.interviewCount ?? 0) + (evidenceData?.docCount ?? 0)} Bukti
+                {summary.gap.toFixed(2)}
               </p>
               <p className="text-[10px] text-muted-foreground">
-                FGD: {evidenceData?.fgdCount ?? 0} · IV: {evidenceData?.interviewCount ?? 0} · Dok: {evidenceData?.docCount ?? 0}
+                Status: {GAP_LABELS[summary.level]}
+              </p>
+            </div>
+            <div className="rounded-xl border bg-background p-3">
+              <span className="text-muted-foreground font-semibold block text-[10px]">
+                Bukti Kualitatif
+              </span>
+              <p className="text-xl font-extrabold text-foreground mt-0.5">
+                {(evidenceData?.fgdCount ?? 0) +
+                  (evidenceData?.interviewCount ?? 0) +
+                  (evidenceData?.docCount ?? 0)}{" "}
+                Bukti
+              </p>
+              <p className="text-[10px] text-muted-foreground">
+                FGD: {evidenceData?.fgdCount ?? 0} · IV: {evidenceData?.interviewCount ?? 0} · Dok:{" "}
+                {evidenceData?.docCount ?? 0}
               </p>
             </div>
           </div>
@@ -80,7 +96,9 @@ export function DomainDetailModal({ summary, onClose, evidenceData }: DomainDeta
                 const score = summary.roleScores[r];
                 return (
                   <div key={r} className="rounded-xl border bg-background p-2.5 text-center">
-                    <span className="text-muted-foreground text-[10px] font-semibold block">{ROLE_LABELS[r]}</span>
+                    <span className="text-muted-foreground text-[10px] font-semibold block">
+                      {ROLE_LABELS[r]}
+                    </span>
                     <span className="font-extrabold text-sm text-foreground block mt-0.5">
                       {score != null ? score.toFixed(2) : "—"}
                     </span>
@@ -103,7 +121,10 @@ export function DomainDetailModal({ summary, onClose, evidenceData }: DomainDeta
                     <Users className="size-3" /> Temuan FGD:
                   </span>
                   {evidenceData.fgdQuotes.map((q, i) => (
-                    <blockquote key={i} className="rounded-xl border bg-background p-2.5 italic text-muted-foreground">
+                    <blockquote
+                      key={i}
+                      className="rounded-xl border bg-background p-2.5 italic text-muted-foreground"
+                    >
                       “{q}”
                     </blockquote>
                   ))}
@@ -116,7 +137,10 @@ export function DomainDetailModal({ summary, onClose, evidenceData }: DomainDeta
                     <MessageSquare className="size-3" /> Temuan Wawancara:
                   </span>
                   {evidenceData.interviewFindings.map((f, i) => (
-                    <div key={i} className="rounded-xl border bg-background p-2.5 text-muted-foreground">
+                    <div
+                      key={i}
+                      className="rounded-xl border bg-background p-2.5 text-muted-foreground"
+                    >
                       {f}
                     </div>
                   ))}
@@ -132,7 +156,9 @@ export function DomainDetailModal({ summary, onClose, evidenceData }: DomainDeta
                     {evidenceData.metrics.map((m, i) => (
                       <div key={i} className="flex justify-between items-center text-[11px]">
                         <span className="font-medium">{m.name}</span>
-                        <span className="font-bold">Target: {m.target || "—"} | Actual: {m.actual || "—"}</span>
+                        <span className="font-bold">
+                          Target: {m.target || "—"} | Actual: {m.actual || "—"}
+                        </span>
                       </div>
                     ))}
                   </div>

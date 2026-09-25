@@ -1,5 +1,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import type { Database } from "@/integrations/supabase/types";
+
+type SeedRole = "admin" | "hr";
 
 export async function seedAdminAccounts() {
   const defaultUsers = [
@@ -37,7 +40,7 @@ export async function seedAdminAccounts() {
         id: existing.id,
         email: user.email,
         name: user.name,
-        role: user.role as any,
+        role: user.role as SeedRole,
       });
 
       results.push({ email: user.email, status: "updated", role: user.role });
@@ -55,7 +58,7 @@ export async function seedAdminAccounts() {
           id: newUser.user.id,
           email: user.email,
           name: user.name,
-          role: user.role as any,
+          role: user.role as SeedRole,
         });
         results.push({ email: user.email, status: "created", role: user.role });
       } else {
@@ -68,21 +71,17 @@ export async function seedAdminAccounts() {
 }
 
 export function createPublicClient() {
-  return createClient(
-    process.env["SUPABASE_URL"]!,
-    process.env["SUPABASE_PUBLISHABLE_KEY"]!,
-    {
-      auth: {
-        storage: undefined,
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-      db: { schema: "public" },
+  return createClient(process.env["SUPABASE_URL"]!, process.env["SUPABASE_PUBLISHABLE_KEY"]!, {
+    auth: {
+      storage: undefined,
+      persistSession: false,
+      autoRefreshToken: false,
     },
-  );
+    db: { schema: "public" },
+  });
 }
 
-export type AnyClient = SupabaseClient<any, any, any>;
+export type AnyClient = SupabaseClient<Database>;
 
 export interface Organization {
   id: string;
@@ -206,7 +205,7 @@ export async function insertResponses(input: {
   return { ok: true as const };
 }
 
-/* ---------- Mock Demo Fallback Data ----------
+/* ---------- Mock Demo Fallback Data ---------- */
 
 const DEMO_ORG_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -229,17 +228,63 @@ const DEMO_ORGANIZATIONS: Organization[] = [
 const DEMO_SCORES: DimensionScoreRow[] = Array.from({ length: 12 }, (_, i) => {
   const dim = i + 1;
   return [
-    { organization_id: DEMO_ORG_ID, organization_name: "BMT Amanah Sejahtera (Demo)", dimension: dim, role: "pengurus" as const, avg_score: 4.1 + (dim % 3) * 0.2, respondents: 5 },
-    { organization_id: DEMO_ORG_ID, organization_name: "BMT Amanah Sejahtera (Demo)", dimension: dim, role: "manajemen" as const, avg_score: 3.6 + (dim % 4) * 0.2, respondents: 8 },
-    { organization_id: DEMO_ORG_ID, organization_name: "BMT Amanah Sejahtera (Demo)", dimension: dim, role: "karyawan" as const, avg_score: 3.2 + (dim % 2) * 0.3, respondents: 24 },
-    { organization_id: DEMO_ORG_ID, organization_name: "BMT Amanah Sejahtera (Demo)", dimension: dim, role: "stakeholder" as const, avg_score: 3.9 + (dim % 3) * 0.15, respondents: 15 },
+    {
+      organization_id: DEMO_ORG_ID,
+      organization_name: "BMT Amanah Sejahtera (Demo)",
+      dimension: dim,
+      role: "pengurus" as const,
+      avg_score: 4.1 + (dim % 3) * 0.2,
+      respondents: 5,
+    },
+    {
+      organization_id: DEMO_ORG_ID,
+      organization_name: "BMT Amanah Sejahtera (Demo)",
+      dimension: dim,
+      role: "manajemen" as const,
+      avg_score: 3.6 + (dim % 4) * 0.2,
+      respondents: 8,
+    },
+    {
+      organization_id: DEMO_ORG_ID,
+      organization_name: "BMT Amanah Sejahtera (Demo)",
+      dimension: dim,
+      role: "karyawan" as const,
+      avg_score: 3.2 + (dim % 2) * 0.3,
+      respondents: 24,
+    },
+    {
+      organization_id: DEMO_ORG_ID,
+      organization_name: "BMT Amanah Sejahtera (Demo)",
+      dimension: dim,
+      role: "stakeholder" as const,
+      avg_score: 3.9 + (dim % 3) * 0.15,
+      respondents: 15,
+    },
   ];
 }).flat();
 
 const DEMO_COMMENTS: CommentRow[] = [
-  { organization_id: DEMO_ORG_ID, organization_name: "BMT Amanah Sejahtera (Demo)", dimension: 1, role: "karyawan", comment: "Visi pengurus belum sepenuhnya tersosialisasi ke unit cabang pelaksana." },
-  { organization_id: DEMO_ORG_ID, organization_name: "BMT Amanah Sejahtera (Demo)", dimension: 4, role: "manajemen", comment: "SOP manajemen risiko pembiayaan memerlukan pembaruan sesuai standar DSN-MUI." },
-  { organization_id: DEMO_ORG_ID, organization_name: "BMT Amanah Sejahtera (Demo)", dimension: 7, role: "karyawan", comment: "Pelatihan kompetensi AO/marketing masih terbatas pada saat onboarding awal saja." },
+  {
+    organization_id: DEMO_ORG_ID,
+    organization_name: "BMT Amanah Sejahtera (Demo)",
+    dimension: 1,
+    role: "karyawan",
+    comment: "Visi pengurus belum sepenuhnya tersosialisasi ke unit cabang pelaksana.",
+  },
+  {
+    organization_id: DEMO_ORG_ID,
+    organization_name: "BMT Amanah Sejahtera (Demo)",
+    dimension: 4,
+    role: "manajemen",
+    comment: "SOP manajemen risiko pembiayaan memerlukan pembaruan sesuai standar DSN-MUI.",
+  },
+  {
+    organization_id: DEMO_ORG_ID,
+    organization_name: "BMT Amanah Sejahtera (Demo)",
+    dimension: 7,
+    role: "karyawan",
+    comment: "Pelatihan kompetensi AO/marketing masih terbatas pada saat onboarding awal saja.",
+  },
 ];
 
 /* ---------- Admin & Analyst (terautentikasi) ---------- */
@@ -247,10 +292,7 @@ const DEMO_COMMENTS: CommentRow[] = [
 export async function fetchProjects(client: AnyClient) {
   try {
     const [orgs, progress] = await Promise.all([
-      client
-        .from("organizations")
-        .select("*")
-        .order("created_at", { ascending: false }),
+      client.from("organizations").select("*").order("created_at", { ascending: false }),
       client.from("organization_progress").select("*"),
     ]);
 
@@ -316,7 +358,7 @@ export async function createProject(
         ...(input.priorities12m ? { priorities_12m: input.priorities12m } : {}),
         ...(input.instrument ? { instrument: input.instrument } : {}),
         ...(input.scheduledEnd ? { scheduled_end: input.scheduledEnd } : {}),
-      })
+      } as never)
       .select("*")
       .single();
     if (!error && data) return data as Organization;
@@ -357,11 +399,7 @@ export async function updateProjectStatus(
 export async function fetchDashboardData(client: AnyClient, orgId: string) {
   try {
     const [org, scores, comments] = await Promise.all([
-      client
-        .from("organizations")
-        .select("*")
-        .eq("id", orgId)
-        .maybeSingle(),
+      client.from("organizations").select("*").eq("id", orgId).maybeSingle(),
       client.from("dimension_scores").select("*").eq("organization_id", orgId),
       client.from("dimension_comments").select("*").eq("organization_id", orgId),
     ]);
@@ -388,11 +426,7 @@ export async function fetchDashboardData(client: AnyClient, orgId: string) {
 export async function fetchTriangulationData(client: AnyClient, orgId: string) {
   try {
     const [org, cells] = await Promise.all([
-      client
-        .from("organizations")
-        .select("*")
-        .eq("id", orgId)
-        .maybeSingle(),
+      client.from("organizations").select("*").eq("id", orgId).maybeSingle(),
       client.from("triangulation_cells").select("*").eq("organization_id", orgId),
     ]);
     if (!org.error && org.data) {
@@ -465,11 +499,7 @@ export interface DocumentReview {
 export async function fetchQualitative(client: AnyClient, orgId: string) {
   try {
     const [org, fgd, interviews, docs, metrics] = await Promise.all([
-      client
-        .from("organizations")
-        .select("*")
-        .eq("id", orgId)
-        .maybeSingle(),
+      client.from("organizations").select("*").eq("id", orgId).maybeSingle(),
       client
         .from("fgd_notes")
         .select("*")
@@ -579,7 +609,7 @@ export async function saveDocumentReview(
     doc_type: input.docType.trim(),
     doc_status: input.docStatus,
     score: input.score ?? null,
-    confidence_level: input.confidenceLevel ?? "cukup",
+    confidence_level: (input.confidenceLevel ?? "cukup") as never,
     notes: input.notes?.trim() || null,
   });
   if (error) throw new Error(error.message);
@@ -617,7 +647,10 @@ export async function saveQuantitativeMetric(
 
 export async function deleteQualitativeEntry(
   client: AnyClient,
-  input: { table: "fgd_notes" | "interview_notes" | "document_reviews" | "quantitative_metrics"; id: string },
+  input: {
+    table: "fgd_notes" | "interview_notes" | "document_reviews" | "quantitative_metrics";
+    id: string;
+  },
 ) {
   const { error } = await client.from(input.table).delete().eq("id", input.id);
   if (error) throw new Error(error.message);
@@ -780,32 +813,15 @@ export async function submitResponsesWithToken(input: {
     throw new Error("Tautan pengisian ini telah digunakan dan sudah selesai.");
   }
 
-  const respondentId = link.id;
-  const rows = input.answers.map((a) => ({
-    organization_id: link.organization_id,
-    link_id: link.id,
-    role: link.perspective,
-    respondent_id: respondentId,
-    respondent_name: input.name?.trim() || link.respondent_name || null,
-    tenure: input.tenure ?? null,
-    dimension: a.dimension,
-    question_id: a.questionId,
-    score: a.score,
-    is_na: a.isNa ?? false,
-    evidence_text: a.evidenceText?.trim() || null,
-    conflict_text: a.conflictText?.trim() || null,
-    comment: a.comment?.trim() ? a.comment.trim() : null,
-  }));
+  const { error } = await createPublicClient().rpc("submit_token_responses", {
+    payload: {
+      token: input.token,
+      name: input.name?.trim() || link.respondent_name || "",
+      tenure: input.tenure ?? "",
+      answers: input.answers,
+    },
+  });
 
-  const client = createPublicClient();
-  const { error: respErr } = await client.from("responses").insert(rows);
-  if (respErr) throw new Error(respErr.message);
-
-  // Update status token link to completed
-  await client
-    .from("respondent_links")
-    .update({ status: "completed", submitted_at: new Date().toISOString() })
-    .eq("id", link.id);
-
+  if (error) throw new Error(error.message);
   return { ok: true as const };
 }

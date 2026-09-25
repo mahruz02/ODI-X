@@ -53,81 +53,81 @@
 
 :root {
   --radius: 0.75rem;
-  --background: #F7F8F9;
-  --foreground: #1F2937;
-  --card: #FFFFFF;
-  --card-foreground: #1F2937;
-  --popover: #FFFFFF;
-  --popover-foreground: #1F2937;
+  --background: #f7f8f9;
+  --foreground: #1f2937;
+  --card: #ffffff;
+  --card-foreground: #1f2937;
+  --popover: #ffffff;
+  --popover-foreground: #1f2937;
 
   /* #1B5A5A Teal Gelap */
-  --primary: #1B5A5A;
-  --primary-foreground: #FFFFFF;
+  --primary: #1b5a5a;
+  --primary-foreground: #ffffff;
 
   /* #2E9BC7 Biru Cerah */
-  --secondary: #EBF7FC;
-  --secondary-foreground: #1B5A5A;
+  --secondary: #ebf7fc;
+  --secondary-foreground: #1b5a5a;
 
-  --muted: #EFF1F3;
-  --muted-foreground: #6B7280;
+  --muted: #eff1f3;
+  --muted-foreground: #6b7280;
 
-  --accent: #E2F3F9;
-  --accent-foreground: #2E9BC7;
+  --accent: #e2f3f9;
+  --accent-foreground: #2e9bc7;
 
-  --destructive: #DC2626;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
 
-  --border: #E5E7EB;
-  --input: #E5E7EB;
-  --ring: #2E9BC7;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #2e9bc7;
 
   /* Warna Prespektif */
-  --chart-pengurus: #1B5A5A;
-  --chart-manajemen: #2E9BC7;
-  --chart-karyawan: #D9A441;
-  --chart-stakeholder: #9333EA;
+  --chart-pengurus: #1b5a5a;
+  --chart-manajemen: #2e9bc7;
+  --chart-karyawan: #d9a441;
+  --chart-stakeholder: #9333ea;
 
   /* Status warna */
-  --gap-high: #DC2626;
-  --gap-mid: #EA580C;
-  --gap-low: #16A34A;
+  --gap-high: #dc2626;
+  --gap-mid: #ea580c;
+  --gap-low: #16a34a;
 }
 
 .dark {
   --background: #111827;
-  --foreground: #F9FAFB;
-  --card: #1F2937;
-  --card-foreground: #F9FAFB;
-  --popover: #1F2937;
-  --popover-foreground: #F9FAFB;
+  --foreground: #f9fafb;
+  --card: #1f2937;
+  --card-foreground: #f9fafb;
+  --popover: #1f2937;
+  --popover-foreground: #f9fafb;
 
-  --primary: #2E9BC7;
+  --primary: #2e9bc7;
   --primary-foreground: #111827;
 
-  --secondary: #1E293B;
-  --secondary-foreground: #F9FAFB;
+  --secondary: #1e293b;
+  --secondary-foreground: #f9fafb;
 
   --muted: #374151;
-  --muted-foreground: #9CA3AF;
+  --muted-foreground: #9ca3af;
 
-  --accent: #1E3A8A;
-  --accent-foreground: #93C5FD;
+  --accent: #1e3a8a;
+  --accent-foreground: #93c5fd;
 
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
 
   --border: #374151;
   --input: #374151;
-  --ring: #2E9BC7;
+  --ring: #2e9bc7;
 
-  --chart-pengurus: #2E9BC7;
-  --chart-manajemen: #38BDF8;
-  --chart-karyawan: #FBBF24;
-  --chart-stakeholder: #C084FC;
+  --chart-pengurus: #2e9bc7;
+  --chart-manajemen: #38bdf8;
+  --chart-karyawan: #fbbf24;
+  --chart-stakeholder: #c084fc;
 
-  --gap-high: #F87171;
-  --gap-mid: #FB923C;
-  --gap-low: #4ADE80;
+  --gap-high: #f87171;
+  --gap-mid: #fb923c;
+  --gap-low: #4ade80;
 }
 
 @layer base {
@@ -149,11 +149,15 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, .font-display {
+  h1,
+  h2,
+  h3,
+  .font-display {
     font-family: var(--font-display);
   }
 
-  button, a {
+  button,
+  a {
     touch-action: manipulation;
   }
 }
@@ -175,31 +179,31 @@
 }
 
 @utility badge-gap-high {
-  background-color: #FEE2E2;
-  color: #DC2626;
-  border-color: #FCA5A5;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
 }
 
 @utility badge-gap-mid {
-  background-color: #FFEDD5;
-  color: #EA580C;
-  border-color: #FDBA74;
+  background-color: #ffedd5;
+  color: #ea580c;
+  border-color: #fdba74;
 }
 
 @utility badge-gap-low {
-  background-color: #DCFCE7;
-  color: #16A34A;
-  border-color: #86EFAC;
+  background-color: #dcfce7;
+  color: #16a34a;
+  border-color: #86efac;
 }
 
 @utility cell-filled {
-  background-color: #E6F4F4;
-  color: #1B5A5A;
+  background-color: #e6f4f4;
+  color: #1b5a5a;
 }
 
 @utility cell-thin {
-  background-color: #FFEDD5;
-  color: #EA580C;
+  background-color: #ffedd5;
+  color: #ea580c;
 }
 
 @utility cell-empty {

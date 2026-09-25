@@ -104,10 +104,7 @@ export function buildEvidenceMap(input: {
   };
   for (const row of input.scores) {
     const e = get(row.dimension);
-    e.respondentsByRole[row.role] = Math.max(
-      e.respondentsByRole[row.role] ?? 0,
-      row.respondents,
-    );
+    e.respondentsByRole[row.role] = Math.max(e.respondentsByRole[row.role] ?? 0, row.respondents);
   }
   for (const f of input.fgd) get(f.dimension).fgd += 1;
   for (const i of input.interviews) get(i.dimension).interviews += 1;

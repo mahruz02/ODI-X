@@ -34,8 +34,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Eksternal",
     description: "Adaptasi terhadap perubahan regulasi, pasar, persaingan, dan tren makro.",
     critical: false,
-    evidencePrompt: "Sebutkan contoh perubahan regulasi atau persaingan pasar terbaru yang paling mempengaruhi operasional Anda.",
-    conflictPrompt: "Apa perbedaan pandangan utama antara pimpinan dan staf terkait ancaman eksternal yang dihadapi?",
+    evidencePrompt:
+      "Sebutkan contoh perubahan regulasi atau persaingan pasar terbaru yang paling mempengaruhi operasional Anda.",
+    conflictPrompt:
+      "Apa perbedaan pandangan utama antara pimpinan dan staf terkait ancaman eksternal yang dihadapi?",
     questions: {
       pengurus: [
         "Organisasi rutin memantau dan merespons perubahan regulasi dan industri.",
@@ -61,8 +63,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Strategi",
     description: "Kejelasan visi-misi, target terukur, dan pemahaman arah di semua level.",
     critical: false,
-    evidencePrompt: "Apakah target unit/cabang Anda tertulis dalam KPI tahunan dan pernah disosialisasikan secara formal?",
-    conflictPrompt: "Kenapa pemahaman sasaran strategis di tingkat staf berbeda dengan arah yang dimaksudkan Pengurus?",
+    evidencePrompt:
+      "Apakah target unit/cabang Anda tertulis dalam KPI tahunan dan pernah disosialisasikan secara formal?",
+    conflictPrompt:
+      "Kenapa pemahaman sasaran strategis di tingkat staf berbeda dengan arah yang dimaksudkan Pengurus?",
     questions: {
       pengurus: [
         "Visi, misi, dan sasaran strategis jangka panjang dirumuskan secara terukur.",
@@ -88,8 +92,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Kepemimpinan",
     description: "Gaya kepemimpinan, independensi pengawasan, dan ketepatan keputusan.",
     critical: true,
-    evidencePrompt: "Berikan contoh keputusan strategis terbaru dan jelaskan bagaimana proses pembahasannya berlangsung.",
-    conflictPrompt: "Jelaskan hambatan atau keraguan utama yang dirasakan staf saat ingin menyampaikan kritik kepada pimpinan.",
+    evidencePrompt:
+      "Berikan contoh keputusan strategis terbaru dan jelaskan bagaimana proses pembahasannya berlangsung.",
+    conflictPrompt:
+      "Jelaskan hambatan atau keraguan utama yang dirasakan staf saat ingin menyampaikan kritik kepada pimpinan.",
     questions: {
       pengurus: [
         "Pengurus dan Pengawas menjalankan tata kelola yang transparan dan akuntabel.",
@@ -115,8 +121,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Struktur",
     description: "Kejelasan wewenang, job description, rentang kendali, dan efisiensi hirarki.",
     critical: false,
-    evidencePrompt: "Apakah Anda memiliki dokumen uraian tugas (jobdesc) tertulis yang sesuai dengan tugas harian saat ini?",
-    conflictPrompt: "Di bagian mana terjadi tumpang tindih wewenang atau instruksi yang saling bertentangan antaratasan?",
+    evidencePrompt:
+      "Apakah Anda memiliki dokumen uraian tugas (jobdesc) tertulis yang sesuai dengan tugas harian saat ini?",
+    conflictPrompt:
+      "Di bagian mana terjadi tumpang tindih wewenang atau instruksi yang saling bertentangan antaratasan?",
     questions: {
       pengurus: [
         "Struktur organisasi efektif menunjang pencapaian sasaran tanpa hambatan hirarki.",
@@ -142,8 +150,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Budaya",
     description: "Penerapan nilai organisasi, integritas amanah, dan iklim kerja.",
     critical: true,
-    evidencePrompt: "Sebutkan tindakan nyata pimpinan atau rekan kerja yang mencerminkan penegakan etika dan amanah.",
-    conflictPrompt: "Apakah ada ketimpangan perlakuan atau pelanggaran etika yang terbiarkan tanpa sanksi yang adil?",
+    evidencePrompt:
+      "Sebutkan tindakan nyata pimpinan atau rekan kerja yang mencerminkan penegakan etika dan amanah.",
+    conflictPrompt:
+      "Apakah ada ketimpangan perlakuan atau pelanggaran etika yang terbiarkan tanpa sanksi yang adil?",
     questions: {
       pengurus: [
         "Nilai-nilai syariah dan etika organisasi benar-benar menjadi panduan perilaku.",
@@ -169,8 +179,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "SDM",
     description: "Rekrutmen, pemetaan talenta, pelatihan, dan pengembangan kapabilitas.",
     critical: false,
-    evidencePrompt: "Pelatihan atau bimbingan apa saja yang telah Anda terima dalam 12 bulan terakhir untuk menunjang tugas?",
-    conflictPrompt: "Mengapa program pelatihan yang ada dirasakan belum menjawab kebutuhan riil pekerjaan di lapangan?",
+    evidencePrompt:
+      "Pelatihan atau bimbingan apa saja yang telah Anda terima dalam 12 bulan terakhir untuk menunjang tugas?",
+    conflictPrompt:
+      "Mengapa program pelatihan yang ada dirasakan belum menjawab kebutuhan riil pekerjaan di lapangan?",
     questions: {
       pengurus: [
         "Organisasi memiliki strategi perencanaan dan pemetaan talenta SDM berkelanjutan.",
@@ -196,8 +208,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Desain Kerja",
     description: "Keseimbangan beban kerja, fleksibilitas, dan kejelasan alur proses harian.",
     critical: false,
-    evidencePrompt: "Berapa jam rata-rata kerja/lembur mingguan Anda, dan apakah beban tersebut terdistribusi merata?",
-    conflictPrompt: "Apa penyebab utama penumpukan beban kerja pada unit tertentu yang berpotensi memicu kejenuhan (burnout)?",
+    evidencePrompt:
+      "Berapa jam rata-rata kerja/lembur mingguan Anda, dan apakah beban tersebut terdistribusi merata?",
+    conflictPrompt:
+      "Apa penyebab utama penumpukan beban kerja pada unit tertentu yang berpotensi memicu kejenuhan (burnout)?",
     questions: {
       pengurus: [
         "Beban kerja antar unit terdistribusi secara seimbang dan proporsional.",
@@ -223,8 +237,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Kolaborasi",
     description: "Kerja sama antar cabang/unit, penyelesaian konflik, dan sinergi tim.",
     critical: true,
-    evidencePrompt: "Ceritakan pengalaman kerja sama antar unit/cabang yang berjalan paling sukses atau paling menguji sinergi.",
-    conflictPrompt: "Apa masalah utama yang memicu gesekan atau sekat silogisme antardepartemen saat koordinasi?",
+    evidencePrompt:
+      "Ceritakan pengalaman kerja sama antar unit/cabang yang berjalan paling sukses atau paling menguji sinergi.",
+    conflictPrompt:
+      "Apa masalah utama yang memicu gesekan atau sekat silogisme antardepartemen saat koordinasi?",
     questions: {
       pengurus: [
         "Sinergi dan kolaborasi antar unit/cabang berjalan tanpa sekat silogisme.",
@@ -250,8 +266,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Teknologi",
     description: "Ketersediaan SOP mutakhir, otomatisasi sistem core, dan keandalan IT.",
     critical: false,
-    evidencePrompt: "Aplikasi atau fitur sistem IT apa yang paling membantu kerja harian Anda dan seberapa sering terjadi kendala?",
-    conflictPrompt: "Proses operasional mana yang masih manual atau terhambat SOP usang yang belum disesuaikan?",
+    evidencePrompt:
+      "Aplikasi atau fitur sistem IT apa yang paling membantu kerja harian Anda dan seberapa sering terjadi kendala?",
+    conflictPrompt:
+      "Proses operasional mana yang masih manual atau terhambat SOP usang yang belum disesuaikan?",
     questions: {
       pengurus: [
         "Teknologi informasi dan sistem operasional investasi utama yang mendukung percepatan bisnis.",
@@ -277,8 +295,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Kinerja",
     description: "Keadilan kompensasi, transparansi KPI, insentif, dan apresiasi.",
     critical: true,
-    evidencePrompt: "Bagaimana kriteria insentif dan kenaikan tingkat dihitung serta diumumkan di unit Anda?",
-    conflictPrompt: "Jelaskan persepsi ketidakadilan terkait pemberian insentif, kompensasi, atau penilaian kinerja di tempat kerja.",
+    evidencePrompt:
+      "Bagaimana kriteria insentif dan kenaikan tingkat dihitung serta diumumkan di unit Anda?",
+    conflictPrompt:
+      "Jelaskan persepsi ketidakadilan terkait pemberian insentif, kompensasi, atau penilaian kinerja di tempat kerja.",
     questions: {
       pengurus: [
         "Sistem manajemen kinerja objektif, berbasis data, dan terhubung dengan remunerasi.",
@@ -304,8 +324,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Risiko",
     description: "Pengendalian internal, NPF/NPL, audit, kepatuhan regulasi & syariah.",
     critical: false,
-    evidencePrompt: "Dokumen laporan NPF, hasil audit internal, atau rekomendasi DPS terbaru apa yang pernah ditindaklanjuti?",
-    conflictPrompt: "Apa kelemahan prosedur kontrol atau kepatuhan yang berpotensi menimbulkan risiko keuangan/operasional?",
+    evidencePrompt:
+      "Dokumen laporan NPF, hasil audit internal, atau rekomendasi DPS terbaru apa yang pernah ditindaklanjuti?",
+    conflictPrompt:
+      "Apa kelemahan prosedur kontrol atau kepatuhan yang berpotensi menimbulkan risiko keuangan/operasional?",
     questions: {
       pengurus: [
         "Sistem pengendalian internal dan manajemen risiko berjalan efektif.",
@@ -331,8 +353,10 @@ export const DIMENSIONS: Dimension[] = [
     short: "Stakeholder",
     description: "Kepuasan anggota/nasabah, komplain, dampak sosial, dan penanganan masukan.",
     critical: false,
-    evidencePrompt: "Bagaimana alur dan kecepatan penanganan keluhan anggota/mitra diselesaikan hingga tuntas?",
-    conflictPrompt: "Apa komplain atau ketidakpuasan yang paling sering disampaikan oleh pihak luar atau anggota?",
+    evidencePrompt:
+      "Bagaimana alur dan kecepatan penanganan keluhan anggota/mitra diselesaikan hingga tuntas?",
+    conflictPrompt:
+      "Apa komplain atau ketidakpuasan yang paling sering disampaikan oleh pihak luar atau anggota?",
     questions: {
       pengurus: [
         "Tingkat kepuasan anggota dan dampak sosial organisasi diukur secara berskala.",
@@ -373,12 +397,7 @@ export const ACTION_DIRECTIONS = [
 ] as const;
 export type ActionDirection = (typeof ACTION_DIRECTIONS)[number];
 
-export const HORIZONS = [
-  "0-90 hari",
-  "3-6 bulan",
-  "6-12 bulan",
-  "1-3 tahun",
-] as const;
+export const HORIZONS = ["0-90 hari", "3-6 bulan", "6-12 bulan", "1-3 tahun"] as const;
 export type Horizon = (typeof HORIZONS)[number];
 
 export const GAP_THRESHOLDS = { high: 1.2, mid: 0.7 } as const;
@@ -401,18 +420,114 @@ export function dimensionsForRole(role: Role): Dimension[] {
 }
 
 export const TRIANGULATION_PLAN: Record<number, Record<string, "utama" | "pendukung" | null>> = {
-  1: { pengurus: "utama", manajemen: "utama", karyawan: "pendukung", stakeholder: "utama", fgd: "pendukung", wawancara: "utama", dokumen: "utama" },
-  2: { pengurus: "utama", manajemen: "utama", karyawan: "pendukung", stakeholder: "pendukung", fgd: "pendukung", wawancara: "utama", dokumen: "utama" },
-  3: { pengurus: "utama", manajemen: "utama", karyawan: "utama", stakeholder: "pendukung", fgd: "utama", wawancara: "utama", dokumen: "pendukung" },
-  4: { pengurus: "pendukung", manajemen: "utama", karyawan: "utama", stakeholder: "pendukung", fgd: "pendukung", wawancara: "utama", dokumen: "utama" },
-  5: { pengurus: "utama", manajemen: "utama", karyawan: "utama", stakeholder: "utama", fgd: "utama", wawancara: "utama", dokumen: "pendukung" },
-  6: { pengurus: "utama", manajemen: "utama", karyawan: "utama", stakeholder: "pendukung", fgd: "pendukung", wawancara: "utama", dokumen: "utama" },
-  7: { pengurus: "pendukung", manajemen: "utama", karyawan: "utama", stakeholder: "pendukung", fgd: "pendukung", wawancara: "pendukung", dokumen: "utama" },
-  8: { pengurus: "utama", manajemen: "utama", karyawan: "utama", stakeholder: "pendukung", fgd: "utama", wawancara: "pendukung", dokumen: null },
-  9: { pengurus: "utama", manajemen: "utama", karyawan: "utama", stakeholder: "utama", fgd: "pendukung", wawancara: "pendukung", dokumen: "utama" },
-  10: { pengurus: "utama", manajemen: "utama", karyawan: "utama", stakeholder: "pendukung", fgd: "utama", wawancara: "pendukung", dokumen: "utama" },
-  11: { pengurus: "utama", manajemen: "utama", karyawan: "pendukung", stakeholder: "pendukung", fgd: "pendukung", wawancara: "utama", dokumen: "utama" },
-  12: { pengurus: "utama", manajemen: "utama", karyawan: "utama", stakeholder: "utama", fgd: "utama", wawancara: "utama", dokumen: "utama" },
+  1: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "pendukung",
+    stakeholder: "utama",
+    fgd: "pendukung",
+    wawancara: "utama",
+    dokumen: "utama",
+  },
+  2: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "pendukung",
+    stakeholder: "pendukung",
+    fgd: "pendukung",
+    wawancara: "utama",
+    dokumen: "utama",
+  },
+  3: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "pendukung",
+    fgd: "utama",
+    wawancara: "utama",
+    dokumen: "pendukung",
+  },
+  4: {
+    pengurus: "pendukung",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "pendukung",
+    fgd: "pendukung",
+    wawancara: "utama",
+    dokumen: "utama",
+  },
+  5: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "utama",
+    fgd: "utama",
+    wawancara: "utama",
+    dokumen: "pendukung",
+  },
+  6: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "pendukung",
+    fgd: "pendukung",
+    wawancara: "utama",
+    dokumen: "utama",
+  },
+  7: {
+    pengurus: "pendukung",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "pendukung",
+    fgd: "pendukung",
+    wawancara: "pendukung",
+    dokumen: "utama",
+  },
+  8: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "pendukung",
+    fgd: "utama",
+    wawancara: "pendukung",
+    dokumen: null,
+  },
+  9: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "utama",
+    fgd: "pendukung",
+    wawancara: "pendukung",
+    dokumen: "utama",
+  },
+  10: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "pendukung",
+    fgd: "utama",
+    wawancara: "pendukung",
+    dokumen: "utama",
+  },
+  11: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "pendukung",
+    stakeholder: "pendukung",
+    fgd: "pendukung",
+    wawancara: "utama",
+    dokumen: "utama",
+  },
+  12: {
+    pengurus: "utama",
+    manajemen: "utama",
+    karyawan: "utama",
+    stakeholder: "utama",
+    fgd: "utama",
+    wawancara: "utama",
+    dokumen: "utama",
+  },
 };
 
 export const TRIANGULATION_SOURCES = [
@@ -424,4 +539,3 @@ export const TRIANGULATION_SOURCES = [
   { key: "wawancara", label: "Wawancara" },
   { key: "dokumen", label: "Telaah Dokumen / Quantitative Data" },
 ] as const;
-

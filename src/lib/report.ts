@@ -103,7 +103,9 @@ export function computeCompositeIndices(summaries: DimensionSummary[]): Composit
   else if (rawRiskExposureScore <= 20 && avgGap < 0.5) riskExposure = "Low";
 
   // Readiness for Change Score
-  const readinessScore = Math.round(healthIndex * 0.4 + alignmentIndex * 0.3 + adaptabilityIndex * 0.3);
+  const readinessScore = Math.round(
+    healthIndex * 0.4 + alignmentIndex * 0.3 + adaptabilityIndex * 0.3,
+  );
 
   return {
     healthIndex,
@@ -340,7 +342,11 @@ export function buildRecommendations(summaries: DimensionSummary[]): Recommendat
     const lowScore = s.average < 3.2;
     const midScore = s.average < 3.8;
     const priority: Priority =
-      s.level === "high" || lowScore ? "mendesak" : s.level === "mid" || midScore ? "penting" : "pemeliharaan";
+      s.level === "high" || lowScore
+        ? "mendesak"
+        : s.level === "mid" || midScore
+          ? "penting"
+          : "pemeliharaan";
 
     const meta = ACTION_METADATA[s.id] ?? {
       direction: "Perbaiki" as ActionDirection,
@@ -352,8 +358,11 @@ export function buildRecommendations(summaries: DimensionSummary[]): Recommendat
     };
 
     const reasons: string[] = [];
-    reasons.push(`Skor rata-rata ${s.average.toFixed(2)} / 5.0 (Index ${s.scoreNormalized ?? 0}/100).`);
-    if (s.gap > 0) reasons.push(`Gap persepsi Δ ${s.gap.toFixed(2)} (${GAP_LABELS[s.level].toLowerCase()}).`);
+    reasons.push(
+      `Skor rata-rata ${s.average.toFixed(2)} / 5.0 (Index ${s.scoreNormalized ?? 0}/100).`,
+    );
+    if (s.gap > 0)
+      reasons.push(`Gap persepsi Δ ${s.gap.toFixed(2)} (${GAP_LABELS[s.level].toLowerCase()}).`);
 
     const trace = `Data kuesioner dimensi ${s.id} (${s.name}) — gap persepsi Δ ${s.gap.toFixed(
       2,
@@ -405,9 +414,16 @@ export function generatePublicReportToken(projectId: string, expiryDays = 30): s
   return Buffer.from(JSON.stringify(payload)).toString("base64");
 }
 
-export function verifyPublicReportToken(tokenStr: string): { isValid: boolean; projectId?: string; expiresAt?: string } {
+export function verifyPublicReportToken(tokenStr: string): {
+  isValid: boolean;
+  projectId?: string;
+  expiresAt?: string;
+} {
   try {
-    const jsonStr = typeof atob !== "undefined" ? atob(tokenStr) : Buffer.from(tokenStr, "base64").toString("utf-8");
+    const jsonStr =
+      typeof atob !== "undefined"
+        ? atob(tokenStr)
+        : Buffer.from(tokenStr, "base64").toString("utf-8");
     const parsed = JSON.parse(jsonStr);
     if (!parsed.pId || !parsed.exp) return { isValid: false };
     const isExpired = Date.now() > parsed.exp;
@@ -420,4 +436,3 @@ export function verifyPublicReportToken(tokenStr: string): { isValid: boolean; p
     return { isValid: false };
   }
 }
-

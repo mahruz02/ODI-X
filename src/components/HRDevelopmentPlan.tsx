@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { CheckSquare, Square, Users, Award, ShieldAlert, TrendingUp, Calendar, Target } from "lucide-react";
+import {
+  CheckSquare,
+  Square,
+  Users,
+  Award,
+  ShieldAlert,
+  TrendingUp,
+  Calendar,
+  Target,
+} from "lucide-react";
 
 export interface HRTask {
   id: string;
@@ -82,9 +91,7 @@ export function HRDevelopmentPlan() {
   const progressPercent = Math.round((completedCount / tasks.length) * 100);
 
   function toggleTask(id: string) {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t))
-    );
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
   }
 
   return (
@@ -107,7 +114,9 @@ export function HRDevelopmentPlan() {
         <div className="flex items-center gap-3">
           <div className="text-right">
             <span className="text-xs font-bold text-primary block">{progressPercent}% Selesai</span>
-            <span className="text-[10px] text-muted-foreground">{completedCount} dari {tasks.length} Tindakan Terverifikasi</span>
+            <span className="text-[10px] text-muted-foreground">
+              {completedCount} dari {tasks.length} Tindakan Terverifikasi
+            </span>
           </div>
           <div className="h-2 w-24 rounded-full bg-muted overflow-hidden">
             <div
@@ -145,7 +154,9 @@ export function HRDevelopmentPlan() {
                     {t.domain}
                   </span>
                 </div>
-                <h4 className={`font-bold text-sm mt-1 leading-snug ${t.done ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                <h4
+                  className={`font-bold text-sm mt-1 leading-snug ${t.done ? "line-through text-muted-foreground" : "text-foreground"}`}
+                >
                   {t.title}
                 </h4>
                 <p className="text-[11px] text-muted-foreground mt-1">
@@ -158,9 +169,7 @@ export function HRDevelopmentPlan() {
               <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary block">
                 <Target className="size-3" /> {t.kpi}
               </span>
-              <span className="text-[10px] text-muted-foreground block">
-                PIC: {t.pic}
-              </span>
+              <span className="text-[10px] text-muted-foreground block">PIC: {t.pic}</span>
             </div>
           </div>
         ))}

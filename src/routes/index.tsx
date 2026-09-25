@@ -1,5 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Activity, BarChart3, ClipboardList, Layers, Radar, ShieldCheck, Users, Workflow } from "lucide-react";
+import {
+  Activity,
+  BarChart3,
+  ClipboardList,
+  Layers,
+  Radar,
+  ShieldCheck,
+  Users,
+  Workflow,
+} from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -13,8 +22,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "ODI-X — Diagnosis Kesehatan Organisasi" },
       {
         property: "og:description",
-        content:
-          "Triangulasi persepsi 4 level dan 12 domain kesehatan organisasi.",
+        content: "Triangulasi persepsi 4 level dan 12 domain kesehatan organisasi.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -34,7 +42,9 @@ function LandingPage() {
           Diagnosis Kesehatan Organisasi 12 Domain.
         </h1>
         <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Sistem diagnosis organisasi komprehensif: gabungkan persepsi 4 prespektif (Leadership, Manager, Employee, Stakeholder), data objektif kuantitatif, FGD, wawancara, dan telaah dokumen ke dalam satu peta radar dan roadmap rekomendasi 4 horizon.
+          Sistem diagnosis organisasi komprehensif: gabungkan persepsi 4 prespektif (Leadership,
+          Manager, Employee, Stakeholder), data objektif kuantitatif, FGD, wawancara, dan telaah
+          dokumen ke dalam satu peta radar dan roadmap rekomendasi 4 horizon.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -127,15 +137,7 @@ function StepBox({ step, title, desc }: { step: string; title: string; desc: str
   );
 }
 
-function Feature({
-  icon,
-  title,
-  desc,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-}) {
+function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
     <div className="rounded-2xl border bg-card p-5 shadow-sm">
       <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-accent-foreground">

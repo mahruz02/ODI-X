@@ -1,6 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { fetchLinkByToken, fetchOrganizationByCode, insertResponses, submitResponsesWithToken } from "./diagnosis.server";
+import {
+  fetchLinkByToken,
+  fetchOrganizationByCode,
+  insertResponses,
+  submitResponsesWithToken,
+} from "./diagnosis.server";
 
 export const getOrganizationByCode = createServerFn({ method: "GET" })
   .validator((data) => z.object({ code: z.string().max(80) }).parse(data))

@@ -1,12 +1,7 @@
-import {
-  queryOptions,
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus, Trash2, Upload, FileText, BarChart3, MessageSquare, Users } from "lucide-react";
-import { useState } from "react";
+import { useState, type ComponentType } from "react";
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AssessmentNavTabs } from "@/components/AssessmentNavTabs";
@@ -27,8 +22,7 @@ const qualitativeQuery = (id: string) =>
   });
 
 export const Route = createFileRoute("/asesmen/$id/kualitatif")({
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(qualitativeQuery(params.id)),
+  loader: ({ context, params }) => context.queryClient.ensureQueryData(qualitativeQuery(params.id)),
   head: () => ({
     meta: [
       { title: "Data Kualitatif & Kuantitatif — ODI-X" },
@@ -40,8 +34,7 @@ export const Route = createFileRoute("/asesmen/$id/kualitatif")({
       { property: "og:title", content: "Data Kualitatif & Dokumen — ODI-X" },
       {
         property: "og:description",
-        content:
-          "FGD, wawancara, data kuantitatif, dan telaah dokumen pendukung diagnosis.",
+        content: "FGD, wawancara, data kuantitatif, dan telaah dokumen pendukung diagnosis.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -52,7 +45,7 @@ export const Route = createFileRoute("/asesmen/$id/kualitatif")({
 
 type Tab = "kuantitatif" | "dokumen" | "fgd" | "wawancara";
 
-const TABS: { key: Tab; label: string; icon: any }[] = [
+const TABS: { key: Tab; label: string; icon: ComponentType<{ className?: string }> }[] = [
   { key: "kuantitatif", label: "Data Kuantitatif / Objektif", icon: BarChart3 },
   { key: "dokumen", label: "Telaah Dokumen Bukti", icon: FileText },
   { key: "fgd", label: "FGD Notes", icon: Users },
@@ -97,159 +90,152 @@ function QualitativePage() {
   return (
     <ProtectedRoute allowedRoles={["admin", "hr"]}>
       <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 animate-fade-in">
-      <header className="mb-6">
-        <Link
-          to="/asesmen/$id"
-          params={{ id }}
-          className="text-xs font-semibold text-primary hover:underline"
-        >
-          ← Kembali ke Dashboard Organisasi
-        </Link>
-        <h1 className="mt-2 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-          Bukti Kualitatif, Dokumen & Data Kuantitatif
-        </h1>
-        <p className="mt-2 max-w-3xl text-xs text-muted-foreground leading-relaxed">
-          Input bukti pendukung diagnosis dari hasil FGD, wawancara mendalam, telaah dokumen internal, dan metriks kuantitatif objektif untuk memperkuat triangulasi data.
-        </p>
-      </header>
+        <header className="mb-6">
+          <Link
+            to="/asesmen/$id"
+            params={{ id }}
+            className="text-xs font-semibold text-primary hover:underline"
+          >
+            ← Kembali ke Dashboard Organisasi
+          </Link>
+          <h1 className="mt-2 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+            Bukti Kualitatif, Dokumen & Data Kuantitatif
+          </h1>
+          <p className="mt-2 max-w-3xl text-xs text-muted-foreground leading-relaxed">
+            Input bukti pendukung diagnosis dari hasil FGD, wawancara mendalam, telaah dokumen
+            internal, dan metriks kuantitatif objektif untuk memperkuat triangulasi data.
+          </p>
+        </header>
 
-      <AssessmentNavTabs id={id} />
+        <AssessmentNavTabs id={id} />
 
-      <div className="mb-6 flex flex-wrap gap-2">
-        {TABS.map((t) => {
-          const Icon = t.icon;
-          return (
-            <button
-              key={t.key}
-              type="button"
-              onClick={() => setTab(t.key)}
-              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-bold transition-all ${
-                tab === t.key
-                  ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                  : "bg-card hover:bg-muted"
-              }`}
-            >
-              <Icon className="size-3.5" />
-              {t.label}
-            </button>
-          );
-        })}
-      </div>
+        <div className="mb-6 flex flex-wrap gap-2">
+          {TABS.map((t) => {
+            const Icon = t.icon;
+            return (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setTab(t.key)}
+                className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-bold transition-all ${
+                  tab === t.key
+                    ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                    : "bg-card hover:bg-muted"
+                }`}
+              >
+                <Icon className="size-3.5" />
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
 
-      {tab === "kuantitatif" && (
-        <Section
-          title="Data Objektif / Kuantitatif"
-          form={
-            <MetricForm
-              busy={metricMutation.isPending}
-              onSubmit={(values) =>
-                metricMutation.mutate({ data: { organizationId: id, ...values } })
-              }
-            />
-          }
-          rows={(data.metrics || []).map((m) => ({
-            id: m.id,
-            dimension: m.dimension,
-            title: m.metric_name,
-            body: `Target: ${m.target_val || "—"} | Actual: ${m.actual_val || "—"} (${m.unit || ""}) · Periode: ${m.period || "—"}`,
-            meta: [
-              `Sumber: ${m.data_source || "Internal"}`,
-              `Confidence: ${m.confidence_level}`,
-            ],
-            quote: null,
-          }))}
-          onDelete={(rowId) =>
-            removeMutation.mutate({ data: { table: "quantitative_metrics", id: rowId } })
-          }
-        />
-      )}
+        {tab === "kuantitatif" && (
+          <Section
+            title="Data Objektif / Kuantitatif"
+            form={
+              <MetricForm
+                busy={metricMutation.isPending}
+                onSubmit={(values) =>
+                  metricMutation.mutate({ data: { organizationId: id, ...values } })
+                }
+              />
+            }
+            rows={(data.metrics || []).map((m) => ({
+              id: m.id,
+              dimension: m.dimension,
+              title: m.metric_name,
+              body: `Target: ${m.target_val || "—"} | Actual: ${m.actual_val || "—"} (${m.unit || ""}) · Periode: ${m.period || "—"}`,
+              meta: [`Sumber: ${m.data_source || "Internal"}`, `Confidence: ${m.confidence_level}`],
+              quote: null,
+            }))}
+            onDelete={(rowId) =>
+              removeMutation.mutate({ data: { table: "quantitative_metrics", id: rowId } })
+            }
+          />
+        )}
 
-      {tab === "dokumen" && (
-        <Section
-          title="Telaah Dokumen Pendukung"
-          form={
-            <DocumentForm
-              busy={docMutation.isPending}
-              onSubmit={(values) =>
-                docMutation.mutate({ data: { organizationId: id, ...values } })
-              }
-            />
-          }
-          rows={data.documents.map((d) => ({
-            id: d.id,
-            dimension: d.dimension,
-            title: d.doc_type,
-            body: d.notes ?? "—",
-            meta: [
-              `Status: ${d.doc_status}`,
-              d.score ? `Mutu: ${d.score}/5` : null,
-              `Confidence: ${d.confidence_level || "cukup"}`,
-            ],
-            quote: null,
-          }))}
-          onDelete={(rowId) =>
-            removeMutation.mutate({ data: { table: "document_reviews", id: rowId } })
-          }
-        />
-      )}
+        {tab === "dokumen" && (
+          <Section
+            title="Telaah Dokumen Pendukung"
+            form={
+              <DocumentForm
+                busy={docMutation.isPending}
+                onSubmit={(values) =>
+                  docMutation.mutate({ data: { organizationId: id, ...values } })
+                }
+              />
+            }
+            rows={data.documents.map((d) => ({
+              id: d.id,
+              dimension: d.dimension,
+              title: d.doc_type,
+              body: d.notes ?? "—",
+              meta: [
+                `Status: ${d.doc_status}`,
+                d.score ? `Mutu: ${d.score}/5` : null,
+                `Confidence: ${d.confidence_level || "cukup"}`,
+              ],
+              quote: null,
+            }))}
+            onDelete={(rowId) =>
+              removeMutation.mutate({ data: { table: "document_reviews", id: rowId } })
+            }
+          />
+        )}
 
-      {tab === "fgd" && (
-        <Section
-          title="Catatan FGD"
-          form={
-            <FgdForm
-              busy={fgdMutation.isPending}
-              onSubmit={(values) =>
-                fgdMutation.mutate({ data: { organizationId: id, ...values } })
-              }
-            />
-          }
-          rows={data.fgd.map((n) => ({
-            id: n.id,
-            dimension: n.dimension,
-            title: n.facilitator ?? "Fasilitator tidak dicatat",
-            body: n.themes ?? "—",
-            meta: [
-              n.consensus ? `Konsensus ${n.consensus}/5` : null,
-              n.status,
-            ],
-            quote: n.quotes,
-          }))}
-          onDelete={(rowId) =>
-            removeMutation.mutate({ data: { table: "fgd_notes", id: rowId } })
-          }
-        />
-      )}
+        {tab === "fgd" && (
+          <Section
+            title="Catatan FGD"
+            form={
+              <FgdForm
+                busy={fgdMutation.isPending}
+                onSubmit={(values) =>
+                  fgdMutation.mutate({ data: { organizationId: id, ...values } })
+                }
+              />
+            }
+            rows={data.fgd.map((n) => ({
+              id: n.id,
+              dimension: n.dimension,
+              title: n.facilitator ?? "Fasilitator tidak dicatat",
+              body: n.themes ?? "—",
+              meta: [n.consensus ? `Konsensus ${n.consensus}/5` : null, n.status],
+              quote: n.quotes,
+            }))}
+            onDelete={(rowId) => removeMutation.mutate({ data: { table: "fgd_notes", id: rowId } })}
+          />
+        )}
 
-      {tab === "wawancara" && (
-        <Section
-          title="Catatan Wawancara Mendalam"
-          form={
-            <InterviewForm
-              busy={interviewMutation.isPending}
-              onSubmit={(values) =>
-                interviewMutation.mutate({
-                  data: { organizationId: id, ...values },
-                })
-              }
-            />
-          }
-          rows={data.interviews.map((n) => ({
-            id: n.id,
-            dimension: n.dimension,
-            title: n.informant_role ?? "Informan tidak dicatat",
-            body: n.findings ?? "—",
-            meta: [n.status],
-            quote: null,
-          }))}
-          onDelete={(rowId) =>
-            removeMutation.mutate({
-              data: { table: "interview_notes", id: rowId },
-            })
-          }
-        />
-      )}
-    </main>
+        {tab === "wawancara" && (
+          <Section
+            title="Catatan Wawancara Mendalam"
+            form={
+              <InterviewForm
+                busy={interviewMutation.isPending}
+                onSubmit={(values) =>
+                  interviewMutation.mutate({
+                    data: { organizationId: id, ...values },
+                  })
+                }
+              />
+            }
+            rows={data.interviews.map((n) => ({
+              id: n.id,
+              dimension: n.dimension,
+              title: n.informant_role ?? "Informan tidak dicatat",
+              body: n.findings ?? "—",
+              meta: [n.status],
+              quote: null,
+            }))}
+            onDelete={(rowId) =>
+              removeMutation.mutate({
+                data: { table: "interview_notes", id: rowId },
+              })
+            }
+          />
+        )}
+      </main>
     </ProtectedRoute>
   );
 }
@@ -277,9 +263,7 @@ function Section({
   return (
     <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
       <div className="rounded-2xl border bg-card p-5 shadow-sm">
-        <h2 className="font-display text-base font-bold tracking-tight">
-          Input {title}
-        </h2>
+        <h2 className="font-display text-base font-bold tracking-tight">Input {title}</h2>
         <div className="mt-3">{form}</div>
       </div>
       <div>
@@ -295,10 +279,7 @@ function Section({
             {rows.map((r) => {
               const dim = DIMENSIONS.find((d) => d.id === r.dimension);
               return (
-                <li
-                  key={r.id}
-                  className="rounded-2xl border bg-card p-4 shadow-sm text-xs"
-                >
+                <li key={r.id} className="rounded-2xl border bg-card p-4 shadow-sm text-xs">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-wider text-primary">
@@ -343,13 +324,7 @@ function Section({
   );
 }
 
-function DimensionSelect({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: (v: number) => void;
-}) {
+function DimensionSelect({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
     <label className="block text-xs font-semibold">
       Domain Terkait
@@ -569,7 +544,7 @@ function DocumentForm({
         Status Dokumen
         <select
           value={docStatus}
-          onChange={(e) => setDocStatus(e.target.value as any)}
+          onChange={(e) => setDocStatus(e.target.value as "mutakhir" | "usang" | "tidak_ada")}
           className={inputClass}
         >
           <option value="mutakhir">Mutakhir & Berlaku</option>

@@ -11,11 +11,7 @@ import {
   upsertInsight,
   type QualSnippet,
 } from "./ai.server";
-import {
-  createPublicClient,
-  fetchDashboardData,
-  fetchQualitative,
-} from "./diagnosis.server";
+import { createPublicClient, fetchDashboardData, fetchQualitative } from "./diagnosis.server";
 import { buildEvidenceMap, computeConfidence, evidenceFor, CONFIDENCE_LABELS } from "./confidence";
 import { DIMENSIONS, ROLE_LABELS, type Role } from "./questionnaire";
 import { buildDimensionSummaries } from "./report";
@@ -26,11 +22,11 @@ async function loadContext(orgId: string, dimension: number) {
     fetchDashboardData(client, orgId),
     fetchQualitative(client, orgId),
   ]);
-  const summaries = buildDimensionSummaries(dash.scores as any);
+  const summaries = buildDimensionSummaries(dash.scores);
   const summary = summaries.find((s) => s.id === dimension)!;
   const dim = DIMENSIONS.find((d) => d.id === dimension)!;
   const evidence = buildEvidenceMap({
-    scores: dash.scores as any,
+    scores: dash.scores,
     fgd: qual.fgd,
     interviews: qual.interviews,
     documents: qual.documents,
@@ -41,9 +37,7 @@ async function loadContext(orgId: string, dimension: number) {
     score: summary.roleScores[r] ?? null,
   }));
   const totalRespondents = new Set(dash.scores.map((s) => `${s.role}`)).size
-    ? dash.scores
-        .filter((s) => s.dimension === dimension)
-        .reduce((a, s) => a + s.respondents, 0)
+    ? dash.scores.filter((s) => s.dimension === dimension).reduce((a, s) => a + s.respondents, 0)
     : 0;
   return { client, dash, qual, dim, summary, summaries, confidence, roleScores, totalRespondents };
 }
@@ -119,8 +113,7 @@ export const buildDimensionInsight = createServerFn({ method: "POST" })
       });
       return { status: "ok" as const, row };
     } catch (e) {
-      if (e instanceof AiError)
-        return { status: "error" as const, message: e.message };
+      if (e instanceof AiError) return { status: "error" as const, message: e.message };
       throw e;
     }
   });
@@ -154,8 +147,7 @@ export const buildProbingQuestions = createServerFn({ method: "POST" })
       });
       return { status: "ok" as const, row };
     } catch (e) {
-      if (e instanceof AiError)
-        return { status: "error" as const, message: e.message };
+      if (e instanceof AiError) return { status: "error" as const, message: e.message };
       throw e;
     }
   });
@@ -182,9 +174,7 @@ export const saveInsightEdit = createServerFn({ method: "POST" })
   );
 
 export const toggleInsightInReport = createServerFn({ method: "POST" })
-  .validator((data) =>
-    z.object({ id: z.string().uuid(), include: z.boolean() }).parse(data),
-  )
+  .validator((data) => z.object({ id: z.string().uuid(), include: z.boolean() }).parse(data))
   .handler(({ data }) => setInsightInclusion(createPublicClient(), data));
 
 export const removeInsight = createServerFn({ method: "POST" })

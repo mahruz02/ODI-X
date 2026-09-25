@@ -12,9 +12,10 @@
 ODI-X adalah platform diagnosis kesehatan organisasi berbasis triangulasi data:
 persepsi multi-perspektif (Pengurus, Manajemen, Karyawan, Mitra/Stakeholder),
 data kuantitatif objektif, dan bukti dokumen. Bukan survei kepuasan — setiap
-temuan wajib bisa ditelusuri ke buktinya (*traceable*) dan diberi *confidence level*.
+temuan wajib bisa ditelusuri ke buktinya (_traceable_) dan diberi _confidence level_.
 
 **Pilar:**
+
 1. Triangulasi 4 perspektif responden vs data objektif
 2. 12 Domain kesehatan organisasi (eksternal → operasional)
 3. Deteksi gap persepsi antar level (bukan dirata-ratakan begitu saja)
@@ -28,21 +29,22 @@ temuan wajib bisa ditelusuri ke buktinya (*traceable*) dan diberi *confidence le
 Disederhanakan menjadi **3 role login** + **1 akses tanpa login**. Dashboard
 **hanya** untuk Admin & Asesor — Leadership/Peserta tidak punya akun.
 
-| Role | Login | Scope | Hak Akses |
-|---|---|---|---|
-| `super_admin` | Ya | Semua tenant | Kelola semua organisasi, template kuesioner master, konfigurasi bobot/formula global, lihat semua proyek |
-| `org_admin` | Ya | 1 organisasi | Setup profil organisasi, buat/kelola proyek diagnosis, undang & kelola responden (generate link), akses penuh dashboard & laporan, export PDF, bagikan laporan publik read-only |
-| `analyst` (Asesor) | Ya | Proyek yang ditugaskan | Input FGD/wawancara/telaah dokumen/data kuantitatif, lihat dashboard & matriks triangulasi, edit catatan insight — tidak bisa kelola user/organisasi |
-| Peserta (Respondent) | **Tidak** | 1 pengisian | Buka `/isi/{token}` → isi kuesioner sesuai perspektifnya → submit. Tidak melihat dashboard, tidak melihat hasil, tidak butuh akun |
-| *Leadership* | — dihapus sebagai role | — | Menerima **laporan jadi** (PDF terlampir atau link publik sekali-pakai read-only) dari Org Admin. Bukan akun sistem. |
+| Role                 | Login                  | Scope                  | Hak Akses                                                                                                                                                                       |
+| -------------------- | ---------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `super_admin`        | Ya                     | Semua tenant           | Kelola semua organisasi, template kuesioner master, konfigurasi bobot/formula global, lihat semua proyek                                                                        |
+| `org_admin`          | Ya                     | 1 organisasi           | Setup profil organisasi, buat/kelola proyek diagnosis, undang & kelola responden (generate link), akses penuh dashboard & laporan, export PDF, bagikan laporan publik read-only |
+| `analyst` (Asesor)   | Ya                     | Proyek yang ditugaskan | Input FGD/wawancara/telaah dokumen/data kuantitatif, lihat dashboard & matriks triangulasi, edit catatan insight — tidak bisa kelola user/organisasi                            |
+| Peserta (Respondent) | **Tidak**              | 1 pengisian            | Buka `/isi/{token}` → isi kuesioner sesuai perspektifnya → submit. Tidak melihat dashboard, tidak melihat hasil, tidak butuh akun                                               |
+| _Leadership_         | — dihapus sebagai role | —                      | Menerima **laporan jadi** (PDF terlampir atau link publik sekali-pakai read-only) dari Org Admin. Bukan akun sistem.                                                            |
 
 **Kenapa dipangkas:** Leadership sebagai role terpisah menambah kompleksitas auth
 tanpa nilai tambah — kebutuhan mereka (baca laporan) terpenuhi lewat distribusi
 laporan biasa. Peserta memakai token per-link (bukan akun) supaya proses
-pengisian *frictionless* dan sistem tetap bisa melacak siapa yang belum mengisi
+pengisian _frictionless_ dan sistem tetap bisa melacak siapa yang belum mengisi
 tanpa memaksa mereka membuat akun.
 
 **Row Level Security (Supabase):**
+
 - `user_profiles.role` gate akses tabel operasional (organizations, projects, dst) via RLS policy standar (`auth.uid()` join `organization_id`).
 - Tabel `responses` diakses oleh peserta lewat **service-role Server Action** yang memvalidasi token terhadap `respondent_links.token`, bukan lewat sesi auth Supabase — peserta tidak pernah punya `auth.uid()`.
 
@@ -104,37 +106,46 @@ responden, dan reminder — supaya Admin/Asesor tahu kapan data cukup untuk dian
 ## 5. FORMULASI MATEMATIKA
 
 ### 5.1 Skor domain per perspektif
+
 $$S_{d,r} = \frac{\bar{X}_{d,r} - 1}{4} \times 100$$
 
 ### 5.2 Gap persepsi
+
 $$\Delta_d = \max_r(S_{d,r}) - \min_r(S_{d,r})$$
-Gap Tinggi (*Critical Alignment Issue*) jika $\Delta_d \ge 30$.
+Gap Tinggi (_Critical Alignment Issue_) jika $\Delta_d \ge 30$.
 
 ### 5.3 Health Index
+
 $$HI = \frac{1}{12}\sum_{d=1}^{12} S_d$$
 
 ### 5.4 Alignment Index
+
 $$AI = \max\left(0, 100 - \frac{\bar{\Delta}}{1.6}\times 100\right)$$
 
 ### 5.5 Adaptability Index
+
 $$ADI = \text{avg}(S_1, S_2, S_9, S_{12})$$
 
 ### 5.6 Maturity Level
-| Level | Syarat |
-|---|---|
-| 5 — Teroptimasi | $HI \ge 85$ dan $AI \ge 80$ |
-| 4 — Terkelola & Terukur | $HI \ge 70$ dan $AI \ge 70$ |
+
+| Level                         | Syarat                      |
+| ----------------------------- | --------------------------- |
+| 5 — Teroptimasi               | $HI \ge 85$ dan $AI \ge 80$ |
+| 4 — Terkelola & Terukur       | $HI \ge 70$ dan $AI \ge 70$ |
 | 3 — Terdefinisi & Terstruktur | $HI \ge 55$ dan $AI \ge 60$ |
-| 2 — Terulang & Parsial | $HI \ge 40$ |
-| 1 — Reaktif & Informal | $HI < 40$ |
+| 2 — Terulang & Parsial        | $HI \ge 40$                 |
+| 1 — Reaktif & Informal        | $HI < 40$                   |
 
 ### 5.7 Priority Score
+
 $$P_d = (U_d \times 0.35) + (I_d \times 0.30) + (R_d \times 0.20) - ((1-C_d)\times 0.15)$$
+
 - $U_d$ = urgency dari $\Delta_d$ · $I_d$ = bobot dampak domain
 - $R_d$ = bobot risiko (Kepatuhan/Keuangan 1.0, SDM 0.8, Operasional 0.5)
 - $C_d$ = confidence (Tipis 0.3, Cukup 0.65, Kuat 1.0)
 
 ### 5.8 Risk Exposure (baru, mengisi index yang belum punya formula)
+
 $$RE = \frac{1}{|D_r|}\sum_{d \in D_r} (100 - S_d) \times R_d, \quad D_r = \{4,9,11\}$$
 Rata-rata tertimbang skor domain risiko-tinggi (Struktur, Proses & Teknologi,
 Risiko & Kontrol) — dibalik (100 - S) karena semakin rendah skor domain,
@@ -255,6 +266,7 @@ create table public.interview_notes (
 ```
 
 **RLS ringkas:**
+
 - Semua tabel `organization_id`/`project_id`-scoped → policy `using` cocokkan
   `user_profiles.organization_id` milik `auth.uid()` (kecuali `super_admin` bypass semua).
 - `respondent_links` & `responses`: **tidak ada policy untuk `anon`/`authenticated` biasa**;
@@ -278,22 +290,28 @@ create table public.interview_notes (
 ## 8. HALAMAN & SPESIFIKASI UI/UX
 
 ### 8.1 Landing page (`/`)
+
 Penjelasan 5 tahap alur, 12 domain, CTA login Admin/Asesor. Tidak ada akses publik lain.
 
 ### 8.2 Auth (`/login`)
+
 Login email+password (Supabase Auth) — hanya untuk `super_admin`, `org_admin`, `analyst`.
 
 ### 8.3 Setup Organisasi & Proyek (`/dashboard/organisasi/[id]`)
+
 Form profil organisasi, daftar proyek, tombol "Buat Proyek Baru", generator token
 link per perspektif (dengan tombol copy & kirim email).
 
 ### 8.4 Form Peserta (`/isi/[token]`) — **tanpa login, tanpa sidebar dashboard**
+
 Wizard 12 domain, progress bar, autosave tiap jawaban (debounce), opsi N/A,
 pertanyaan evidence/konflik muncul kondisional saat skor ≤ 2. Halaman "Terima kasih"
 setelah submit — token langsung nonaktif (status `completed`), tidak bisa dibuka ulang.
 
 ### 8.5 Dashboard Utama Proyek (`/dashboard/proyek/[id]`) — **Admin & Asesor**
+
 Ini yang paling dilengkapi sesuai permintaan:
+
 - **Scorecard 5 kartu**: Health / Alignment / Adaptability / Maturity Level / Risk Exposure, tiap kartu dengan angka besar + trend indicator (vs pengukuran sebelumnya jika ada)
 - **Radar chart** 12 domain, 4 garis (per perspektif) ditumpuk, toggle show/hide per perspektif
 - **Bar chart** perbandingan 12 domain (skor rata-rata vs threshold Level target)
@@ -303,14 +321,17 @@ Ini yang paling dilengkapi sesuai permintaan:
 - **Panel evidence coverage**: indikator per domain apakah bukti kuantitatif/dokumen/FGD/wawancara sudah lengkap (proof coverage dari matriks triangulasi)
 
 ### 8.6 Matriks Triangulasi (`/dashboard/proyek/[id]/triangulasi`)
+
 Tabel 12 domain x 7 sumber data (4 perspektif + kuantitatif + dokumen + FGD/wawancara),
 cell menampilkan skor/status + ikon agreement/disagreement.
 
 ### 8.7 Input Kualitatif & Dokumen (`/dashboard/proyek/[id]/kualitatif`)
+
 Tab: Data Kuantitatif (tabel target vs actual, form tambah baris) · Dokumen
 (upload + confidence level) · FGD · Wawancara.
 
 ### 8.8 Laporan & Roadmap (`/dashboard/proyek/[id]/laporan`)
+
 Pilih audiens (Eksekutif/Lengkap/Kepemimpinan/SDM/Risiko), preview siap cetak,
 tombol export PDF & "Generate link publik read-only" (untuk dibagikan ke Leadership
 tanpa akun — link kedaluwarsa otomatis 30 hari). Roadmap 4 horizon sebagai
@@ -318,6 +339,7 @@ timeline/kanban dengan checklist status per item rekomendasi, tiap item link ke
 bukti pendukungnya.
 
 ### 8.9 Admin Global (`/dashboard/admin`) — **hanya `super_admin`**
+
 Daftar semua organisasi/tenant, kelola template kuesioner master, konfigurasi bobot
 formula ($I_d$, $R_d$) per domain.
 

@@ -2,6 +2,7 @@
 // Semua output ditandai sebagai draf awal yang wajib divalidasi asesor.
 
 import type { AnyClient } from "./diagnosis.server";
+import type { Json } from "@/integrations/supabase/types";
 
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const MODEL = "google/gemini-3.7-flash";
@@ -14,7 +15,7 @@ export class AiError extends Error {
   }
 }
 
-async function callAi(system: string, user: string): Promise<any> {
+async function callAi(system: string, user: string): Promise<unknown> {
   const key = process.env["LOVABLE_API_KEY"];
   if (!key) throw new AiError(401, "Kunci AI belum terpasang pada proyek ini.");
   const res = await fetch(GATEWAY, {
@@ -40,9 +41,12 @@ async function callAi(system: string, user: string): Promise<any> {
       throw new AiError(402, "Kredit AI workspace habis. Tambahkan kredit untuk melanjutkan.");
     throw new AiError(res.status, `Layanan AI gagal merespons. ${text.slice(0, 200)}`);
   }
-  const json: any = await res.json();
-  const content: string = json?.choices?.[0]?.message?.content ?? "";
-  const cleaned = content.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "");
+  const json = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+  const content = json.choices?.[0]?.message?.content ?? "";
+  const cleaned = content
+    .trim()
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/, "");
   try {
     return JSON.parse(cleaned);
   } catch {
@@ -99,7 +103,10 @@ Skor per peran: ${input.roleScores
     .join(", ")}. Δ gap persepsi = ${input.gap.toFixed(2)}.
 Skor dimensi lain (untuk membaca pola lintas dimensi):
 ${input.otherDimensions
-  .map((d) => `- ${d.name}: rata-rata ${d.average != null ? d.average.toFixed(2) : "—"}, gap ${d.gap.toFixed(2)}`)
+  .map(
+    (d) =>
+      `- ${d.name}: rata-rata ${d.average != null ? d.average.toFixed(2) : "—"}, gap ${d.gap.toFixed(2)}`,
+  )
   .join("\n")}
 Kutipan kualitatif (anonim):
 ${input.snippets.map((s) => `- [${s.source}${s.role ? ` · ${s.role}` : ""}] ${s.text}`).join("\n")}
@@ -158,7 +165,7 @@ export interface AiInsightRow {
   organization_id: string;
   dimension: number;
   kind: string;
-  content: any;
+  content: Json;
   include_in_report: boolean;
   edited_by_asesor: boolean;
   updated_at: string;
@@ -180,7 +187,7 @@ export async function upsertInsight(
     organizationId: string;
     dimension: number;
     kind: string;
-    content: unknown;
+    content: Json;
     editedByAsesor?: boolean | undefined;
   },
 ) {

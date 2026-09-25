@@ -22,14 +22,17 @@ import {
   updateProjectStatus,
 } from "./diagnosis.server";
 
-export const listProjects = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
-  .handler(() => fetchProjects(createPublicClient()));
+export const listProjects = createServerFn({ method: "GET" })
+  .middleware([requireAdminOrHr])
+  .handler(({ context }) => fetchProjects(context.supabase));
 
-export const listRespondentLinks = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
+export const listRespondentLinks = createServerFn({ method: "GET" })
+  .middleware([requireAdminOrHr])
   .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
-  .handler(({ data }) => fetchRespondentLinks(createPublicClient(), data.id));
+  .handler(({ data, context }) => fetchRespondentLinks(context.supabase, data.id));
 
-export const addRespondentLink = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const addRespondentLink = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -40,9 +43,10 @@ export const addRespondentLink = createServerFn({ method: "POST" }).middleware([
       })
       .parse(data),
   )
-  .handler(({ data }) => createRespondentLink(createPublicClient(), data));
+  .handler(({ data, context }) => createRespondentLink(context.supabase, data));
 
-export const addProject = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const addProject = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -59,9 +63,10 @@ export const addProject = createServerFn({ method: "POST" }).middleware([require
       })
       .parse(data),
   )
-  .handler(({ data }) => createProject(createPublicClient(), data));
+  .handler(({ data, context }) => createProject(context.supabase, data));
 
-export const setProjectStatus = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const setProjectStatus = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -70,23 +75,25 @@ export const setProjectStatus = createServerFn({ method: "POST" }).middleware([r
       })
       .parse(data),
   )
-  .handler(({ data }) => updateProjectStatus(createPublicClient(), data));
+  .handler(({ data, context }) => updateProjectStatus(context.supabase, data));
 
-export const getDashboardData = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
+export const getDashboardData = createServerFn({ method: "GET" })
+  .middleware([requireAdminOrHr])
   .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
-  .handler(({ data }) => fetchDashboardData(createPublicClient(), data.id));
+  .handler(({ data, context }) => fetchDashboardData(context.supabase, data.id));
 
-export const getTriangulationData = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
+export const getTriangulationData = createServerFn({ method: "GET" })
+  .middleware([requireAdminOrHr])
   .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
-  .handler(({ data }) =>
-    fetchTriangulationData(createPublicClient(), data.id),
-  );
+  .handler(({ data, context }) => fetchTriangulationData(context.supabase, data.id));
 
-export const getQualitativeData = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
+export const getQualitativeData = createServerFn({ method: "GET" })
+  .middleware([requireAdminOrHr])
   .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
-  .handler(({ data }) => fetchQualitative(createPublicClient(), data.id));
+  .handler(({ data, context }) => fetchQualitative(context.supabase, data.id));
 
-export const addFgdNote = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const addFgdNote = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -100,9 +107,10 @@ export const addFgdNote = createServerFn({ method: "POST" }).middleware([require
       })
       .parse(data),
   )
-  .handler(({ data }) => saveFgdNote(createPublicClient(), data));
+  .handler(({ data, context }) => saveFgdNote(context.supabase, data));
 
-export const addInterviewNote = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const addInterviewNote = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -114,9 +122,10 @@ export const addInterviewNote = createServerFn({ method: "POST" }).middleware([r
       })
       .parse(data),
   )
-  .handler(({ data }) => saveInterviewNote(createPublicClient(), data));
+  .handler(({ data, context }) => saveInterviewNote(context.supabase, data));
 
-export const addDocumentReview = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const addDocumentReview = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -130,9 +139,10 @@ export const addDocumentReview = createServerFn({ method: "POST" }).middleware([
       })
       .parse(data),
   )
-  .handler(({ data }) => saveDocumentReview(createPublicClient(), data));
+  .handler(({ data, context }) => saveDocumentReview(context.supabase, data));
 
-export const addQuantitativeMetric = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const addQuantitativeMetric = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -148,9 +158,10 @@ export const addQuantitativeMetric = createServerFn({ method: "POST" }).middlewa
       })
       .parse(data),
   )
-  .handler(({ data }) => saveQuantitativeMetric(createPublicClient(), data));
+  .handler(({ data, context }) => saveQuantitativeMetric(context.supabase, data));
 
-export const removeQualitativeEntry = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const removeQualitativeEntry = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -159,19 +170,20 @@ export const removeQualitativeEntry = createServerFn({ method: "POST" }).middlew
       })
       .parse(data),
   )
-  .handler(({ data }) =>
-    deleteQualitativeEntry(createPublicClient(), data),
-  );
+  .handler(({ data, context }) => deleteQualitativeEntry(context.supabase, data));
 
-export const removeProject = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const removeProject = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
-  .handler(({ data }) => deleteProject(createPublicClient(), data.id));
+  .handler(({ data, context }) => deleteProject(context.supabase, data.id));
 
-export const getRespondents = createServerFn({ method: "GET" }).middleware([requireAdminOrHr])
+export const getRespondents = createServerFn({ method: "GET" })
+  .middleware([requireAdminOrHr])
   .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
-  .handler(({ data }) => fetchRespondents(createPublicClient(), data.id));
+  .handler(({ data, context }) => fetchRespondents(context.supabase, data.id));
 
-export const removeRespondent = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const removeRespondent = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -180,9 +192,10 @@ export const removeRespondent = createServerFn({ method: "POST" }).middleware([r
       })
       .parse(data),
   )
-  .handler(({ data }) => deleteRespondent(createPublicClient(), data));
+  .handler(({ data, context }) => deleteRespondent(context.supabase, data));
 
-export const removeResponsesByRole = createServerFn({ method: "POST" }).middleware([requireAdminOrHr])
+export const removeResponsesByRole = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
   .validator((data) =>
     z
       .object({
@@ -191,4 +204,4 @@ export const removeResponsesByRole = createServerFn({ method: "POST" }).middlewa
       })
       .parse(data),
   )
-  .handler(({ data }) => deleteResponsesByRole(createPublicClient(), data));
+  .handler(({ data, context }) => deleteResponsesByRole(context.supabase, data));

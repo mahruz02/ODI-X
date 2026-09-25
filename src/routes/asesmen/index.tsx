@@ -3,12 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Building2, Copy, Plus, ShieldCheck, Trash2, Users } from "lucide-react";
 import { useState } from "react";
 
-import {
-  addProject,
-  listProjects,
-  removeProject,
-  setProjectStatus,
-} from "@/lib/admin.functions";
+import { addProject, listProjects, removeProject, setProjectStatus } from "@/lib/admin.functions";
 
 const projectsQuery = queryOptions({
   queryKey: ["projects"],
@@ -28,8 +23,7 @@ export const Route = createFileRoute("/asesmen/")({
       { property: "og:title", content: "Proyek Diagnosis Organisasi — ODI-X" },
       {
         property: "og:description",
-        content:
-          "Kelola proyek diagnosis per organisasi dan bagikan tautan kuesioner unik.",
+        content: "Kelola proyek diagnosis per organisasi dan bagikan tautan kuesioner unik.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -101,7 +95,9 @@ function ProjectsPage() {
               Proyek Diagnosis Organisasi
             </h1>
             <p className="mt-2 max-w-3xl text-xs text-muted-foreground leading-relaxed">
-              Satu proyek diagnosis untuk satu organisasi. Lengkapi Organization Profile (sektor, jumlah karyawan, tantangan, prioritas 12 bulan) dan bagikan tautan kuesioner unik untuk triangulasi 4 prespektif.
+              Satu proyek diagnosis untuk satu organisasi. Lengkapi Organization Profile (sektor,
+              jumlah karyawan, tantangan, prioritas 12 bulan) dan bagikan tautan kuesioner unik
+              untuk triangulasi 4 prespektif.
             </p>
           </div>
           <button

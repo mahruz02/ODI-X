@@ -22,10 +22,26 @@ const STATUS_BADGE: Record<Status, string> = {
 };
 
 const HORIZONS = [
-  { key: "0-90 hari", label: "Horizon 1: Segera (0–90 Hari)", desc: "Tindakan mendesak & Quick Wins" },
-  { key: "3-6 bulan", label: "Horizon 2: Jangka Pendek (3–6 Bulan)", desc: "Perbaikan operasional inti" },
-  { key: "6-12 bulan", label: "Horizon 3: Jangka Menengah (6–12 Bulan)", desc: "Transformasi & Digitalisasi" },
-  { key: "1-3 tahun", label: "Horizon 4: Jangka Panjang (1–3 Tahun)", desc: "Keberlanjutan & Budaya" },
+  {
+    key: "0-90 hari",
+    label: "Horizon 1: Segera (0–90 Hari)",
+    desc: "Tindakan mendesak & Quick Wins",
+  },
+  {
+    key: "3-6 bulan",
+    label: "Horizon 2: Jangka Pendek (3–6 Bulan)",
+    desc: "Perbaikan operasional inti",
+  },
+  {
+    key: "6-12 bulan",
+    label: "Horizon 3: Jangka Menengah (6–12 Bulan)",
+    desc: "Transformasi & Digitalisasi",
+  },
+  {
+    key: "1-3 tahun",
+    label: "Horizon 4: Jangka Panjang (1–3 Tahun)",
+    desc: "Keberlanjutan & Budaya",
+  },
 ];
 
 export function KanbanRoadmap({ recommendations }: KanbanRoadmapProps) {
@@ -48,7 +64,8 @@ export function KanbanRoadmap({ recommendations }: KanbanRoadmapProps) {
   function toggleStatus(dimension: number) {
     setItemStatuses((prev) => {
       const current = prev[dimension] ?? "todo";
-      const next: Status = current === "todo" ? "in_progress" : current === "in_progress" ? "done" : "todo";
+      const next: Status =
+        current === "todo" ? "in_progress" : current === "in_progress" ? "done" : "todo";
       return { ...prev, [dimension]: next };
     });
   }
@@ -114,7 +131,9 @@ export function KanbanRoadmap({ recommendations }: KanbanRoadmapProps) {
                           <span className="flex size-5 shrink-0 items-center justify-center rounded bg-primary/10 text-[10px] font-bold text-primary">
                             {item.dimension}
                           </span>
-                          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-bold ${DIRECTION_BADGE_CLASS[item.direction]}`}>
+                          <span
+                            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-bold ${DIRECTION_BADGE_CLASS[item.direction]}`}
+                          >
                             {item.direction}
                           </span>
                         </div>
@@ -134,7 +153,9 @@ export function KanbanRoadmap({ recommendations }: KanbanRoadmapProps) {
                           </div>
                           <div className="flex items-center gap-1 font-medium">
                             <Target className="size-3 text-amber-600 shrink-0" />
-                            <span className="truncate">{item.kpi} ({item.target})</span>
+                            <span className="truncate">
+                              {item.kpi} ({item.target})
+                            </span>
                           </div>
                         </div>
 

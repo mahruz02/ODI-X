@@ -17,12 +17,7 @@ import {
   submitResponses,
   submitTokenResponses,
 } from "@/lib/diagnosis.functions";
-import {
-  LIKERT,
-  ROLE_LABELS,
-  dimensionsForRole,
-  type Role,
-} from "@/lib/questionnaire";
+import { LIKERT, ROLE_LABELS, dimensionsForRole, type Role } from "@/lib/questionnaire";
 
 const orgQuery = (code: string) =>
   queryOptions({
@@ -38,8 +33,7 @@ const orgQuery = (code: string) =>
   });
 
 export const Route = createFileRoute("/isi/$kode")({
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(orgQuery(params.kode)),
+  loader: ({ context, params }) => context.queryClient.ensureQueryData(orgQuery(params.kode)),
   head: () => ({
     meta: [
       { title: "Isi Kuesioner Diagnosis — ODI-X" },
@@ -51,8 +45,7 @@ export const Route = createFileRoute("/isi/$kode")({
       { property: "og:title", content: "Isi Kuesioner Diagnosis — ODI-X" },
       {
         property: "og:description",
-        content:
-          "Kuesioner diagnosis 12 domain kesehatan organisasi. Anonim, tanpa login.",
+        content: "Kuesioner diagnosis 12 domain kesehatan organisasi. Anonim, tanpa login.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -64,10 +57,7 @@ export const Route = createFileRoute("/isi/$kode")({
 const TENURE_OPTIONS = ["< 1 tahun", "1–3 tahun", "3–5 tahun", "> 5 tahun"];
 
 type Step =
-  | { kind: "role" }
-  | { kind: "identity" }
-  | { kind: "dimension"; index: number }
-  | { kind: "done" };
+  { kind: "role" } | { kind: "identity" } | { kind: "dimension"; index: number } | { kind: "done" };
 
 function IsiPage() {
   const { kode } = Route.useParams();
@@ -84,7 +74,9 @@ function IsiPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [locked, setLocked] = useState(false);
-  const [isOnline, setIsOnline] = useState(typeof navigator !== "undefined" ? navigator.onLine : true);
+  const [isOnline, setIsOnline] = useState(
+    typeof navigator !== "undefined" ? navigator.onLine : true,
+  );
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [draftSavedTime, setDraftSavedTime] = useState<string | null>(null);
 
@@ -108,7 +100,13 @@ function IsiPage() {
           if (parsed.role) setRole(parsed.role);
           if (parsed.name) setName(parsed.name);
           if (parsed.tenure) setTenure(parsed.tenure);
-          if (parsed.savedAt) setDraftSavedTime(new Date(parsed.savedAt).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }));
+          if (parsed.savedAt)
+            setDraftSavedTime(
+              new Date(parsed.savedAt).toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            );
         }
       }
     } catch {
@@ -134,7 +132,9 @@ function IsiPage() {
         savedAt: new Date().toISOString(),
       };
       window.localStorage.setItem(draftKey, JSON.stringify(draftPayload));
-      setDraftSavedTime(new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }));
+      setDraftSavedTime(
+        new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
+      );
     } catch {
       /* storage kuota penuh / diblokir */
     }
@@ -177,11 +177,9 @@ function IsiPage() {
     const dim = dims[index];
     if (!dim) return false;
     const questions = dim.questions[role] || [];
-    const allScored = questions.every(
-      (_, qi) => scores[questionKey(dim.id, qi)] != null,
-    );
+    const allScored = questions.every((_, qi) => scores[questionKey(dim.id, qi)] != null);
     if (!allScored) return false;
-     if (dim.critical && !comments[String(dim.id)]?.trim()) return false;
+    if (dim.critical && !comments[String(dim.id)]?.trim()) return false;
     return true;
   }
 
@@ -192,17 +190,17 @@ function IsiPage() {
     try {
       const answers = dims.flatMap((dim) =>
         (dim.questions[role] || []).map((_, qi) => {
-           const comment = comments[String(dim.id)]?.trim();
-           const question = (dim.questions[role] || [])[qi];
-           return {
-             dimension: dim.id,
-             questionId: questionKey(dim.id, qi),
-             score: scores[questionKey(dim.id, qi)]!,
-             comment: comment ? comment : undefined,
-             evidenceText: comments[`${dim.id}-ev-${qi}`]?.trim() || undefined,
-             conflictText: comments[`${dim.id}-cf-${qi}`]?.trim() || undefined,
-             isNa: question?.na ? scores[questionKey(dim.id, qi)] === 0 : undefined,
-           };
+          const comment = comments[String(dim.id)]?.trim();
+          const question = (dim.questions[role] || [])[qi];
+          return {
+            dimension: dim.id,
+            questionId: questionKey(dim.id, qi),
+            score: scores[questionKey(dim.id, qi)]!,
+            comment: comment ? comment : undefined,
+            evidenceText: comments[`${dim.id}-ev-${qi}`]?.trim() || undefined,
+            conflictText: comments[`${dim.id}-cf-${qi}`]?.trim() || undefined,
+            isNa: scores[questionKey(dim.id, qi)] === 0,
+          };
         }),
       );
 
@@ -254,12 +252,10 @@ function IsiPage() {
           Pengisian Sudah Ditutup
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Anda sudah menyelesaikan kuesioner melalui tautan ini, sehingga
-          aksesnya otomatis ditutup. Bila Anda perlu mengisi kembali, hubungi tim asesor.
+          Anda sudah menyelesaikan kuesioner melalui tautan ini, sehingga aksesnya otomatis ditutup.
+          Bila Anda perlu mengisi kembali, hubungi tim asesor.
         </p>
-        <p className="mt-6 text-xs text-muted-foreground">
-          Silakan tutup halaman ini.
-        </p>
+        <p className="mt-6 text-xs text-muted-foreground">Silakan tutup halaman ini.</p>
       </main>
     );
   }
@@ -291,7 +287,8 @@ function IsiPage() {
             <p className="mx-auto mt-3 flex max-w-md items-start justify-center gap-2 text-sm text-muted-foreground">
               <Lock className="mt-0.5 size-4 shrink-0" />
               <span>
-                Jawaban Anda <strong>rahasia & anonim</strong> — hanya dihitung dalam bentuk agregat untuk analisis kesehatan organisasi.
+                Jawaban Anda <strong>rahasia & anonim</strong> — hanya dihitung dalam bentuk agregat
+                untuk analisis kesehatan organisasi.
               </span>
             </p>
           </div>
@@ -336,7 +333,9 @@ function IsiPage() {
           <div className="space-y-5 rounded-2xl border bg-card p-5 shadow-sm">
             {draftSavedTime && (
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/40 p-3 text-xs">
-                <span className="font-medium text-muted-foreground">Draft tersimpan pukul {draftSavedTime}</span>
+                <span className="font-medium text-muted-foreground">
+                  Draft tersimpan pukul {draftSavedTime}
+                </span>
                 <button
                   type="button"
                   onClick={() => {
@@ -353,8 +352,7 @@ function IsiPage() {
             )}
             <div>
               <label htmlFor="nama" className="text-sm font-semibold">
-                Nama / Inisial{" "}
-                <span className="font-normal text-muted-foreground">(opsional)</span>
+                Nama / Inisial <span className="font-normal text-muted-foreground">(opsional)</span>
               </label>
               <input
                 id="nama"
@@ -440,13 +438,17 @@ function IsiPage() {
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-2xl border bg-card p-6 shadow-xl">
-            <h3 className="font-display text-lg font-bold tracking-tight">Konfirmasi Pengiriman Jawaban</h3>
+            <h3 className="font-display text-lg font-bold tracking-tight">
+              Konfirmasi Pengiriman Jawaban
+            </h3>
             <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-              Anda telah mengisi {answeredCount} dari {totalQuestions} pertanyaan kuesioner. Setelah dikirimkan, jawaban bersifat final dan tautan ini akan ditutup.
+              Anda telah mengisi {answeredCount} dari {totalQuestions} pertanyaan kuesioner. Setelah
+              dikirimkan, jawaban bersifat final dan tautan ini akan ditutup.
             </p>
             {!isOnline && (
               <p className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-2.5 text-xs text-amber-800 font-medium">
-                Perangkat Anda sedang offline. Jawaban telah tersimpan di draft lokal dan akan dikirimkan begitu koneksi kembali pulih.
+                Perangkat Anda sedang offline. Jawaban telah tersimpan di draft lokal dan akan
+                dikirimkan begitu koneksi kembali pulih.
               </p>
             )}
             <div className="mt-6 flex justify-end gap-2">
@@ -477,11 +479,10 @@ function IsiPage() {
             Terima Kasih Atas Partisipasi Anda
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Jawaban Anda telah tersimpan aman dan divalidasi. Hasil agregat akan diolah oleh tim asesor untuk menyusun rekomendasi perbaikan organisasi.
+            Jawaban Anda telah tersimpan aman dan divalidasi. Hasil agregat akan diolah oleh tim
+            asesor untuk menyusun rekomendasi perbaikan organisasi.
           </p>
-          <p className="mt-6 text-xs text-muted-foreground">
-            Silakan tutup halaman ini.
-          </p>
+          <p className="mt-6 text-xs text-muted-foreground">Silakan tutup halaman ini.</p>
         </section>
       )}
     </main>
@@ -509,9 +510,7 @@ function RoleButton({
         {icon}
       </span>
       <div>
-        <span className="block font-display text-base font-extrabold tracking-tight">
-          {title}
-        </span>
+        <span className="block font-display text-base font-extrabold tracking-tight">{title}</span>
         <span className="block text-xs text-muted-foreground">{desc}</span>
       </div>
     </button>
@@ -521,9 +520,7 @@ function RoleButton({
 function StepHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className="mb-5">
-      <h1 className="font-display text-xl font-extrabold tracking-tight sm:text-2xl">
-        {title}
-      </h1>
+      <h1 className="font-display text-xl font-extrabold tracking-tight sm:text-2xl">{title}</h1>
       <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
     </div>
   );
@@ -564,9 +561,7 @@ function DimensionStep(props: {
   draftSavedTime?: string | null;
 }) {
   const { dim, role, index, total, isOnline = true, draftSavedTime } = props;
-  const progress = Math.round(
-    (props.answeredCount / Math.max(1, props.totalQuestions)) * 100,
-  );
+  const progress = Math.round((props.answeredCount / Math.max(1, props.totalQuestions)) * 100);
   const questions = dim.questions[role] || [];
 
   return (
@@ -612,8 +607,9 @@ function DimensionStep(props: {
 
       {/* Likert Scale Reference Guide */}
       <div className="mb-5 rounded-xl border bg-muted/40 p-3 text-[11px] text-muted-foreground">
-        <span className="font-bold text-foreground">Panduan Skala Nilai:</span>{" "}
-        1: Sangat Rendah / Tidak Pernah · 2: Rendah · 3: Cukup / Sedang · 4: Baik / Terkelola · 5: Sangat Baik / Optimal · N/A: Tidak Berlaku.
+        <span className="font-bold text-foreground">Panduan Skala Nilai:</span> 1: Sangat Rendah /
+        Tidak Pernah · 2: Rendah · 3: Cukup / Sedang · 4: Baik / Terkelola · 5: Sangat Baik /
+        Optimal · N/A: Tidak Berlaku.
       </div>
 
       <div className="space-y-4">
@@ -633,9 +629,13 @@ function DimensionStep(props: {
                 <p className="text-sm font-semibold leading-relaxed">
                   {qi + 1}. {q}
                 </p>
-                <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                  isAnswered ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/30" : "bg-muted text-muted-foreground"
-                }`}>
+                <span
+                  className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                    isAnswered
+                      ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/30"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
                   {isAnswered ? "Terisi" : "Belum"}
                 </span>
               </div>
@@ -652,9 +652,7 @@ function DimensionStep(props: {
                         : "bg-background hover:bg-muted"
                     }`}
                   >
-                    <span className="text-sm font-extrabold tabular-nums">
-                      {opt.value}
-                    </span>
+                    <span className="text-sm font-extrabold tabular-nums">{opt.value}</span>
                     <span className="text-[10px] font-semibold leading-tight">
                       {opt.shortLabel}
                     </span>
@@ -683,24 +681,26 @@ function DimensionStep(props: {
                   </p>
                   <div>
                     <label className="block text-[11px] font-medium text-amber-900">
-                      {dim.evidencePrompt || "Jelaskan perilaku atau bukti nyata di lapangan yang menjadi alasan penilaian ini:"}
+                      {dim.evidencePrompt ||
+                        "Jelaskan perilaku atau bukti nyata di lapangan yang menjadi alasan penilaian ini:"}
                     </label>
                     <textarea
                       rows={2}
                       value={props.comments[`${dim.id}-ev-${qi}`] ?? ""}
-                      onChange={(e) => props.onComment(`${dim.id}-ev-${qi}` as any, e.target.value)}
+                      onChange={(e) => props.onComment(`${dim.id}-ev-${qi}`, e.target.value)}
                       placeholder="Contoh kejadian atau praktik nyata..."
                       className="mt-1 w-full rounded-lg border bg-background px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-amber-500"
                     />
                   </div>
                   <div>
                     <label className="block text-[11px] font-medium text-amber-900">
-                      {dim.conflictPrompt || "Apakah ada perbedaan pendapat antar atasan/staf terkait isu ini?"}
+                      {dim.conflictPrompt ||
+                        "Apakah ada perbedaan pendapat antar atasan/staf terkait isu ini?"}
                     </label>
                     <textarea
                       rows={2}
                       value={props.comments[`${dim.id}-cf-${qi}`] ?? ""}
-                      onChange={(e) => props.onComment(`${dim.id}-cf-${qi}` as any, e.target.value)}
+                      onChange={(e) => props.onComment(`${dim.id}-cf-${qi}`, e.target.value)}
                       placeholder="Perbedaan pandangan atau kendala komunikasi..."
                       className="mt-1 w-full rounded-lg border bg-background px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-amber-500"
                     />
@@ -723,8 +723,8 @@ function DimensionStep(props: {
           <textarea
             id={`komentar-${dim.id}`}
             rows={3}
-             value={props.comments[String(dim.id)] ?? ""}
-             onChange={(e) => props.onComment(String(dim.id), e.target.value)}
+            value={props.comments[String(dim.id)] ?? ""}
+            onChange={(e) => props.onComment(String(dim.id), e.target.value)}
             placeholder="Sampaikan fakta/pengalaman nyata terkait domain ini secara objektif..."
             className="mt-2 w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring"
           />

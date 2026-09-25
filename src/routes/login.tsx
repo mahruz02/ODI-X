@@ -10,8 +10,7 @@ export const Route = createFileRoute("/login")({
       { title: "Login Admin & HR — ODI-X" },
       {
         name: "description",
-        content:
-          "Halaman masuk sistem diagnosis ODI-X untuk Admin dan HR.",
+        content: "Halaman masuk sistem diagnosis ODI-X untuk Admin dan HR.",
       },
     ],
   }),
@@ -108,9 +107,7 @@ function LoginPage() {
           <h1 className="mt-3 font-display text-2xl font-extrabold tracking-tight">
             Ruang Kerja Admin & HR ODI-X
           </h1>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Akses khusus Admin dan HR
-          </p>
+          <p className="mt-1 text-xs text-muted-foreground">Akses khusus Admin dan HR</p>
         </div>
 
         {/* Mode Selector */}
@@ -119,7 +116,9 @@ function LoginPage() {
             type="button"
             onClick={() => setMode("password")}
             className={`rounded-lg py-2 transition-all ${
-              mode === "password" ? "bg-card text-foreground shadow-sm font-bold" : "text-muted-foreground"
+              mode === "password"
+                ? "bg-card text-foreground shadow-sm font-bold"
+                : "text-muted-foreground"
             }`}
           >
             Password
@@ -128,7 +127,9 @@ function LoginPage() {
             type="button"
             onClick={() => setMode("otp")}
             className={`rounded-lg py-2 transition-all ${
-              mode === "otp" ? "bg-card text-foreground shadow-sm font-bold" : "text-muted-foreground"
+              mode === "otp"
+                ? "bg-card text-foreground shadow-sm font-bold"
+                : "text-muted-foreground"
             }`}
           >
             Magic Link
@@ -137,7 +138,9 @@ function LoginPage() {
             type="button"
             onClick={() => setMode("signup")}
             className={`rounded-lg py-2 transition-all ${
-              mode === "signup" ? "bg-card text-foreground shadow-sm font-bold" : "text-muted-foreground"
+              mode === "signup"
+                ? "bg-card text-foreground shadow-sm font-bold"
+                : "text-muted-foreground"
             }`}
           >
             Daftar Akun
@@ -267,13 +270,15 @@ function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-foreground">Peran / Scope Akses</label>
+              <label className="block text-xs font-semibold text-foreground">
+                Peran / Scope Akses
+              </label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value as SystemRole)}
                 className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
               >
-                 <option value="hr">HR</option>
+                <option value="hr">HR</option>
               </select>
             </div>
 
@@ -286,7 +291,6 @@ function LoginPage() {
             </button>
           </form>
         )}
-
       </div>
     </main>
   );
