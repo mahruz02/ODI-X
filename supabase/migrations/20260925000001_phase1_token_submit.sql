@@ -21,10 +21,10 @@ BEGIN
 
   FOR answer IN SELECT * FROM jsonb_array_elements(payload->'answers') LOOP
     INSERT INTO public.responses (
-      organization_id, link_id, role, respondent_id, respondent_name, tenure,
+      organization_id, role, respondent_id, respondent_name, tenure,
       dimension, question_id, score, is_na, evidence_text, conflict_text, comment
     ) VALUES (
-      link_row.organization_id, link_row.id, link_row.perspective, link_row.id::text,
+      link_row.organization_id, link_row.perspective, link_row.id::text,
       NULLIF(payload->>'name', ''), NULLIF(payload->>'tenure', ''),
       (answer->>'dimension')::smallint, answer->>'questionId', (answer->>'score')::smallint,
       COALESCE((answer->>'isNa')::boolean, false), answer->>'evidenceText',
