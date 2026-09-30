@@ -48,13 +48,13 @@ function LandingPage() {
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
-            to="/asesmen"
+            to="/login"
             className="rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary/90"
           >
             Ruang Kerja Admin/HR & Proyek
           </Link>
           <Link
-            to="/asesmen"
+            to="/login"
             className="rounded-xl border bg-card px-6 py-3.5 text-sm font-bold transition-all hover:bg-muted"
           >
             Inisiasi Diagnosis Baru

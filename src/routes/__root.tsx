@@ -97,23 +97,25 @@ function SiteHeader() {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1 text-sm font-semibold">
-            <Link
-              to="/"
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "bg-accent text-accent-foreground" }}
-              className="rounded-lg px-3 py-1.5 text-muted-foreground transition-colors hover:bg-muted"
-            >
-              Beranda
-            </Link>
-            <Link
-              to="/asesmen"
-              activeProps={{ className: "bg-accent text-accent-foreground" }}
-              className="rounded-lg px-3 py-1.5 text-muted-foreground transition-colors hover:bg-muted"
-            >
-              Proyek Asesmen
-            </Link>
-          </nav>
+          {user && (
+            <nav className="hidden md:flex items-center gap-1 text-sm font-semibold">
+              <Link
+                to="/"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: "bg-accent text-accent-foreground" }}
+                className="rounded-lg px-3 py-1.5 text-muted-foreground transition-colors hover:bg-muted"
+              >
+                Beranda
+              </Link>
+              <Link
+                to="/asesmen"
+                activeProps={{ className: "bg-accent text-accent-foreground" }}
+                className="rounded-lg px-3 py-1.5 text-muted-foreground transition-colors hover:bg-muted"
+              >
+                Proyek Asesmen
+              </Link>
+            </nav>
+          )}
         </div>
 
         <div className="flex items-center gap-3 text-xs font-semibold">

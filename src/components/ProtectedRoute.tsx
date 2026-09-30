@@ -69,7 +69,7 @@ export function ProtectedRoute({
         </p>
         <div className="mt-6 flex w-full flex-col gap-2">
           <Link
-            to="/asesmen"
+            to="/"
             className="w-full rounded-xl bg-primary px-4 py-3 text-xs font-bold text-primary-foreground shadow-sm hover:opacity-90"
           >
             Ke Ruang Kerja Asesmen
