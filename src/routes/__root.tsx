@@ -114,6 +114,20 @@ function SiteHeader() {
               >
                 Proyek Asesmen
               </Link>
+              <Link
+                to="/profile"
+                className="rounded-lg px-3 py-1.5 text-muted-foreground transition-colors hover:bg-muted"
+              >
+                Profil
+              </Link>
+              {profile?.role === "admin" && (
+                <Link
+                  to="/users"
+                  className="rounded-lg px-3 py-1.5 text-muted-foreground transition-colors hover:bg-muted"
+                >
+                  Manajemen User
+                </Link>
+              )}
             </nav>
           )}
         </div>

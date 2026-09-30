@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireAdminOrHr } from "@/integrations/supabase/auth-middleware";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
 import {
   createPublicClient,
@@ -21,6 +22,34 @@ import {
   fetchTriangulationData,
   updateProjectStatus,
 } from "./diagnosis.server";
+
+export const createManagedUser = createServerFn({ method: "POST" })
+  .middleware([requireAdminOrHr])
+  .validator((data) =>
+    z
+      .object({
+        email: z.string().email(),
+        password: z.string().min(8),
+        name: z.string().min(2).max(120),
+        role: z.enum(["admin", "hr"]),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    if (context.role !== "admin") throw new Error("Forbidden: Admin role required");
+    const { data: user, error } = await supabaseAdmin.auth.admin.createUser({
+      email: data.email,
+      password: data.password,
+      email_confirm: true,
+      user_metadata: { name: data.name, role: data.role },
+    });
+    if (error || !user.user) throw new Error(error?.message ?? "User creation failed");
+    const { error: profileError } = await supabaseAdmin
+      .from("user_profiles")
+      .upsert({ id: user.user.id, email: data.email, name: data.name, role: data.role });
+    if (profileError) throw new Error(profileError.message);
+    return { ok: true as const };
+  });
 
 export const listProjects = createServerFn({ method: "GET" })
   .middleware([requireAdminOrHr])

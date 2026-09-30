@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as UsersRouteImport } from './routes/users'
 import { Route as AsesmenIndexRouteImport } from './routes/asesmen/index'
 import { Route as IsiKodeRouteImport } from './routes/isi/$kode'
 import { Route as AsesmenIdIndexRouteImport } from './routes/asesmen/$id/index'
@@ -26,6 +28,16 @@ const IndexRoute = IndexRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsersRoute = UsersRouteImport.update({
+  id: '/users',
+  path: '/users',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AsesmenIndexRoute = AsesmenIndexRouteImport.update({
@@ -62,6 +74,8 @@ const AsesmenIdTriangulasiRoute = AsesmenIdTriangulasiRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/users': typeof UsersRoute
   '/isi/$kode': typeof IsiKodeRoute
   '/asesmen/': typeof AsesmenIndexRoute
   '/asesmen/$id/kualitatif': typeof AsesmenIdKualitatifRoute
@@ -72,6 +86,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/users': typeof UsersRoute
   '/isi/$kode': typeof IsiKodeRoute
   '/asesmen': typeof AsesmenIndexRoute
   '/asesmen/$id/kualitatif': typeof AsesmenIdKualitatifRoute
@@ -83,6 +99,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/users': typeof UsersRoute
   '/isi/$kode': typeof IsiKodeRoute
   '/asesmen/': typeof AsesmenIndexRoute
   '/asesmen/$id/kualitatif': typeof AsesmenIdKualitatifRoute
@@ -95,6 +113,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/profile'
+    | '/users'
     | '/isi/$kode'
     | '/asesmen/'
     | '/asesmen/$id/kualitatif'
@@ -105,6 +125,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/profile'
+    | '/users'
     | '/isi/$kode'
     | '/asesmen'
     | '/asesmen/$id/kualitatif'
@@ -115,6 +137,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/login'
+    | '/profile'
+    | '/users'
     | '/isi/$kode'
     | '/asesmen/'
     | '/asesmen/$id/kualitatif'
@@ -126,6 +150,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
+  UsersRoute: typeof UsersRoute
   IsiKodeRoute: typeof IsiKodeRoute
   AsesmenIndexRoute: typeof AsesmenIndexRoute
   AsesmenIdKualitatifRoute: typeof AsesmenIdKualitatifRoute
@@ -148,6 +174,20 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/users': {
+      id: '/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof UsersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/asesmen/': {
@@ -198,6 +238,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
+  UsersRoute: UsersRoute,
   IsiKodeRoute: IsiKodeRoute,
   AsesmenIndexRoute: AsesmenIndexRoute,
   AsesmenIdKualitatifRoute: AsesmenIdKualitatifRoute,
