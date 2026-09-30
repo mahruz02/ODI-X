@@ -1,0 +1,4 @@
+{
+  "buildCommand": "LOVABLE_NITRO_PRESET=lovable-fetch-bundle npm run build",
+  "framework": null
+}
