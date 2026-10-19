@@ -1,4 +1,4 @@
-import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   AlertCircle,
@@ -22,7 +22,13 @@ const projectsQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/asesmen/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(projectsQuery),
+  loader: async ({ context }) => {
+    try {
+      return await context.queryClient.ensureQueryData(projectsQuery);
+    } catch {
+      return { organizations: [], progress: [] };
+    }
+  },
   head: () => ({
     meta: [
       { title: "Proyek Diagnosis Organisasi — ODI-X" },
@@ -46,7 +52,7 @@ export const Route = createFileRoute("/asesmen/")({
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function ProjectsPage() {
-  const { data } = useSuspenseQuery(projectsQuery);
+  const { data = { organizations: [], progress: [] } } = useQuery(projectsQuery);
   const qc = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
