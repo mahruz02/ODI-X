@@ -196,9 +196,13 @@ export async function insertResponses(input: {
       }));
       const { error } = await supabaseAdmin.from("responses").insert(rows);
       if (!error) return { ok: true as const };
+      console.error("[insertResponses] Supabase insert failed:", error.message);
     }
-  } catch {
-    /* fallback demo response submit below */
+  } catch (error) {
+    console.error(
+      "[insertResponses] Response submission failed:",
+      error instanceof Error ? error.message : String(error),
+    );
   }
 
   if (!demoEnabled) throw new Error("Response submission unavailable");
@@ -843,6 +847,9 @@ export async function submitResponsesWithToken(input: {
     },
   });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("[submitResponsesWithToken] Supabase RPC failed:", error.message);
+    throw new Error(error.message);
+  }
   return { ok: true as const };
 }
