@@ -1,6 +1,17 @@
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, Copy, Plus, ShieldCheck, Trash2, Users } from "lucide-react";
+import {
+  AlertCircle,
+  AlertTriangle,
+  Building2,
+  Copy,
+  Loader2,
+  Plus,
+  ShieldCheck,
+  Trash2,
+  Users,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 
 import { addProject, listProjects, removeProject, setProjectStatus } from "@/lib/admin.functions";
@@ -48,6 +59,12 @@ function ProjectsPage() {
   const [startedOn, setStartedOn] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
 
+  // Error & deletion modal states
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [orgToDelete, setOrgToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [confirmText, setConfirmText] = useState("");
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
   const create = useMutation({
     mutationFn: (input: {
       name: string;
@@ -61,9 +78,19 @@ function ProjectsPage() {
     }) => addProject({ data: input }),
     onSuccess: () => {
       setName("");
+      setSector("Lembaga Keuangan Mikro Syariah / BMT");
+      setEmployeeCount("35");
+      setMainProducts("Simpanan & Pembiayaan Syariah");
+      setStrengths("");
+      setChallenges("");
+      setPriorities12m("");
       setStartedOn("");
+      setCreateError(null);
       setShowForm(false);
       void qc.invalidateQueries({ queryKey: ["projects"] });
+    },
+    onError: (err: any) => {
+      setCreateError(err?.message || "Gagal membuat proyek asesmen baru.");
     },
   });
 
@@ -75,7 +102,15 @@ function ProjectsPage() {
 
   const destroy = useMutation({
     mutationFn: (input: { id: string }) => removeProject({ data: input }),
-    onSuccess: () => void qc.invalidateQueries({ queryKey: ["projects"] }),
+    onSuccess: () => {
+      setOrgToDelete(null);
+      setConfirmText("");
+      setDeleteError(null);
+      void qc.invalidateQueries({ queryKey: ["projects"] });
+    },
+    onError: (err: any) => {
+      setDeleteError(err?.message || "Gagal menghapus proyek asesmen.");
+    },
   });
 
   const respondentsOf = (orgId: string) =>
@@ -102,7 +137,10 @@ function ProjectsPage() {
           </div>
           <button
             type="button"
-            onClick={() => setShowForm(!showForm)}
+            onClick={() => {
+              setShowForm(!showForm);
+              setCreateError(null);
+            }}
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90 shadow-sm"
           >
             <Plus className="size-4" />
@@ -117,14 +155,30 @@ function ProjectsPage() {
                 Formulir Profile Organisasi & Inisiasi Asesmen Baru
               </h2>
               <p className="text-xs text-muted-foreground">
-                Isi data kerangka dasar organisasi sebelum menyebarkan tautan kuesioner.
+                Isi data kerangka dasar organisasi sebelum menyebarkan tautan kuesioner. Kolom bertanda{" "}
+                <span className="font-semibold text-destructive">* Wajib</span> harus diisi.
               </p>
             </div>
+
+            {createError && (
+              <div className="mb-5 flex items-start gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-3.5 text-xs text-destructive">
+                <AlertCircle className="size-4 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold">Gagal Menyimpan Proyek</p>
+                  <p className="mt-0.5 text-[11px] opacity-90">{createError}</p>
+                </div>
+              </div>
+            )}
+
             <form
               className="space-y-4"
               onSubmit={(e) => {
                 e.preventDefault();
-                if (name.trim().length < 2) return;
+                setCreateError(null);
+                if (name.trim().length < 2) {
+                  setCreateError("Nama Organisasi minimal harus terdiri dari 2 karakter.");
+                  return;
+                }
                 create.mutate({
                   name: name.trim(),
                   sector,
@@ -139,85 +193,132 @@ function ProjectsPage() {
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-semibold">Nama Organisasi / BMT *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">Nama Organisasi / BMT</label>
+                    <span className="rounded-md bg-destructive/15 px-2 py-0.5 text-[10px] font-bold text-destructive">
+                      * Wajib Diisi
+                    </span>
+                  </div>
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="mis. BMT Amanah Sejahtera"
-                    className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
+                    className="w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
                     required
                   />
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Nama resmi lembaga yang akan dievaluasi kesehatannya.
+                  </p>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold">Sektor / Jenis Lembaga</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">Sektor / Jenis Lembaga</label>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      Opsional
+                    </span>
+                  </div>
                   <input
                     value={sector}
                     onChange={(e) => setSector(e.target.value)}
                     placeholder="Lembaga Keuangan Mikro Syariah / BMT"
-                    className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
+                    className="w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
                   />
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Klasifikasi bidang organisasi (mis. LKMS, KSPPS, Yayasan).
+                  </p>
                 </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-semibold">Jumlah Karyawan / Staf</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">Jumlah Karyawan / Staf</label>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      Opsional
+                    </span>
+                  </div>
                   <input
                     type="number"
                     value={employeeCount}
                     onChange={(e) => setEmployeeCount(e.target.value)}
-                    className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
+                    placeholder="35"
+                    className="w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold">Produk / Layanan Utama</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">Produk / Layanan Utama</label>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      Opsional
+                    </span>
+                  </div>
                   <input
                     value={mainProducts}
                     onChange={(e) => setMainProducts(e.target.value)}
                     placeholder="Simpanan & Pembiayaan Syariah"
-                    className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
+                    className="w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold">Jadwal Mulai Diagnosis</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">Jadwal Mulai Diagnosis</label>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      Opsional (Hari Ini)
+                    </span>
+                  </div>
                   <input
                     type="date"
                     value={startedOn}
                     onChange={(e) => setStartedOn(e.target.value)}
-                    className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
+                    className="w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-semibold">Kekuatan Utama Organisasi</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">Kekuatan Utama Organisasi</label>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      Opsional
+                    </span>
+                  </div>
                   <textarea
                     rows={2}
                     value={strengths}
                     onChange={(e) => setStrengths(e.target.value)}
                     placeholder="mis. Loyalitas anggota tinggi, brand syariah kuat"
-                    className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
+                    className="w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold">Tantangan Utama</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">Tantangan Utama</label>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      Opsional
+                    </span>
+                  </div>
                   <textarea
                     rows={2}
                     value={challenges}
                     onChange={(e) => setChallenges(e.target.value)}
                     placeholder="mis. NPF cabang meningkat, digitalisasi belum penuh"
-                    className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
+                    className="w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold">Prioritas 12 Bulan Ke Depan</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold">Prioritas 12 Bulan Ke Depan</label>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      Opsional
+                    </span>
+                  </div>
                   <textarea
                     rows={2}
                     value={priorities12m}
                     onChange={(e) => setPriorities12m(e.target.value)}
                     placeholder="mis. Penyehatan NPF, restrukturisasi SOP"
-                    className="mt-1 w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
+                    className="w-full rounded-xl border bg-background px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
               </div>
@@ -226,7 +327,7 @@ function ProjectsPage() {
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="rounded-xl border bg-background px-4 py-2 text-xs font-semibold"
+                  className="rounded-xl border bg-background px-4 py-2 text-xs font-semibold hover:bg-muted"
                 >
                   Batal
                 </button>
@@ -235,8 +336,17 @@ function ProjectsPage() {
                   disabled={create.isPending}
                   className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-xs font-bold text-primary-foreground shadow-sm hover:opacity-90 disabled:opacity-50"
                 >
-                  <Plus className="size-4" />
-                  {create.isPending ? "Menyimpan Proyek…" : "Simpan & Buat Proyek"}
+                  {create.isPending ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />
+                      Menyimpan Proyek…
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="size-4" />
+                      Simpan & Buat Proyek
+                    </>
+                  )}
                 </button>
               </div>
             </form>
@@ -324,13 +434,11 @@ function ProjectsPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      const typed = window.prompt(
-                        `Ketik HAPUS untuk menghapus proyek "${org.name}" beserta seluruh data. Tindakan ini permanen.`,
-                      );
-                      if (typed === "HAPUS") destroy.mutate({ id: org.id });
+                      setOrgToDelete({ id: org.id, name: org.name });
+                      setConfirmText("");
+                      setDeleteError(null);
                     }}
-                    disabled={destroy.isPending}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/30 px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/30 px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 transition-colors"
                   >
                     <Trash2 className="size-3.5" />
                     Hapus Proyek
@@ -341,6 +449,92 @@ function ProjectsPage() {
           })}
         </div>
       </main>
+
+      {/* Confirmation Modal for Project Deletion */}
+      {orgToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border bg-card p-6 shadow-xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2.5 text-destructive">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-destructive/10">
+                  <AlertTriangle className="size-5" />
+                </span>
+                <h3 className="font-display text-base font-bold text-foreground">
+                  Hapus Proyek Asesmen
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setOrgToDelete(null);
+                  setDeleteError(null);
+                }}
+                className="rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+
+            <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+              Apakah Anda yakin ingin menghapus proyek diagnosis{" "}
+              <strong className="text-foreground font-semibold">"{orgToDelete.name}"</strong>? Seluruh
+              data kuesioner responden, tautan token, dan catatan triangulasi akan dihapus secara permanen.
+            </p>
+
+            {deleteError && (
+              <div className="mt-3 flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
+                <AlertCircle className="size-4 shrink-0 mt-0.5" />
+                <p>{deleteError}</p>
+              </div>
+            )}
+
+            <div className="mt-4">
+              <label className="block text-[11px] font-semibold text-foreground">
+                Ketik <span className="font-mono font-bold text-destructive">HAPUS</span> untuk konfirmasi:
+              </label>
+              <input
+                type="text"
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder="HAPUS"
+                className="mt-1.5 w-full rounded-xl border bg-background px-3.5 py-2 text-xs font-mono outline-none focus:ring-2 focus:ring-destructive"
+              />
+            </div>
+
+            <div className="mt-6 flex items-center justify-end gap-2 border-t pt-4">
+              <button
+                type="button"
+                disabled={destroy.isPending}
+                onClick={() => {
+                  setOrgToDelete(null);
+                  setDeleteError(null);
+                }}
+                className="rounded-xl border bg-background px-4 py-2 text-xs font-semibold hover:bg-muted"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={confirmText !== "HAPUS" || destroy.isPending}
+                onClick={() => destroy.mutate({ id: orgToDelete.id })}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-destructive px-4 py-2 text-xs font-bold text-destructive-foreground hover:opacity-90 disabled:opacity-40 transition-opacity"
+              >
+                {destroy.isPending ? (
+                  <>
+                    <Loader2 className="size-3.5 animate-spin" />
+                    Menghapus…
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="size-3.5" />
+                    Hapus Permanen
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </ProtectedRoute>
   );
 }

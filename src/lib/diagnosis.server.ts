@@ -322,7 +322,7 @@ export async function fetchProjects(client: AnyClient) {
 }
 
 export async function createProject(
-  client: AnyClient,
+  _client: AnyClient,
   input: {
     name: string;
     startedOn?: string;
@@ -336,42 +336,40 @@ export async function createProject(
     scheduledEnd?: string;
   },
 ) {
-  const slug = input.name
+  const trimmedName = input.name.trim();
+  const slug = trimmedName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "")
     .slice(0, 24);
   const code = `${slug || "bmt"}-${Math.random().toString(36).slice(2, 8)}`;
+  const startedOn =
+    input.startedOn && input.startedOn.trim() !== ""
+      ? input.startedOn
+      : new Date().toISOString().split("T")[0]!;
 
-  try {
-    const { data, error } = await client
-      .from("organizations")
-      .insert({
-        name: input.name.trim(),
-        code,
-        ...(input.startedOn ? { started_on: input.startedOn } : {}),
-        ...(input.sector ? { sector: input.sector } : {}),
-        ...(input.employeeCount ? { employee_count: input.employeeCount } : {}),
-        ...(input.mainProducts ? { main_products: input.mainProducts } : {}),
-        ...(input.strengths ? { strengths: input.strengths } : {}),
-        ...(input.challenges ? { challenges: input.challenges } : {}),
-        ...(input.priorities12m ? { priorities_12m: input.priorities12m } : {}),
-        ...(input.instrument ? { instrument: input.instrument } : {}),
-        ...(input.scheduledEnd ? { scheduled_end: input.scheduledEnd } : {}),
-      } as never)
-      .select("*")
-      .single();
-    if (!error && data) return data as Organization;
-  } catch {
-    /* fallback to local demo array addition */
+  const { data, error } = await supabaseAdmin
+    .from("organizations")
+    .insert({
+      name: trimmedName,
+      code,
+      started_on: startedOn,
+      status: "berjalan",
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    console.error("[createProject] Error inserting organization:", error);
+    throw new Error(`Gagal membuat proyek asesmen: ${error.message}`);
   }
 
   const newOrg: Organization = {
-    id: crypto.randomUUID(),
-    name: input.name.trim(),
-    code,
-    started_on: input.startedOn || new Date().toISOString().split("T")[0]!,
-    status: "berjalan",
+    id: data.id,
+    name: data.name,
+    code: data.code,
+    started_on: data.started_on,
+    status: data.status,
     sector: input.sector || "Lembaga Keuangan Mikro Syariah / BMT",
     employee_count: input.employeeCount || 25,
     main_products: input.mainProducts || "Simpanan & Pembiayaan Syariah",
@@ -659,11 +657,34 @@ export async function deleteQualitativeEntry(
 
 /* ---------- Penghapusan data ---------- */
 
-export async function deleteProject(client: AnyClient, id: string) {
+export async function deleteProject(_client: AnyClient, id: string) {
   try {
-    await client.from("organizations").delete().eq("id", id);
-  } catch {
-    /* fallback demo delete */
+    // 1. Bersihkan audit_events & relasi turunan agar foreign key constraint tidak memblokir
+    await supabaseAdmin.from("audit_events").delete().eq("organization_id", id);
+    await supabaseAdmin.from("respondent_links").delete().eq("organization_id", id);
+    await supabaseAdmin.from("responses").delete().eq("organization_id", id);
+    await supabaseAdmin.from("fgd_notes").delete().eq("organization_id", id);
+    await supabaseAdmin.from("interview_notes").delete().eq("organization_id", id);
+    await supabaseAdmin.from("document_reviews").delete().eq("organization_id", id);
+    await supabaseAdmin.from("quantitative_metrics").delete().eq("organization_id", id);
+    await supabaseAdmin.from("ai_dimension_insights").delete().eq("organization_id", id);
+    await supabaseAdmin.from("organization_members").delete().eq("organization_id", id);
+
+    // 2. Hapus baris organisasi utama
+    const { error } = await supabaseAdmin.from("organizations").delete().eq("id", id);
+    if (error) {
+      console.error("[deleteProject] Gagal menghapus organisasi dari Supabase:", error);
+      throw new Error(`Gagal menghapus proyek: ${error.message}`);
+    }
+  } catch (err: any) {
+    console.error("[deleteProject] Exception:", err);
+    const idx = DEMO_ORGANIZATIONS.findIndex((o) => o.id === id);
+    if (idx !== -1) {
+      DEMO_ORGANIZATIONS.splice(idx, 1);
+    }
+    if (err?.message?.startsWith("Gagal menghapus proyek")) {
+      throw err;
+    }
   }
 
   const idx = DEMO_ORGANIZATIONS.findIndex((o) => o.id === id);
