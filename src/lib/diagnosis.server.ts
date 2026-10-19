@@ -140,7 +140,7 @@ const demoEnabled = process.env["ODIX_ENABLE_DEMO"] === "true";
 
 export async function fetchOrganizationByCode(code: string) {
   try {
-    const { data, error } = await createPublicClient()
+    const { data, error } = await supabaseAdmin
       .from("organizations")
       .select("*")
       .eq("code", code)

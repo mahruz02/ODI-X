@@ -24,9 +24,13 @@ const orgQuery = (code: string) =>
     queryKey: ["org-by-code", code],
     queryFn: async () => {
       // First try to load as respondent token link
-      const link = await getLinkByToken({ data: { token: code } });
+      let link = null;
+      try {
+        link = await getLinkByToken({ data: { token: code } });
+      } catch {
+        link = null;
+      }
       if (link) return { isLinkToken: true, link, org: link.organizations };
-      // Fallback to code lookup
       const org = await getOrganizationByCode({ data: { code } });
       return { isLinkToken: false, link: null, org };
     },
