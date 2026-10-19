@@ -194,7 +194,7 @@ export async function insertResponses(input: {
         conflict_text: a.conflictText?.trim() || null,
         comment: a.comment?.trim() ? a.comment.trim() : null,
       }));
-      const { error } = await createPublicClient().from("responses").insert(rows);
+      const { error } = await supabaseAdmin.from("responses").insert(rows);
       if (!error) return { ok: true as const };
     }
   } catch {
@@ -834,7 +834,7 @@ export async function submitResponsesWithToken(input: {
     throw new Error("Tautan pengisian ini telah digunakan dan sudah selesai.");
   }
 
-  const { error } = await createPublicClient().rpc("submit_token_responses", {
+  const { error } = await supabaseAdmin.rpc("submit_token_responses", {
     payload: {
       token: input.token,
       name: input.name?.trim() || link.respondent_name || "",
