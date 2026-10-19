@@ -156,7 +156,7 @@ export async function fetchOrganizationByCode(code: string) {
 
 export async function fetchLinkByToken(token: string) {
   try {
-    const { data, error } = await createPublicClient()
+    const { data, error } = await supabaseAdmin
       .from("respondent_links")
       .select("*, organizations(*)")
       .eq("token", token)
