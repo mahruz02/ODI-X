@@ -3,7 +3,6 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
@@ -82,7 +81,7 @@ const qualitativeQuery = (id: string) =>
 
 export const Route = createFileRoute("/asesmen/$id/")({
   loader: async ({ context, params }) => {
-    await Promise.all([
+    await Promise.allSettled([
       context.queryClient.ensureQueryData(dashboardQuery(params.id)),
       context.queryClient.ensureQueryData(qualitativeQuery(params.id)),
     ]);
@@ -123,8 +122,9 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function DashboardPage() {
   const { id } = Route.useParams();
-  const { data } = useSuspenseQuery(dashboardQuery(id));
-  const { data: qualData } = useSuspenseQuery(qualitativeQuery(id));
+  const { data = { organization: null, scores: [], comments: [] } } = useQuery(dashboardQuery(id));
+  const { data: qualData = { organization: null, fgd: [], interviews: [], documents: [], metrics: [] } } =
+    useQuery(qualitativeQuery(id));
   const [copied, setCopied] = useState(false);
   const [selectedSummary, setSelectedSummary] = useState<DimensionSummary | null>(null);
 

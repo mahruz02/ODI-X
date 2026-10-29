@@ -30,7 +30,7 @@ export interface Dimension {
 export const DIMENSIONS: Dimension[] = [
   {
     id: 1,
-    name: "Konteks Eksternal",
+    name: "Lingkungan Eksternal",
     short: "Eksternal",
     description: "Adaptasi terhadap perubahan regulasi, pasar, persaingan, dan tren makro.",
     critical: false,
@@ -40,26 +40,38 @@ export const DIMENSIONS: Dimension[] = [
       "Apa perbedaan pandangan utama antara pimpinan dan staf terkait ancaman eksternal yang dihadapi?",
     questions: {
       pengurus: [
-        "Organisasi rutin memantau dan merespons perubahan regulasi dan industri.",
-        "Peluang dan ancaman pasar eksternal dipetakan dengan cermat dalam perencanaan.",
+              "Lembaga memahami regulasi terbaru yang berlaku bagi BMT/KSPPS.",
+              "Lembaga rutin memantau perkembangan pesaing dan lembaga sejenis.",
+              "Kebutuhan dan harapan anggota dipahami seluruh unsur lembaga.",
+              "Lembaga cepat menyesuaikan diri saat kondisi ekonomi atau kebijakan berubah.",
+              "Hubungan dengan regulator, pemerintah, dan perhimpunan terjaga baik."
       ],
       manajemen: [
-        "Perubahan regulasi/pasar eksternal diantisipasi secara cepat dalam operasional.",
-        "Kompetitor dan tren baru dipantau untuk menjaga daya saing layanan.",
+              "Lembaga memahami regulasi terbaru yang berlaku bagi BMT/KSPPS.",
+              "Lembaga rutin memantau perkembangan pesaing dan lembaga sejenis.",
+              "Kebutuhan dan harapan anggota dipahami seluruh unsur lembaga.",
+              "Lembaga cepat menyesuaikan diri saat kondisi ekonomi atau kebijakan berubah.",
+              "Hubungan dengan regulator, pemerintah, dan perhimpunan terjaga baik."
       ],
       karyawan: [
-        "Saya mendapat informasi mengenai perubahan aturan atau kondisi pasar yang mempengaruhi kerja.",
-        "Layanan tempat saya bekerja cepat beradaptasi dengan kebutuhan anggota/nasabah saat ini.",
+              "Lembaga memahami regulasi terbaru yang berlaku bagi BMT/KSPPS.",
+              "Lembaga rutin memantau perkembangan pesaing dan lembaga sejenis.",
+              "Kebutuhan dan harapan anggota dipahami seluruh unsur lembaga.",
+              "Lembaga cepat menyesuaikan diri saat kondisi ekonomi atau kebijakan berubah.",
+              "Hubungan dengan regulator, pemerintah, dan perhimpunan terjaga baik."
       ],
       stakeholder: [
-        "Organisasi dinilai reponsif terhadap regulasi dan perkembangan lingkungan eksternal.",
-        "Inovasi layanan organisasi relevan dengan kebutuhan masyarakat saat ini.",
+              "Lembaga memahami regulasi terbaru yang berlaku bagi BMT/KSPPS.",
+              "Lembaga rutin memantau perkembangan pesaing dan lembaga sejenis.",
+              "Kebutuhan dan harapan anggota dipahami seluruh unsur lembaga.",
+              "Lembaga cepat menyesuaikan diri saat kondisi ekonomi atau kebijakan berubah.",
+              "Hubungan dengan regulator, pemerintah, dan perhimpunan terjaga baik."
       ],
     },
   },
   {
     id: 2,
-    name: "Strategi & Arah",
+    name: "Visi, Misi & Strategi",
     short: "Strategi",
     description: "Kejelasan visi-misi, target terukur, dan pemahaman arah di semua level.",
     critical: false,
@@ -69,26 +81,38 @@ export const DIMENSIONS: Dimension[] = [
       "Kenapa pemahaman sasaran strategis di tingkat staf berbeda dengan arah yang dimaksudkan Pengurus?",
     questions: {
       pengurus: [
-        "Visi, misi, dan sasaran strategis jangka panjang dirumuskan secara terukur.",
-        "Rencana strategis diturunkan menjadi Indikator Kinerja Utama (KPI) yang jelas.",
+              "Saya memahami visi dan misi lembaga.",
+              "Rencana strategis dan program kerja tersusun jelas dan tertulis.",
+              "Target tahunan diturunkan jelas sampai ke unit dan individu.",
+              "Strategi lembaga realistis sesuai kemampuan sumber daya.",
+              "Capaian strategi dievaluasi secara berkala."
       ],
       manajemen: [
-        "Saya memahami target strategis unit saya dan bagaimana mencapainya.",
-        "Pengurus memberikan arahan strategis yang konsisten dan fokus.",
+              "Saya memahami visi dan misi lembaga.",
+              "Rencana strategis dan program kerja tersusun jelas dan tertulis.",
+              "Target tahunan diturunkan jelas sampai ke unit dan individu.",
+              "Strategi lembaga realistis sesuai kemampuan sumber daya.",
+              "Capaian strategi dievaluasi secara berkala."
       ],
       karyawan: [
-        "Saya tahu visi dan sasaran utama organisasi tahun ini.",
-        "Pekerjaan harian saya berkontribusi langsung pada target organisasi.",
+              "Saya memahami visi dan misi lembaga.",
+              "Rencana strategis dan program kerja tersusun jelas dan tertulis.",
+              "Target tahunan diturunkan jelas sampai ke unit dan individu.",
+              "Strategi lembaga realistis sesuai kemampuan sumber daya.",
+              "Capaian strategi dievaluasi secara berkala."
       ],
       stakeholder: [
-        "Organisasi memiliki fokus dan arah pengembangan bisnis yang jelas.",
-        "Komitmen organisasi terhadap misi sosial dan bisnis berjalan seimbang.",
+              "Saya memahami visi dan misi lembaga.",
+              "Rencana strategis dan program kerja tersusun jelas dan tertulis.",
+              "Target tahunan diturunkan jelas sampai ke unit dan individu.",
+              "Strategi lembaga realistis sesuai kemampuan sumber daya.",
+              "Capaian strategi dievaluasi secara berkala."
       ],
     },
   },
   {
     id: 3,
-    name: "Kepemimpinan & Tata Kelola",
+    name: "Kepemimpinan",
     short: "Kepemimpinan",
     description: "Gaya kepemimpinan, independensi pengawasan, dan ketepatan keputusan.",
     critical: true,
@@ -98,26 +122,38 @@ export const DIMENSIONS: Dimension[] = [
       "Jelaskan hambatan atau keraguan utama yang dirasakan staf saat ingin menyampaikan kritik kepada pimpinan.",
     questions: {
       pengurus: [
-        "Pengurus dan Pengawas menjalankan tata kelola yang transparan dan akuntabel.",
-        "Keputusan penting diambil secara tepat waktu berdasar data yang memadai.",
+              "Pimpinan memberi arahan yang jelas.",
+              "Pimpinan menjadi teladan dalam sikap dan integritas.",
+              "Pimpinan terbuka terhadap masukan dan kritik.",
+              "Keputusan pimpinan adil dan tidak pilih kasih.",
+              "Pimpinan membimbing dan mengembangkan bawahannya."
       ],
       manajemen: [
-        "Pimpinan memberi ruang diskusi dan terbuka terhadap kritik/masukan.",
-        "Arahan kepemimpinan memperjelas prioritas kerja dan tidak membingungkan.",
+              "Pimpinan memberi arahan yang jelas.",
+              "Pimpinan menjadi teladan dalam sikap dan integritas.",
+              "Pimpinan terbuka terhadap masukan dan kritik.",
+              "Keputusan pimpinan adil dan tidak pilih kasih.",
+              "Pimpinan membimbing dan mengembangkan bawahannya."
       ],
       karyawan: [
-        "Atasan memberi teladan yang baik dan kejelasan dalam bertindak.",
-        "Saya merasa aman menyampaikan pendapat kepada pimpinan.",
+              "Pimpinan memberi arahan yang jelas.",
+              "Pimpinan menjadi teladan dalam sikap dan integritas.",
+              "Pimpinan terbuka terhadap masukan dan kritik.",
+              "Keputusan pimpinan adil dan tidak pilih kasih.",
+              "Pimpinan membimbing dan mengembangkan bawahannya."
       ],
       stakeholder: [
-        "Tata kelola dan pengawasan organisasi berjalan independen dan profesional.",
-        "Kepemimpinan organisasi dipercaya oleh mitra dan anggota.",
+              "Pimpinan memberi arahan yang jelas.",
+              "Pimpinan menjadi teladan dalam sikap dan integritas.",
+              "Pimpinan terbuka terhadap masukan dan kritik.",
+              "Keputusan pimpinan adil dan tidak pilih kasih.",
+              "Pimpinan membimbing dan mengembangkan bawahannya."
       ],
     },
   },
   {
     id: 4,
-    name: "Struktur Organisasi",
+    name: "Budaya Organisasi",
     short: "Struktur",
     description: "Kejelasan wewenang, job description, rentang kendali, dan efisiensi hirarki.",
     critical: false,
@@ -127,26 +163,38 @@ export const DIMENSIONS: Dimension[] = [
       "Di bagian mana terjadi tumpang tindih wewenang atau instruksi yang saling bertentangan antaratasan?",
     questions: {
       pengurus: [
-        "Struktur organisasi efektif menunjang pencapaian sasaran tanpa hambatan hirarki.",
-        "Pembagian peran antara organs pengurus, pengawas, dan direksi/manajemen tegas.",
+              "Nilai-nilai lembaga dipraktikkan sehari-hari, bukan sekadar slogan.",
+              "Suasana kekeluargaan terjaga tanpa mengurangi profesionalisme.",
+              "Disiplin dan etika kerja ditegakkan konsisten pada semua orang.",
+              "Kesalahan dijadikan bahan belajar, bukan mencari kambing hitam.",
+              "Saya bangga menjadi bagian dari lembaga ini."
       ],
       manajemen: [
-        "Batas wewenang pengambilan keputusan di unit saya terdefinisi jelas.",
-        "Tidak ada tumpang tindih fungsi atau koordinasi yang berbelit antar departemen.",
+              "Nilai-nilai lembaga dipraktikkan sehari-hari, bukan sekadar slogan.",
+              "Suasana kekeluargaan terjaga tanpa mengurangi profesionalisme.",
+              "Disiplin dan etika kerja ditegakkan konsisten pada semua orang.",
+              "Kesalahan dijadikan bahan belajar, bukan mencari kambing hitam.",
+              "Saya bangga menjadi bagian dari lembaga ini."
       ],
       karyawan: [
-        "Rincian tugas (jobdesc) saya jelas dan sesuai praktek harian.",
-        "Saya tahu persis garis pelaporan dan koordinasi pekerjaan saya.",
+              "Nilai-nilai lembaga dipraktikkan sehari-hari, bukan sekadar slogan.",
+              "Suasana kekeluargaan terjaga tanpa mengurangi profesionalisme.",
+              "Disiplin dan etika kerja ditegakkan konsisten pada semua orang.",
+              "Kesalahan dijadikan bahan belajar, bukan mencari kambing hitam.",
+              "Saya bangga menjadi bagian dari lembaga ini."
       ],
       stakeholder: [
-        "Struktur organisasi mempermudah alur komunikasi dan kerja sama luar.",
-        "Penanggung jawab layanan/unit mudah dihubungi dan berwenang mengambil keputusan.",
+              "Nilai-nilai lembaga dipraktikkan sehari-hari, bukan sekadar slogan.",
+              "Suasana kekeluargaan terjaga tanpa mengurangi profesionalisme.",
+              "Disiplin dan etika kerja ditegakkan konsisten pada semua orang.",
+              "Kesalahan dijadikan bahan belajar, bukan mencari kambing hitam.",
+              "Saya bangga menjadi bagian dari lembaga ini."
       ],
     },
   },
   {
     id: 5,
-    name: "Budaya & Etika",
+    name: "Struktur Organisasi",
     short: "Budaya",
     description: "Penerapan nilai organisasi, integritas amanah, dan iklim kerja.",
     critical: true,
@@ -156,26 +204,38 @@ export const DIMENSIONS: Dimension[] = [
       "Apakah ada ketimpangan perlakuan atau pelanggaran etika yang terbiarkan tanpa sanksi yang adil?",
     questions: {
       pengurus: [
-        "Nilai-nilai syariah dan etika organisasi benar-benar menjadi panduan perilaku.",
-        "Terdapat penegakan etika dan integritas yang konsisten di semua lini.",
+              "Struktur organisasi jelas dan dipahami semua pihak.",
+              "Peran pengurus, pengelola, dan karyawan terbagi jelas, tanpa tumpang tindih.",
+              "Jobdesk saya tertulis dan sesuai pekerjaan sebenarnya.",
+              "Jalur koordinasi dan pelaporan antar level berjalan jelas.",
+              "Beban kerja antar posisi terbagi wajar."
       ],
       manajemen: [
-        "Praktik harian di unit selaras dengan nilai-nilai yang dipromosikan.",
-        "Pelanggaran etika ditindak secara adil tanpa tebang pilih.",
+              "Struktur organisasi jelas dan dipahami semua pihak.",
+              "Peran pengurus, pengelola, dan karyawan terbagi jelas, tanpa tumpang tindih.",
+              "Jobdesk saya tertulis dan sesuai pekerjaan sebenarnya.",
+              "Jalur koordinasi dan pelaporan antar level berjalan jelas.",
+              "Beban kerja antar posisi terbagi wajar."
       ],
       karyawan: [
-        "Budaya saling menghargai dan amanah terasa dalam lingkungan kerja harian.",
-        "Saya bangga dengan standar etika dan reputasi tempat saya bekerja.",
+              "Struktur organisasi jelas dan dipahami semua pihak.",
+              "Peran pengurus, pengelola, dan karyawan terbagi jelas, tanpa tumpang tindih.",
+              "Jobdesk saya tertulis dan sesuai pekerjaan sebenarnya.",
+              "Jalur koordinasi dan pelaporan antar level berjalan jelas.",
+              "Beban kerja antar posisi terbagi wajar."
       ],
       stakeholder: [
-        "Organisasi konsisten menjaga integritas, etika, dan nilai syariah dalam bertransaksi.",
-        "Citra dan budaya pelayanan organisasi dirasakan positif oleh pihak luar.",
+              "Struktur organisasi jelas dan dipahami semua pihak.",
+              "Peran pengurus, pengelola, dan karyawan terbagi jelas, tanpa tumpang tindih.",
+              "Jobdesk saya tertulis dan sesuai pekerjaan sebenarnya.",
+              "Jalur koordinasi dan pelaporan antar level berjalan jelas.",
+              "Beban kerja antar posisi terbagi wajar."
       ],
     },
   },
   {
     id: 6,
-    name: "SDM & Kompetensi",
+    name: "Praktik Manajemen",
     short: "SDM",
     description: "Rekrutmen, pemetaan talenta, pelatihan, dan pengembangan kapabilitas.",
     critical: false,
@@ -185,26 +245,38 @@ export const DIMENSIONS: Dimension[] = [
       "Mengapa program pelatihan yang ada dirasakan belum menjawab kebutuhan riil pekerjaan di lapangan?",
     questions: {
       pengurus: [
-        "Organisasi memiliki strategi perencanaan dan pemetaan talenta SDM berkelanjutan.",
-        "Alokasi anggaran pelatihan dan pengembangan kompetensi SDM memadai.",
+              "Rencana kerja dibuat dan dikomunikasikan sebelum dilaksanakan.",
+              "Keputusan penting didasarkan pada data.",
+              "Pengawasan dan evaluasi kerja berjalan rutin.",
+              "Rapat efektif dan menghasilkan tindak lanjut.",
+              "Masalah diselesaikan tuntas dan tidak berulang."
       ],
       manajemen: [
-        "Anggota tim saya memiliki kompetensi yang cukup untuk menjalankan tugas.",
-        "Program pelatihan yang diberikan sesuai dengan kebutuhan peningkatan kerja.",
+              "Rencana kerja dibuat dan dikomunikasikan sebelum dilaksanakan.",
+              "Keputusan penting didasarkan pada data.",
+              "Pengawasan dan evaluasi kerja berjalan rutin.",
+              "Rapat efektif dan menghasilkan tindak lanjut.",
+              "Masalah diselesaikan tuntas dan tidak berulang."
       ],
       karyawan: [
-        "Saya mendapatkan pelatihan/bimbingan yang dibutuhkan untuk mengembangkan ketrampilan.",
-        "Peluang karir dan pengembangan diri terbuka secara transparan.",
+              "Rencana kerja dibuat dan dikomunikasikan sebelum dilaksanakan.",
+              "Keputusan penting didasarkan pada data.",
+              "Pengawasan dan evaluasi kerja berjalan rutin.",
+              "Rapat efektif dan menghasilkan tindak lanjut.",
+              "Masalah diselesaikan tuntas dan tidak berulang."
       ],
       stakeholder: [
-        "Staf organisasi kompeten, terampil, dan menguasai bidang tugasnya.",
-        "Interaksi dengan staf menunjukkan profesionalisme yang tinggi.",
+              "Rencana kerja dibuat dan dikomunikasikan sebelum dilaksanakan.",
+              "Keputusan penting didasarkan pada data.",
+              "Pengawasan dan evaluasi kerja berjalan rutin.",
+              "Rapat efektif dan menghasilkan tindak lanjut.",
+              "Masalah diselesaikan tuntas dan tidak berulang."
       ],
     },
   },
   {
     id: 7,
-    name: "Desain Pekerjaan",
+    name: "Sistem & Prosedur",
     short: "Desain Kerja",
     description: "Keseimbangan beban kerja, fleksibilitas, dan kejelasan alur proses harian.",
     critical: false,
@@ -214,26 +286,38 @@ export const DIMENSIONS: Dimension[] = [
       "Apa penyebab utama penumpukan beban kerja pada unit tertentu yang berpotensi memicu kejenuhan (burnout)?",
     questions: {
       pengurus: [
-        "Beban kerja antar unit terdistribusi secara seimbang dan proporsional.",
-        "Desain pekerjaan dirancang efisien serta meminimalisir risiko burnout.",
+              "SOP tersedia untuk pekerjaan-pekerjaan utama.",
+              "SOP benar-benar dijalankan.",
+              "Sistem informasi/aplikasi memadai untuk mendukung pekerjaan.",
+              "Data dan laporan lembaga akurat dan tepat waktu.",
+              "Pengendalian internal (kas, pembiayaan, dokumen) cukup kuat mencegah penyimpangan."
       ],
       manajemen: [
-        "Beban kerja tim harian realistis dan dapat diselesaikan pada jam kerja.",
-        "Target individu dan unit ditetapkan rasional berdasar kapasitas.",
+              "SOP tersedia untuk pekerjaan-pekerjaan utama.",
+              "SOP benar-benar dijalankan.",
+              "Sistem informasi/aplikasi memadai untuk mendukung pekerjaan.",
+              "Data dan laporan lembaga akurat dan tepat waktu.",
+              "Pengendalian internal (kas, pembiayaan, dokumen) cukup kuat mencegah penyimpangan."
       ],
       karyawan: [
-        "Beban kerja saya wajar dan saya dapat menjaga keseimbangan hidup-kerja.",
-        "Fasilitas dan perlengkapan kerja memadai untuk menyelesaikan tugas.",
+              "SOP tersedia untuk pekerjaan-pekerjaan utama.",
+              "SOP benar-benar dijalankan.",
+              "Sistem informasi/aplikasi memadai untuk mendukung pekerjaan.",
+              "Data dan laporan lembaga akurat dan tepat waktu.",
+              "Pengendalian internal (kas, pembiayaan, dokumen) cukup kuat mencegah penyimpangan."
       ],
       stakeholder: [
-        "Proses pelayanan tidak tampak membebani petugas hingga menurunkan mutu.",
-        "Waktu respons dan penyelesaian pekerjaan relatif terukur.",
+              "SOP tersedia untuk pekerjaan-pekerjaan utama.",
+              "SOP benar-benar dijalankan.",
+              "Sistem informasi/aplikasi memadai untuk mendukung pekerjaan.",
+              "Data dan laporan lembaga akurat dan tepat waktu.",
+              "Pengendalian internal (kas, pembiayaan, dokumen) cukup kuat mencegah penyimpangan."
       ],
     },
   },
   {
     id: 8,
-    name: "Tim & Kolaborasi",
+    name: "Kepatuhan Syariah & Tata Kelola",
     short: "Kolaborasi",
     description: "Kerja sama antar cabang/unit, penyelesaian konflik, dan sinergi tim.",
     critical: true,
@@ -243,26 +327,38 @@ export const DIMENSIONS: Dimension[] = [
       "Apa masalah utama yang memicu gesekan atau sekat silogisme antardepartemen saat koordinasi?",
     questions: {
       pengurus: [
-        "Sinergi dan kolaborasi antar unit/cabang berjalan tanpa sekat silogisme.",
-        "Konflik antar fungsi diselesaikan secara konstruktif.",
+              "Produk dan akad sesuai prinsip syariah.",
+              "DPS berperan aktif dalam pengawasan.",
+              "Pengurus menjalankan fungsi pengawasan secara nyata, bukan formalitas.",
+              "Informasi keuangan dan kebijakan disampaikan transparan.",
+              "Pelanggaran aturan ditindak tanpa memandang jabatan."
       ],
       manajemen: [
-        "Kerja sama antar tim/departemen berjalan lancar dan saling mendukung.",
-        "Informasi penting dibagikan secara terbuka antar unit kerja.",
+              "Produk dan akad sesuai prinsip syariah.",
+              "DPS berperan aktif dalam pengawasan.",
+              "Pengurus menjalankan fungsi pengawasan secara nyata, bukan formalitas.",
+              "Informasi keuangan dan kebijakan disampaikan transparan.",
+              "Pelanggaran aturan ditindak tanpa memandang jabatan."
       ],
       karyawan: [
-        "Rekan kerja di unit saya kooperatif dan siap membantu saat dibutuhkan.",
-        "Suasana tim mendukung pencapaian hasil bersama.",
+              "Produk dan akad sesuai prinsip syariah.",
+              "DPS berperan aktif dalam pengawasan.",
+              "Pengurus menjalankan fungsi pengawasan secara nyata, bukan formalitas.",
+              "Informasi keuangan dan kebijakan disampaikan transparan.",
+              "Pelanggaran aturan ditindak tanpa memandang jabatan."
       ],
       stakeholder: [
-        "Organisasi menunjukkan kekompakan dan koordinasi yang solid saat melayani mitra.",
-        "Tim organisasi cepat merespons kebutuhan kolaborasi eksternal.",
+              "Produk dan akad sesuai prinsip syariah.",
+              "DPS berperan aktif dalam pengawasan.",
+              "Pengurus menjalankan fungsi pengawasan secara nyata, bukan formalitas.",
+              "Informasi keuangan dan kebijakan disampaikan transparan.",
+              "Pelanggaran aturan ditindak tanpa memandang jabatan."
       ],
     },
   },
   {
     id: 9,
-    name: "Proses & Teknologi",
+    name: "Iklim Kerja",
     short: "Teknologi",
     description: "Ketersediaan SOP mutakhir, otomatisasi sistem core, dan keandalan IT.",
     critical: false,
@@ -272,26 +368,38 @@ export const DIMENSIONS: Dimension[] = [
       "Proses operasional mana yang masih manual atau terhambat SOP usang yang belum disesuaikan?",
     questions: {
       pengurus: [
-        "Teknologi informasi dan sistem operasional investasi utama yang mendukung percepatan bisnis.",
-        "SOP dan digitalisasi proses terus dimutakhirkan.",
+              "Komunikasi antar bagian terbuka dan lancar.",
+              "Kerja sama tim berjalan baik.",
+              "Konflik diselesaikan secara sehat.",
+              "Saya merasa aman menyampaikan pendapat yang berbeda.",
+              "Saya puas dengan suasana kerja sehari-hari."
       ],
       manajemen: [
-        "Sistem IT dan aplikasi yang digunakan andal dan jarang mengalami kendala.",
-        "SOP kerja relevan dengan operasional aktual saat ini.",
+              "Komunikasi antar bagian terbuka dan lancar.",
+              "Kerja sama tim berjalan baik.",
+              "Konflik diselesaikan secara sehat.",
+              "Saya merasa aman menyampaikan pendapat yang berbeda.",
+              "Saya puas dengan suasana kerja sehari-hari."
       ],
       karyawan: [
-        "Sistem/aplikasi kerja mempermudah penyelesaian tugas saya sehari-hari.",
-        "Panduan operasional (SOP) jelas dan mudah diakses.",
+              "Komunikasi antar bagian terbuka dan lancar.",
+              "Kerja sama tim berjalan baik.",
+              "Konflik diselesaikan secara sehat.",
+              "Saya merasa aman menyampaikan pendapat yang berbeda.",
+              "Saya puas dengan suasana kerja sehari-hari."
       ],
       stakeholder: [
-        "Teknologi dan layanan digital organisasi mudah digunakan dan aman.",
-        "Kecepatan transaksi dan pemrosesan didukung IT yang handal.",
+              "Komunikasi antar bagian terbuka dan lancar.",
+              "Kerja sama tim berjalan baik.",
+              "Konflik diselesaikan secara sehat.",
+              "Saya merasa aman menyampaikan pendapat yang berbeda.",
+              "Saya puas dengan suasana kerja sehari-hari."
       ],
     },
   },
   {
     id: 10,
-    name: "Manajemen Kinerja",
+    name: "Kompetensi SDI",
     short: "Kinerja",
     description: "Keadilan kompensasi, transparansi KPI, insentif, dan apresiasi.",
     critical: true,
@@ -301,26 +409,38 @@ export const DIMENSIONS: Dimension[] = [
       "Jelaskan persepsi ketidakadilan terkait pemberian insentif, kompensasi, atau penilaian kinerja di tempat kerja.",
     questions: {
       pengurus: [
-        "Sistem manajemen kinerja objektif, berbasis data, dan terhubung dengan remunerasi.",
-        "Kompensasi dan benefit kompetitif dibanding standar industri.",
+              "Kemampuan karyawan sesuai tuntutan tugas.",
+              "Rekrutmen dan penempatan didasarkan pada kompetensi.",
+              "Pelatihan yang diberikan sesuai kebutuhan kerja.",
+              "Pengurus dan manajer berkompeten untuk perannya.",
+              "Ada rencana pengembangan SDI dan kaderisasi yang jelas."
       ],
       manajemen: [
-        "Penilaian kinerja bawahan dilakukan secara adil dan transparan.",
-        "Insentif dan reward diberikan sesuai dengan capaian kinerja riil.",
+              "Kemampuan karyawan sesuai tuntutan tugas.",
+              "Rekrutmen dan penempatan didasarkan pada kompetensi.",
+              "Pelatihan yang diberikan sesuai kebutuhan kerja.",
+              "Pengurus dan manajer berkompeten untuk perannya.",
+              "Ada rencana pengembangan SDI dan kaderisasi yang jelas."
       ],
       karyawan: [
-        "Gaji dan insentif yang saya terima adil dibanding beban tanggung jawab.",
-        "Aturan kenaikan tingkat/promosi dijelaskan secara transparan.",
+              "Kemampuan karyawan sesuai tuntutan tugas.",
+              "Rekrutmen dan penempatan didasarkan pada kompetensi.",
+              "Pelatihan yang diberikan sesuai kebutuhan kerja.",
+              "Pengurus dan manajer berkompeten untuk perannya.",
+              "Ada rencana pengembangan SDI dan kaderisasi yang jelas."
       ],
       stakeholder: [
-        "Standar mutu layanan organisasi terjaga konsistensinya.",
-        "Capaian indikator kinerja organisasi tampak terus meningkat.",
+              "Kemampuan karyawan sesuai tuntutan tugas.",
+              "Rekrutmen dan penempatan didasarkan pada kompetensi.",
+              "Pelatihan yang diberikan sesuai kebutuhan kerja.",
+              "Pengurus dan manajer berkompeten untuk perannya.",
+              "Ada rencana pengembangan SDI dan kaderisasi yang jelas."
       ],
     },
   },
   {
     id: 11,
-    name: "Risiko & Kontrol",
+    name: "Motivasi & Kebutuhan Individu",
     short: "Risiko",
     description: "Pengendalian internal, NPF/NPL, audit, kepatuhan regulasi & syariah.",
     critical: false,
@@ -330,26 +450,38 @@ export const DIMENSIONS: Dimension[] = [
       "Apa kelemahan prosedur kontrol atau kepatuhan yang berpotensi menimbulkan risiko keuangan/operasional?",
     questions: {
       pengurus: [
-        "Sistem pengendalian internal dan manajemen risiko berjalan efektif.",
-        "Rekomendasi audit dan DPS selalu ditindaklanjuti secara disiplin.",
+              "Gaji dan tunjangan sepadan dengan beban kerja.",
+              "Jenjang karier jelas dan terbuka.",
+              "Prestasi dihargai secara nyata.",
+              "Saya mendapat kesempatan untuk berkembang.",
+              "Saya bersemangat dan terlibat dalam pekerjaan."
       ],
       manajemen: [
-        "Risiko operasional dan pembiayaan teridentifikasi serta termonitor ketat.",
-        "Mekanisme kontrol dan persetujuan mencegah penyimpangan tanpa menghambat.",
+              "Gaji dan tunjangan sepadan dengan beban kerja.",
+              "Jenjang karier jelas dan terbuka.",
+              "Prestasi dihargai secara nyata.",
+              "Saya mendapat kesempatan untuk berkembang.",
+              "Saya bersemangat dan terlibat dalam pekerjaan."
       ],
       karyawan: [
-        "Saya memahami batas kepatuhan dan prosedur keamanan transaksi.",
-        "Temuan pemeriksaan diperbaiki dengan cepat.",
+              "Gaji dan tunjangan sepadan dengan beban kerja.",
+              "Jenjang karier jelas dan terbuka.",
+              "Prestasi dihargai secara nyata.",
+              "Saya mendapat kesempatan untuk berkembang.",
+              "Saya bersemangat dan terlibat dalam pekerjaan."
       ],
       stakeholder: [
-        "Organisasi dinilai memiliki tingkat keamanan keuangan dan kehati-hatian yang tinggi.",
-        "Kepatuhan syariah dan hukum terjamin secara konsisten.",
+              "Gaji dan tunjangan sepadan dengan beban kerja.",
+              "Jenjang karier jelas dan terbuka.",
+              "Prestasi dihargai secara nyata.",
+              "Saya mendapat kesempatan untuk berkembang.",
+              "Saya bersemangat dan terlibat dalam pekerjaan."
       ],
     },
   },
   {
     id: 12,
-    name: "Pengalaman Stakeholder",
+    name: "Kinerja",
     short: "Stakeholder",
     description: "Kepuasan anggota/nasabah, komplain, dampak sosial, dan penanganan masukan.",
     critical: false,
@@ -359,20 +491,32 @@ export const DIMENSIONS: Dimension[] = [
       "Apa komplain atau ketidakpuasan yang paling sering disampaikan oleh pihak luar atau anggota?",
     questions: {
       pengurus: [
-        "Tingkat kepuasan anggota dan dampak sosial organisasi diukur secara berskala.",
-        "Umpan balik dari stakeholder utama menjadi bahan evaluasi kebijakan.",
+              "Target kerja saya/unit saya tercapai.",
+              "Penilaian kinerja (KPI) objektif dan dipahami.",
+              "Hasil penilaian ditindaklanjuti dengan reward atau pembinaan.",
+              "Kesehatan keuangan lembaga terjaga (likuiditas, kualitas pembiayaan).",
+              "Kualitas layanan kepada anggota terus meningkat."
       ],
       manajemen: [
-        "Komplain dari anggota/nasabah ditangani secara cepat dan ada prosedur penyelesaiannya.",
-        "Kualitas hubungan dengan mitra strategis dijaga berkelanjutan.",
+              "Target kerja saya/unit saya tercapai.",
+              "Penilaian kinerja (KPI) objektif dan dipahami.",
+              "Hasil penilaian ditindaklanjuti dengan reward atau pembinaan.",
+              "Kesehatan keuangan lembaga terjaga (likuiditas, kualitas pembiayaan).",
+              "Kualitas layanan kepada anggota terus meningkat."
       ],
       karyawan: [
-        "Saya berupaya memberikan pengalaman pelayanan terbaik bagi anggota.",
-        "Keluhan atau masalah anggota cepat dibantu oleh atasan/unit terkait.",
+              "Target kerja saya/unit saya tercapai.",
+              "Penilaian kinerja (KPI) objektif dan dipahami.",
+              "Hasil penilaian ditindaklanjuti dengan reward atau pembinaan.",
+              "Kesehatan keuangan lembaga terjaga (likuiditas, kualitas pembiayaan).",
+              "Kualitas layanan kepada anggota terus meningkat."
       ],
       stakeholder: [
-        "Saya puas dengan mutu layanan, komunikasi, dan manfaat kerja sama dengan organisasi ini.",
-        "Organisasi memberikan dampak nyata bagi pengembangan ekonomi masyarakat.",
+              "Target kerja saya/unit saya tercapai.",
+              "Penilaian kinerja (KPI) objektif dan dipahami.",
+              "Hasil penilaian ditindaklanjuti dengan reward atau pembinaan.",
+              "Kesehatan keuangan lembaga terjaga (likuiditas, kualitas pembiayaan).",
+              "Kualitas layanan kepada anggota terus meningkat."
       ],
     },
   },
